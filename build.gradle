@@ -1,0 +1,53 @@
+plugins {
+    id 'war'
+    id 'org.springframework.boot' version '1.5.9.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.3.RELEASE' apply false
+    id 'org.liquibase.gradle' version '1.2.4'
+}
+
+group 'com.meta.leon'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+springBoot {
+    mainClass = 'com.meta.leon.discordbot.DiscordBotApp'
+}
+
+bootRun {
+    addResources = true
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-logging'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'org.springframework:spring-context-support'
+
+    compile 'org.json:json:20180130'
+
+    compile 'com.fasterxml.jackson.core:jackson-annotations'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.1'
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:${jacksonDatatypeJoda}"
+
+    compile 'org.liquibase:liquibase-core'
+
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+
+    compile 'net.dv8tion:JDA:3.5.1_348'
+
+//    compile 'com.google.api-client:google-api-client:1.23.0'
+//    compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
+//    compile 'com.google.apis:google-api-services-sheets:v4-rev508-1.23.0'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile "org.dbunit:dbunit:${dbunitVersion}"
+
+    runtime "org.postgresql:postgresql:${postgresDriverVersion}"
+}
