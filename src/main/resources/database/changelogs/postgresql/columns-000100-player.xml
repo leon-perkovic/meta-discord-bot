@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="00001-20180315" author="leon" dbms="postgresql">
+        <createTable tableName="player">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_player" />
+            </column>
+            <column name="account_name" type="VARCHAR(100)" />
+            <column name="discord_name" type="VARCHAR(100)" />
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
