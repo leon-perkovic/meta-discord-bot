@@ -13,6 +13,6 @@
     <include file="/META-INF/database/changelogs/postgresql/columns-000400-event.xml" />
     <include file="/META-INF/database/changelogs/postgresql/columns-000500-dps-report.xml" />
 
-    <include file="/META-INF/database/changelogs/postgresql/columns-000600-signup.xml" />
+    <include file="/META-INF/database/changelogs/postgresql/columns-000600-event-signup.xml" />
 
 </databaseChangeLog>
