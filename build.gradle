@@ -5,6 +5,29 @@ plugins {
     id 'org.liquibase.gradle' version '1.2.4'
 }
 
+allprojects {
+    group = 'com.meta.leon.discordbot'
+    version = '1.0-SNAPSHOT'
+
+    apply plugin: 'idea'
+
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+}
+
+war {
+    manifest {
+        attributes(
+                'Build-Version': version,
+                'Build-Time': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        )
+    }
+    archiveName 'meta-discord-bot.war'
+}
+
 group 'com.meta.leon'
 version '1.0-SNAPSHOT'
 
