@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="00001-20180315" author="leon">
+        <insert tableName="role">
+            <column name="role_name">chronomancer</column>
+            <column name="short_name">chrono</column>
+        </insert>
+
+        <insert tableName="role">
+            <column name="role_name">druid</column>
+            <column name="short_name">druid</column>
+        </insert>
+
+        <insert tableName="role">
+            <column name="role_name">berserker</column>
+            <column name="short_name">bs</column>
+        </insert>
+
+        <insert tableName="role">
+            <column name="role_name">handkiter</column>
+            <column name="short_name">hk</column>
+        </insert>
+
+        <insert tableName="role">
+            <column name="role_name">dps</column>
+            <column name="short_name">dps</column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

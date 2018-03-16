@@ -8,6 +8,8 @@ import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
@@ -17,9 +19,13 @@ import java.util.Properties;
 /**
  * @author Leon, created on 12/03/2018
  */
+@SpringBootApplication
 public class DiscordBotApp extends ListenerAdapter{
 
     public static void main(String[] args) throws LoginException, InterruptedException, IOException{
+
+        // run with spring-boot
+        SpringApplication.run(DiscordBotApp.class, args);
 
         // load application.properties file
         Properties prop = new Properties();

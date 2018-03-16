@@ -12,5 +12,6 @@
     <include file="/database/discordbot-master-postgres.xml"/>
 
     <!-- test data -->
+    <include file="/database/changelogs/testdata/test-000100-role.xml" />
 
 </databaseChangeLog>
