@@ -5,6 +5,29 @@ plugins {
     id 'org.liquibase.gradle' version '1.2.4'
 }
 
+allprojects {
+    group = 'com.meta.leon.discordbot'
+    version = '1.0-SNAPSHOT'
+
+    apply plugin: 'idea'
+
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+}
+
+war {
+    manifest {
+        attributes(
+                'Build-Version': version,
+                'Build-Time': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        )
+    }
+    archiveName 'meta-discord-bot.war'
+}
+
 group 'com.meta.leon'
 version '1.0-SNAPSHOT'
 
@@ -41,9 +64,11 @@ dependencies {
 
     compile 'org.liquibase:liquibase-core'
 
-    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
-
     compile 'net.dv8tion:JDA:3.5.1_348'
+
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+    compile 'org.apache.commons:commons-lang3:3.5'
+    compile 'org.jadira.usertype:usertype.core:5.0.0.GA'
 
 //    compile 'com.google.api-client:google-api-client:1.23.0'
 //    compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'

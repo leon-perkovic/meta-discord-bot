@@ -7,21 +7,21 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="00001-20180315" author="leon" dbms="postgresql">
-        <createTable tableName="signup">
+        <createTable tableName="event_signup">
             <column name="player_id" type="BIGINT" />
             <column name="event_id" type="BIGINT" />
             <column name="discord_rank" type="VARCHAR(255)" />
             <column name="signup_time" type="TIMESTAMP" />
         </createTable>
 
-        <addPrimaryKey tableName="signup" columnNames="player_id, event_id" />
+        <addPrimaryKey tableName="event_signup" columnNames="player_id, event_id" />
 
-        <addForeignKeyConstraint baseTableName="signup" baseColumnNames="player_id" constraintName="fk_player_id"
+        <addForeignKeyConstraint baseTableName="event_signup" baseColumnNames="player_id" constraintName="fk_player_id"
                                  referencedTableName="player"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE" />
 
-        <addForeignKeyConstraint baseTableName="signup" baseColumnNames="event_id" constraintName="fk_event_id"
+        <addForeignKeyConstraint baseTableName="event_signup" baseColumnNames="event_id" constraintName="fk_event_id"
                                  referencedTableName="event"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE" />

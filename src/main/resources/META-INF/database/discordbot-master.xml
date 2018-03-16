@@ -9,9 +9,9 @@
     <property name="current.timestamp" value="now()" dbms="postgresql"/>
 
     <!-- database structure -->
-    <include file="/database/discordbot-master-postgres.xml"/>
+    <include file="/META-INF/database/discordbot-master-postgres.xml"/>
 
     <!-- test data -->
-    <include file="/database/changelogs/testdata/test-000100-role.xml" />
+    <include file="/META-INF/database/changelogs/testdata/test-000100-role.xml" />
 
 </databaseChangeLog>
