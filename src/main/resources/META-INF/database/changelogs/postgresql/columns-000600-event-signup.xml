@@ -10,7 +10,7 @@
         <createTable tableName="event_signup">
             <column name="player_id" type="BIGINT" />
             <column name="event_id" type="BIGINT" />
-            <column name="discord_rank" type="VARCHAR(255)" />
+            <column name="discord_rank" type="VARCHAR(45)" />
             <column name="signup_time" type="TIMESTAMP" />
         </createTable>
 

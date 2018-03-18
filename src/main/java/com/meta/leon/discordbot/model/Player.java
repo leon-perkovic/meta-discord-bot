@@ -24,8 +24,8 @@ public class Player implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "discord_name")
-    private String discordName;
+    @Column(name = "nickname")
+    private String nickname;
 
     @Column(name = "account_name")
     private String accountName;
@@ -44,9 +44,17 @@ public class Player implements Serializable{
         // default constructor
     }
 
-    public Player(String discordName, String accountName){
-        this.discordName=discordName;
+    public Player(String nickname, String accountName){
+        this.nickname=nickname;
         this.accountName=accountName;
+    }
+
+    public String toStringForEmbed(){
+
+        String playerInfo = "**" + nickname + "** (" + accountName +
+                            ", *id:* " + id + ")" + "\n*Roles:* " + roles.toString();
+
+        return playerInfo;
     }
 
     @Override
@@ -55,7 +63,7 @@ public class Player implements Serializable{
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
         stringBuilder.append("id", id);
-        stringBuilder.append("discordName", discordName);
+        stringBuilder.append("nickname", nickname);
         stringBuilder.append("accountName", accountName);
         stringBuilder.append("roles", roles.toString());
 
@@ -72,12 +80,12 @@ public class Player implements Serializable{
         this.id=id;
     }
 
-    public String getDiscordName(){
-        return discordName;
+    public String getNickname(){
+        return nickname;
     }
 
-    public void setDiscordName(String discordName){
-        this.discordName=discordName;
+    public void setNickname(String nickname){
+        this.nickname=nickname;
     }
 
     public String getAccountName(){
