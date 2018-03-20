@@ -19,10 +19,14 @@ public interface PlayerService{
 
     Player findByAccountName(String accountName);
 
+    Player findByDiscordId(String discordId);
+
     Player savePlayer(Player player);
 
-    Integer removePlayerById(Long id);
+    Integer removeById(Long id);
 
-    Integer removePlayerByNickname(String nickname);
+    Integer removeByNickname(String nickname);
+
+    Integer removeByDiscordId(String discordId);
 
 }

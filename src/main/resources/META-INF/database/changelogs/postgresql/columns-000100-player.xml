@@ -17,6 +17,9 @@
             <column name="account_name" type="VARCHAR(45)">
                 <constraints unique="true" nullable="false" />
             </column>
+            <column name="discord_id" type="VARCHAR(100)">
+                <constraints unique="true" nullable="true" />
+            </column>
         </createTable>
     </changeSet>
 

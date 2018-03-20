@@ -35,8 +35,8 @@ public class Event implements Serializable{
     }
 
     public Event(DateTime eventDate, String description){
-        this.eventDate=eventDate;
-        this.description=description;
+        this.eventDate = eventDate;
+        this.description = description;
     }
 
     @Override
