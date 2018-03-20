@@ -6,7 +6,7 @@ import com.meta.leon.discordbot.command.CommandResponses;
 import com.meta.leon.discordbot.command.ResponseForm;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
-import com.meta.leon.discordbot.validator.CommandValidator;
+import com.meta.leon.discordbot.validator.PlayerValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class GetPlayersCommand extends AbstractCommand{
     PlayerService playerService;
 
     @Autowired
-    CommandValidator commandValidator;
+    PlayerValidator playerValidator;
 
 
     public GetPlayersCommand(){
@@ -39,28 +39,27 @@ public class GetPlayersCommand extends AbstractCommand{
     public ResponseForm execute(ArrayList<String> arguments){
 
         // validate passed arguments
-        if(!commandValidator.validateNumberOfArguments(arguments, 0)){
+        if(!playerValidator.validateNumberOfArguments(arguments, 0)){
             return new ResponseForm(CommandResponses.GET_PLAYERS_INVALID_ARGUMENTS);
         }
 
         List<Player> players = playerService.findAll();
 
-        if(!players.isEmpty()){
-            String playerFields = "";
-
-            for(Player player : players){
-                playerFields += player.toStringForEmbed() + "\n";
-            }
-
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-
-            embedBuilder.setTitle("__Player info:__");
-            embedBuilder.setColor(Color.decode("#D02F00"));
-            embedBuilder.setDescription(playerFields);
-
-            return new ResponseForm(embedBuilder.build());
+        if(players.isEmpty()){
+            return new ResponseForm(CommandResponses.GET_PLAYERS_NONE_FOUND);
         }
-        return new ResponseForm(CommandResponses.GET_PLAYERS_NONE_FOUND);
+
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+
+        embedBuilder.setTitle("__Player info:__");
+        embedBuilder.setColor(Color.decode("#D02F00"));
+
+        for(Player player : players){
+            embedBuilder.addField(
+                    player.getNickname() + " (" + player.getAccountName() + ", id: " + player.getId() + ")",
+                    player.rolesToString(), true);
+        }
+        return new ResponseForm(embedBuilder.build());
     }
 
 }

@@ -8,28 +8,28 @@
 
     <changeSet id="00001-20180315" author="leon">
         <insert tableName="role">
-            <column name="role_name">chronomancer</column>
+            <column name="role_name">Chronomancer</column>
             <column name="short_name">chrono</column>
         </insert>
 
         <insert tableName="role">
-            <column name="role_name">druid</column>
-            <column name="short_name">druid</column>
+            <column name="role_name">Druid</column>
+            <column name="short_name">Druid</column>
         </insert>
 
         <insert tableName="role">
-            <column name="role_name">berserker</column>
-            <column name="short_name">bs</column>
+            <column name="role_name">Berserker</column>
+            <column name="short_name">BS</column>
         </insert>
 
         <insert tableName="role">
-            <column name="role_name">handkiter</column>
-            <column name="short_name">hk</column>
+            <column name="role_name">Handkiter</column>
+            <column name="short_name">HK</column>
         </insert>
 
         <insert tableName="role">
-            <column name="role_name">dps</column>
-            <column name="short_name">dps</column>
+            <column name="role_name">DPS</column>
+            <column name="short_name">DPS</column>
         </insert>
     </changeSet>
 

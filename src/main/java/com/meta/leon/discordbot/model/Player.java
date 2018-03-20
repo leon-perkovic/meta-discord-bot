@@ -30,6 +30,9 @@ public class Player implements Serializable{
     @Column(name = "account_name")
     private String accountName;
 
+    @Column(name = "discord_id")
+    private String discordId;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "player_role",
             joinColumns = { @JoinColumn(name = "player_id", referencedColumnName = "id") },
@@ -44,15 +47,26 @@ public class Player implements Serializable{
         // default constructor
     }
 
-    public Player(String nickname, String accountName){
-        this.nickname=nickname;
-        this.accountName=accountName;
+    public Player(String nickname, String accountName, String discordId){
+        this.nickname = nickname;
+        this.accountName = accountName;
+        this.discordId = discordId;
     }
 
-    public String toStringForEmbed(){
+    public String rolesToString(){
 
-        String playerInfo = "**" + nickname + "** (" + accountName +
-                            ", *id:* " + id + ")" + "\n*Roles:* " + roles.toString();
+        String playerInfo = "- *Roles:* [";
+
+        int i = 0;
+        for(Role role : roles){
+            if(i == roles.size()-1){
+                playerInfo += role.getRoleName();
+            }else{
+                playerInfo += role.getRoleName() + ", ";
+            }
+            i++;
+        }
+        playerInfo += "]";
 
         return playerInfo;
     }
@@ -94,6 +108,14 @@ public class Player implements Serializable{
 
     public void setAccountName(String accountName){
         this.accountName=accountName;
+    }
+
+    public String getDiscordId(){
+        return discordId;
+    }
+
+    public void setDiscordId(String discordId){
+        this.discordId = discordId;
     }
 
     public Set<Role> getRoles(){

@@ -5,7 +5,7 @@ import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
 import com.meta.leon.discordbot.command.ResponseForm;
 import com.meta.leon.discordbot.service.PlayerService;
-import com.meta.leon.discordbot.validator.CommandValidator;
+import com.meta.leon.discordbot.validator.PlayerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 
 /**
- * !removePlayer [id or nickname]
+ * !removePlayer <id or nickname or @username>
  * Command for removing player entries from a database
  *
  * @author Leon, created on 18/03/2018
@@ -25,7 +25,7 @@ public class RemovePlayerCommand extends AbstractCommand{
     PlayerService playerService;
 
     @Autowired
-    CommandValidator commandValidator;
+    PlayerValidator playerValidator;
 
 
     public RemovePlayerCommand(){
@@ -37,17 +37,20 @@ public class RemovePlayerCommand extends AbstractCommand{
     public ResponseForm execute(ArrayList<String> arguments){
 
         // validate passed arguments
-        if(!commandValidator.validateNumberOfArguments(arguments, 1)){
+        if(!playerValidator.validateNumberOfArguments(arguments, 1)){
             return new ResponseForm(CommandResponses.REMOVE_PLAYER_INVALID_ARGUMENTS);
         }
 
         int numOfRemoved = 0;
-        if(commandValidator.validateIfNumeric(arguments.get(0))){
+        if(playerValidator.validateIfNumeric(arguments.get(0))){
             Long id = Long.valueOf(arguments.get(0));
-            numOfRemoved = playerService.removePlayerById(id);
+            numOfRemoved = playerService.removeById(id);
+
+        }else if(playerValidator.validateIfDiscordId(arguments.get(0))){
+            numOfRemoved = playerService.removeByDiscordId(arguments.get(0));
 
         }else{
-            numOfRemoved = playerService.removePlayerByNickname(arguments.get(0));
+            numOfRemoved = playerService.removeByNickname(arguments.get(0));
         }
 
         if(numOfRemoved > 0){

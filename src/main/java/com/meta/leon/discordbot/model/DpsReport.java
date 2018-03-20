@@ -32,8 +32,8 @@ public class DpsReport implements Serializable{
     }
 
     public DpsReport(String link, Long eventId){
-        this.link=link;
-        this.eventId=eventId;
+        this.link = link;
+        this.eventId = eventId;
     }
 
     @Override

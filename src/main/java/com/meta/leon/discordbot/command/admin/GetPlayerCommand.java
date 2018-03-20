@@ -6,7 +6,7 @@ import com.meta.leon.discordbot.command.CommandResponses;
 import com.meta.leon.discordbot.command.ResponseForm;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
-import com.meta.leon.discordbot.validator.CommandValidator;
+import com.meta.leon.discordbot.validator.PlayerValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * !getPlayer [id or nickname]
+ * !getPlayer <id or nickname or @username>
  * Command for getting a player entry from a database
  *
  * @author Leon, created on 18/03/2018
@@ -27,7 +27,7 @@ public class GetPlayerCommand extends AbstractCommand{
     PlayerService playerService;
 
     @Autowired
-    CommandValidator commandValidator;
+    PlayerValidator playerValidator;
 
 
     public GetPlayerCommand(){
@@ -38,14 +38,17 @@ public class GetPlayerCommand extends AbstractCommand{
     public ResponseForm execute(ArrayList<String> arguments){
 
         // validate passed arguments
-        if(!commandValidator.validateNumberOfArguments(arguments, 1)){
+        if(!playerValidator.validateNumberOfArguments(arguments, 1)){
             return new ResponseForm(CommandResponses.GET_PLAYER_INVALID_ARGUMENTS);
         }
 
         Player player;
-        if(commandValidator.validateIfNumeric(arguments.get(0))){
+        if(playerValidator.validateIfNumeric(arguments.get(0))){
             Long id = Long.valueOf(arguments.get(0));
             player = playerService.findById(id);
+
+        }else if(playerValidator.validateIfDiscordId(arguments.get(0))){
+            player = playerService.findByDiscordId(arguments.get(0));
 
         }else{
             player = playerService.findByNickname(arguments.get(0));
@@ -56,7 +59,9 @@ public class GetPlayerCommand extends AbstractCommand{
 
             embedBuilder.setTitle("__Player info:__");
             embedBuilder.setColor(Color.decode("#D02F00"));
-            embedBuilder.setDescription(player.toStringForEmbed());
+            embedBuilder.addField(
+                    player.getNickname() + " (" + player.getAccountName() + ", id: " + player.getId() + ")",
+                    player.rolesToString(), true);
 
             return new ResponseForm(embedBuilder.build());
         }

@@ -37,10 +37,10 @@ public class EventSignup implements Serializable{
     }
 
     public EventSignup(Long playerId, Long eventId, String discordRank, DateTime signupTime){
-        this.playerId=playerId;
-        this.eventId=eventId;
-        this.discordRank=discordRank;
-        this.signupTime=signupTime;
+        this.playerId = playerId;
+        this.eventId = eventId;
+        this.discordRank = discordRank;
+        this.signupTime = signupTime;
     }
 
     @Override

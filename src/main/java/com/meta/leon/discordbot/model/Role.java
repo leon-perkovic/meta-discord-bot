@@ -32,8 +32,8 @@ public class Role implements Serializable{
     }
 
     public Role(String roleName, String shortName){
-        this.roleName=roleName;
-        this.shortName=shortName;
+        this.roleName = roleName;
+        this.shortName = shortName;
     }
 
     @Override
