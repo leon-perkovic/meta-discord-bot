@@ -22,21 +22,33 @@ public class Event implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name")
+    private String name;
+
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Column(name = "event_date")
-    private DateTime eventDate;
+    @Column(name = "event_time")
+    private DateTime eventTime;
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "player_limit")
+    private Integer playerLimit;
+
+    @Column(name = "event_leader")
+    private String eventLeader;
 
 
     public Event(){
         // default constructor
     }
 
-    public Event(DateTime eventDate, String description){
-        this.eventDate = eventDate;
+    public Event(String name, DateTime eventTime, String description, Integer playerLimit, String eventLeader){
+        this.name = name;
+        this.eventTime = eventTime;
         this.description = description;
+        this.playerLimit = playerLimit;
+        this.eventLeader = eventLeader;
     }
 
     @Override
@@ -45,8 +57,11 @@ public class Event implements Serializable{
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
         stringBuilder.append("id", id);
-        stringBuilder.append("eventDate", eventDate);
+        stringBuilder.append("name", name);
+        stringBuilder.append("eventTime", eventTime);
         stringBuilder.append("description", description);
+        stringBuilder.append("playerLimit", playerLimit);
+        stringBuilder.append("eventLeader", eventLeader);
 
         return stringBuilder.toString();
     }
@@ -61,12 +76,20 @@ public class Event implements Serializable{
         this.id=id;
     }
 
-    public DateTime getEventDate(){
-        return eventDate;
+    public String getName(){
+        return name;
     }
 
-    public void setEventDate(DateTime eventDate){
-        this.eventDate=eventDate;
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public DateTime getEventTime(){
+        return eventTime;
+    }
+
+    public void setEventTime(DateTime eventTime){
+        this.eventTime=eventTime;
     }
 
     public String getDescription(){
@@ -75,6 +98,22 @@ public class Event implements Serializable{
 
     public void setDescription(String description){
         this.description=description;
+    }
+
+    public Integer getPlayerLimit(){
+        return playerLimit;
+    }
+
+    public void setPlayerLimit(Integer playerLimit){
+        this.playerLimit = playerLimit;
+    }
+
+    public String getEventLeader(){
+        return eventLeader;
+    }
+
+    public void setEventLeader(String eventLeader){
+        this.eventLeader = eventLeader;
     }
 
 }

@@ -20,6 +20,8 @@ public class DiscordBotApp implements CommandLineRunner{
     @Autowired
     private BotListener botListener;
 
+    private static JDA jdaBot;
+
     private static String token;
     private static String adminRole;
     private static String memberRole;
@@ -47,13 +49,17 @@ public class DiscordBotApp implements CommandLineRunner{
         publicRole = prop.getProperty("discord.publicRole");
 
         // initialize Bot and set token
-        JDA jdaBot = new JDABuilder(AccountType.BOT).setToken(token).buildBlocking();
+        jdaBot = new JDABuilder(AccountType.BOT).setToken(token).buildBlocking();
 
         // add autowired BotListener bean to event listener
         jdaBot.addEventListener(botListener);
     }
 
     // -- getters and setters -------------------------------------------------
+
+    public static JDA getJdaBot(){
+        return jdaBot;
+    }
 
     public static String getAdminRole(){
         return adminRole;

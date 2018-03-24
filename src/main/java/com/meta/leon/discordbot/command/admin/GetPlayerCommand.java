@@ -60,8 +60,13 @@ public class GetPlayerCommand extends AbstractCommand{
             embedBuilder.setTitle("__Player info:__");
             embedBuilder.setColor(Color.decode("#D02F00"));
             embedBuilder.addField(
-                    player.getNickname() + " (" + player.getAccountName() + ", id: " + player.getId() + ")",
-                    player.rolesToString(), true);
+                    "",
+                    "**" + player.getNickname()
+                    + "**, " + player.getAccountName()
+                    + ", " + "*id:* " + player.getId()
+                    + ", " + player.getDiscordId() + "\n"
+                    + player.rolesToString(),
+                    true);
 
             return new ResponseForm(embedBuilder.build());
         }

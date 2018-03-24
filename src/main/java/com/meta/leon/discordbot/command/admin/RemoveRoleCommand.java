@@ -41,7 +41,7 @@ public class RemoveRoleCommand extends AbstractCommand{
         return new ResponseForm(CommandResponses.REMOVE_ROLE_INVALID_ARGUMENTS);
         }
 
-        int numOfRemoved = 0;
+        int numOfRemoved;
         if(roleValidator.validateIfNumeric(arguments.get(0))){
             Long id = Long.valueOf(arguments.get(0));
             numOfRemoved = roleService.removeById(id);

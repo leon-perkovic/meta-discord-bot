@@ -1,5 +1,7 @@
 package com.meta.leon.discordbot.validator;
 
+import com.meta.leon.discordbot.command.CommandUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,7 +18,12 @@ public class GlobalValidator{
 
     public static final String NUMBER_PATTERN = "^(0|[1-9][0-9]*)$";
 
+    public static final String TIME_PATTERN = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$";
+
     public static final String DISCORD_ID_PATTERN = "^<@(0|[1-9][0-9]*)>$";
+
+    @Autowired
+    CommandUtil commandUtil;
 
 
     public boolean validateNumberOfArguments(ArrayList<String> arguments, int expectedArguments){
@@ -48,6 +55,25 @@ public class GlobalValidator{
         Matcher matcher = pattern.matcher(argument);
 
         if(matcher.matches()){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean validateIfDay(String argument){
+        if(commandUtil.getDays().containsKey(argument.toLowerCase())){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean validateIfTime(String argument){
+        Pattern pattern = Pattern.compile(TIME_PATTERN);
+        Matcher matcher = pattern.matcher(argument);
+
+        if(validateIfNumeric(argument)){
+            return true;
+        }else if(matcher.matches()){
             return true;
         }
         return false;

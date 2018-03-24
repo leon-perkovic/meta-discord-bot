@@ -19,6 +19,10 @@ public class CommandResponses{
 
     public static final String ROLE_ALREADY_EXISTS = "That role already exists :no_entry_sign:";
 
+    public static final String EVENT_NOT_FOUND = "That event doesn't exist :no_entry_sign:";
+
+    public static final String EVENT_ALREADY_EXISTS = "That event already exists :no_entry_sign:";
+
     // -- AddPlayer -----------------------------------------------------------
 
     public static final String ADD_PLAYER_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!addPlayer <nickname> <account_name> [@username]```";
@@ -83,5 +87,29 @@ public class CommandResponses{
     // -- AddPr ---------------------------------------------------------------
 
     public static final String ADD_PR_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!addPR <id or nickname or @username> <role_name or short_name ...>```";
+
+    // -- AddEvent ------------------------------------------------------------
+
+    public static final String ADD_EVENT_INVALID_ARGUMENTS = "Expected at least 3 arguments :no_entry_sign: Try: ```!addEvent <day> <HH:mm> <player_limit> [event_leader] [description]```";
+
+    // -- RemoveEvent ---------------------------------------------------------
+
+    public static final String REMOVE_EVENT_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!removeEvent <id or name or day> [HH:mm]```";
+
+    public static final String REMOVE_EVENT_SUCCESS = "Event removed successfully :white_check_mark:";
+
+    // -- GetEvent ------------------------------------------------------------
+
+    public static final String GET_EVENT_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!getEvent <id or name or day> [HH:mm]```";
+
+    // -- GetEvents -----------------------------------------------------------
+
+    public static final String GET_EVENTS_INVALID_ARGUMENTS = "Unexpected arguments :no_entry_sign: Try: ```!getEvents```";
+
+    public static final String GET_EVENTS_NONE_FOUND = "I couldn't find any events :cry:";
+
+    // -- GetPastEvents -------------------------------------------------------
+
+    public static final String GET_PAST_EVENTS_INVALID_ARGUMENT = "Invalid argument :no_entry_sign: Try: ```!getPastEvents [page_number]```";
 
 }
