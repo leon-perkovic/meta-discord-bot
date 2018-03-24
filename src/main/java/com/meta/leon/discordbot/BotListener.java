@@ -54,8 +54,8 @@ public class BotListener extends ListenerAdapter{
         String[] splitContent = messageContent.split(" ");
 
         // check if command exists
-        if(commands.keySet().contains(splitContent[0])){
-            AbstractCommand command = commands.get(splitContent[0]);
+        if(commands.keySet().contains(splitContent[0].toLowerCase())){
+            AbstractCommand command = commands.get(splitContent[0].toLowerCase());
 
             // check if user is authorized to use the command
             if(authority.getLevel() >= command.getAuthority().getLevel()){

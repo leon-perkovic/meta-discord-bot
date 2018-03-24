@@ -41,7 +41,7 @@ public class RemovePlayerCommand extends AbstractCommand{
             return new ResponseForm(CommandResponses.REMOVE_PLAYER_INVALID_ARGUMENTS);
         }
 
-        int numOfRemoved = 0;
+        int numOfRemoved;
         if(playerValidator.validateIfNumeric(arguments.get(0))){
             Long id = Long.valueOf(arguments.get(0));
             numOfRemoved = playerService.removeById(id);

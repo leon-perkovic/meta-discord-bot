@@ -56,8 +56,13 @@ public class GetPlayersCommand extends AbstractCommand{
 
         for(Player player : players){
             embedBuilder.addField(
-                    player.getNickname() + " (" + player.getAccountName() + ", id: " + player.getId() + ")",
-                    player.rolesToString(), true);
+                    "--------------------",
+                    "**" + player.getNickname()
+                    + "**, " + player.getAccountName()
+                    + ", " + "*id:* " + player.getId()
+                    + ", " + player.getDiscordId() + "\n"
+                    + player.rolesToString(),
+                    true);
         }
         return new ResponseForm(embedBuilder.build());
     }
