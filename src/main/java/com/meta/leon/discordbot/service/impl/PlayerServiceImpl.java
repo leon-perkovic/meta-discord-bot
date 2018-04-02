@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Player service - uses Player repository to manage Player entries in a database
  *
- * @author Leon, created on 17/03/2018
+ * Created by Leon on 17/03/2018
  */
 @Service
 public class PlayerServiceImpl implements PlayerService{

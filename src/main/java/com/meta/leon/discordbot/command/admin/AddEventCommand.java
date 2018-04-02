@@ -4,6 +4,7 @@ import com.meta.leon.discordbot.command.*;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.EventValidator;
+import net.dv8tion.jda.core.entities.User;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 
 /**
- * !addEvent <day> <HH:mm> <player_limit> [event_leader] [description]
+ * !addEvent <day> <HH:mm> <player_limit> <trial_limit> <member_limit> [event_leader] [description]
  * [event_leader] and [description] are optional
  * Command for adding new event entries to a database
- * Event date will be determined and set automatically for first upcoming day
+ * Event date will be determined and set automatically for first upcoming day in the week
  *
- * @author Leon, created on 21/03/2018
+ * Created by Leon on 21/03/2018
  */
 @Component
 public class AddEventCommand extends AbstractCommand{
@@ -25,6 +26,8 @@ public class AddEventCommand extends AbstractCommand{
     private String name;
     private DateTime eventTime;
     private Integer playerLimit;
+    private Integer memberLimit;
+    private Integer trialLimit;
     private String eventLeader;
     private String description;
 
@@ -39,20 +42,20 @@ public class AddEventCommand extends AbstractCommand{
 
 
     public AddEventCommand(){
-        super("addevent", "Add new event to a database", "N/A", CommandAuthority.ADMIN);
+        super("addevent", "Add new event to a database", "N/A", CommandAuthority.EVENT_LEADER);
     }
 
     @Override
     @Transactional
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
 
-        int descStart = 3;
+        int descStart = 5;
 
         // if @username was passed as an argument, push start of description
-        if(arguments.size() > 3){
-            if(eventValidator.validateIfDiscordId(arguments.get(3))){
-                this.eventLeader = arguments.get(3);
-                descStart = 4;
+        if(arguments.size() > 5){
+            if(eventValidator.validateIfDiscordId(arguments.get(5))){
+                this.eventLeader = arguments.get(5);
+                descStart = 6;
             }else{
                 this.eventLeader = null;
             }
@@ -76,6 +79,12 @@ public class AddEventCommand extends AbstractCommand{
         if(!eventValidator.validateIfNumeric(arguments.get(2))){
             return new ResponseForm(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS);
         }
+        if(!eventValidator.validateIfNumeric(arguments.get(3))){
+            return new ResponseForm(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS);
+        }
+        if(!eventValidator.validateIfNumeric(arguments.get(4))){
+            return new ResponseForm(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS);
+        }
 
         // if description was split as multiple arguments - combine them
         if(arguments.size() > descStart+1){
@@ -86,7 +95,11 @@ public class AddEventCommand extends AbstractCommand{
             this.description = combinedDesc.trim();
 
         }else{
-            this.description = arguments.get(descStart).trim();
+            this.description = arguments.get(descStart);
+
+            if(description != null){
+                description = description.trim();
+            }
         }
 
         this.eventTime = commandUtil.getEventDateTime(arguments.get(0), arguments.get(1));
@@ -99,13 +112,21 @@ public class AddEventCommand extends AbstractCommand{
                 + "-" + eventTime.getMinuteOfHour();
 
         this.playerLimit = Integer.valueOf(arguments.get(2));
+        this.memberLimit = Integer.valueOf(arguments.get(3));
+        this.trialLimit = Integer.valueOf(arguments.get(4));
+
+        if(memberLimit > playerLimit){
+            memberLimit = playerLimit;
+        }
+        if(trialLimit > playerLimit){
+            trialLimit = playerLimit;
+        }
 
         if(!eventValidator.validateIfUniqueEvent(name)){
             return new ResponseForm(CommandResponses.EVENT_ALREADY_EXISTS);
         }
 
-        Event event = new Event(name, eventTime, description, playerLimit, eventLeader);
-        System.out.println(event.toString());
+        Event event = new Event(name, eventTime, description, playerLimit, memberLimit, trialLimit, eventLeader);
         eventService.saveEvent(event);
 
         return new ResponseForm("Successfully added event: **" + name + "** :white_check_mark:");

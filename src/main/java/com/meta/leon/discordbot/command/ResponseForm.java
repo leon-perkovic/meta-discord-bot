@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command;
 /**
  * Response form - can contain any object
  *
- * @author Leon, created on 18/03/2018
+ * Created by Leon on 18/03/2018
  */
 public class ResponseForm<R>{
 

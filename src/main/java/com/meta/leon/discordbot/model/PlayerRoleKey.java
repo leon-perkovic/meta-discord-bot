@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Container class for PlayerRole's composite primary key
  *
- * @author Leon, created on 19/03/2018
+ * Created by Leon on 19/03/2018
  */
 public class PlayerRoleKey implements Serializable{
 

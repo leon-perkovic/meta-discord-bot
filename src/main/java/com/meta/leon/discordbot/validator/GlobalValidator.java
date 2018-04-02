@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 /**
  * Global Validator for passed arguments
  *
- * @author Leon, created on 18/03/2018
+ * Created by Leon on 18/03/2018
  */
 @Component
 public class GlobalValidator{
@@ -44,20 +44,16 @@ public class GlobalValidator{
         Pattern pattern = Pattern.compile(NUMBER_PATTERN);
         Matcher matcher = pattern.matcher(argument);
 
-        if(matcher.matches()){
-            return true;
-        }
-        return false;
+        return matcher.matches();
     }
 
     public boolean validateIfDiscordId(String argument){
+        argument = argument.replace("!", "");
+
         Pattern pattern = Pattern.compile(DISCORD_ID_PATTERN);
         Matcher matcher = pattern.matcher(argument);
 
-        if(matcher.matches()){
-            return true;
-        }
-        return false;
+        return matcher.matches();
     }
 
     public boolean validateIfDay(String argument){
@@ -73,10 +69,8 @@ public class GlobalValidator{
 
         if(validateIfNumeric(argument)){
             return true;
-        }else if(matcher.matches()){
-            return true;
         }
-        return false;
+        return matcher.matches();
     }
 
 }

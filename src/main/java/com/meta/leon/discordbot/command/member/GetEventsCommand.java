@@ -5,7 +5,9 @@ import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.EventValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.User;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +20,7 @@ import java.util.List;
  * !getEvents
  * Command for getting upcoming event entries from a database
  *
- * @author Leon, created on 22/03/2018
+ * Created by Leon on 22/03/2018
  */
 @Component
 public class GetEventsCommand extends AbstractCommand{
@@ -39,7 +41,7 @@ public class GetEventsCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
 
         // validate passed arguments
         if(!eventValidator.validateNumberOfArguments(arguments, 0)){
@@ -55,14 +57,11 @@ public class GetEventsCommand extends AbstractCommand{
             embedBuilder.setColor(Color.decode("#D02F00"));
 
             for(Event event : events){
-                embedBuilder.addField(
-                        event.getName() + " (id: " + event.getId() + ")",
-                        "*Description:*  **" + event.getDescription() + "**\n"
-                        + "*Time:*  **" + event.getEventTime().toString("dd/MM/yyyy - HH:mm") + "**\n"
-                        + "*Player limit:*  **" + event.getPlayerLimit() + "**\n"
-                        + "*Leader:*  **" + event.getEventLeader() + "**\n"
-                        + "--------------------",
-                        true);
+
+                String fieldValue = commandUtil.createEventBody(event);
+                fieldValue += "\n------------------------------";
+
+                embedBuilder.addField(event.getName() + " (id: " + event.getId() + ")", fieldValue, false);
             }
 
             return new ResponseForm(embedBuilder.build());

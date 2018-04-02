@@ -1,11 +1,13 @@
 package com.meta.leon.discordbot.command;
 
+import net.dv8tion.jda.core.entities.User;
+
 import java.util.ArrayList;
 
 /**
  * Abstract class for Commands - contains all basic command properties and methods
  *
- * @author Leon, created on 17/03/2018
+ * Created by Leon on 17/03/2018
  */
 public abstract class AbstractCommand{
 
@@ -30,7 +32,7 @@ public abstract class AbstractCommand{
         this.authority = authority;
     }
 
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
         return null;
     }
 

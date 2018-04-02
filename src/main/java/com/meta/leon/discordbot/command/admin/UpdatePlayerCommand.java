@@ -7,6 +7,7 @@ import com.meta.leon.discordbot.command.ResponseForm;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
+import net.dv8tion.jda.core.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * [@username] is optional
  * Command for updating player entries in a database
  *
- * @author Leon, created on 18/03/2018
+ * Created by Leon on 18/03/2018
  */
 @Component
 public class UpdatePlayerCommand extends AbstractCommand{
@@ -41,7 +42,7 @@ public class UpdatePlayerCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
 
         // if @username wasn't specified - add it as null
         if(arguments.size() == 3){
@@ -63,6 +64,9 @@ public class UpdatePlayerCommand extends AbstractCommand{
             this.nickname = arguments.get(1);
             this.accountName = arguments.get(2);
             this.discordId = arguments.get(3);
+            if(discordId != null){
+                discordId = discordId.replace("!", "");
+            }
 
             Player player = playerService.findById(id);
             if(player == null){

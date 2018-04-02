@@ -8,9 +8,10 @@
 
     <changeSet id="00001-20180315" author="leon" dbms="postgresql">
         <createTable tableName="event_signup">
-            <column name="player_id" type="BIGINT" />
             <column name="event_id" type="BIGINT" />
+            <column name="player_id" type="BIGINT" />
             <column name="discord_rank" type="VARCHAR(45)" />
+            <column name="is_backup" type="BOOLEAN" defaultValueBoolean="false" />
             <column name="signup_time" type="TIMESTAMP" />
         </createTable>
 

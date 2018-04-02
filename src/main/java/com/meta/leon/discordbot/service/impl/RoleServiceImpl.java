@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Role service - uses Role repository to manage Role entries in a database
  *
- * @author Leon, created on 18/03/2018
+ * Created by Leon on 18/03/2018
  */
 @Service
 public class RoleServiceImpl implements RoleService{

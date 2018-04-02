@@ -6,6 +6,7 @@ import com.meta.leon.discordbot.command.CommandResponses;
 import com.meta.leon.discordbot.command.ResponseForm;
 import com.meta.leon.discordbot.service.RoleService;
 import com.meta.leon.discordbot.validator.RoleValidator;
+import net.dv8tion.jda.core.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  * !removeRole <id or role_name or short_name>
  * Command for removing role entries from a database
  *
- * @author Leon, created on 19/03/2018
+ * Created by Leon on 19/03/2018
  */
 @Component
 public class RemoveRoleCommand extends AbstractCommand{
@@ -34,7 +35,7 @@ public class RemoveRoleCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
 
         // validate passed arguments
         if(!roleValidator.validateNumberOfArguments(arguments, 1)){

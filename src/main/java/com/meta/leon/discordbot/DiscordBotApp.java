@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * @author Leon, created on 12/03/2018
+ * Created by Leon on 12/03/2018
  */
 @SpringBootApplication
 public class DiscordBotApp implements CommandLineRunner{
@@ -23,8 +23,13 @@ public class DiscordBotApp implements CommandLineRunner{
     private static JDA jdaBot;
 
     private static String token;
+    private static String serverId;
+    private static String announcementChannel;
+
     private static String adminRole;
+    private static String eventLeaderRole;
     private static String memberRole;
+    private static String trialRole;
     private static String publicRole;
 
 
@@ -44,8 +49,13 @@ public class DiscordBotApp implements CommandLineRunner{
 
         // read and store properties
         token = prop.getProperty("discordApp.token");
+        serverId = prop.getProperty("discordApp.serverId");
+        announcementChannel = prop.getProperty("discordApp.announcementChannel");
+
         adminRole = prop.getProperty("discord.adminRole");
+        eventLeaderRole = prop.getProperty("discord.eventLeaderRole");
         memberRole = prop.getProperty("discord.memberRole");
+        trialRole = prop.getProperty("discord.trialRole");
         publicRole = prop.getProperty("discord.publicRole");
 
         // initialize Bot and set token
@@ -61,12 +71,28 @@ public class DiscordBotApp implements CommandLineRunner{
         return jdaBot;
     }
 
+    public static String getServerId(){
+        return serverId;
+    }
+
+    public static String getAnnouncementChannel(){
+        return announcementChannel;
+    }
+
     public static String getAdminRole(){
         return adminRole;
     }
 
+    public static String getEventLeaderRole(){
+        return eventLeaderRole;
+    }
+
     public static String getMemberRole(){
         return memberRole;
+    }
+
+    public static String getTrialRole(){
+        return trialRole;
     }
 
     public static String getPublicRole(){

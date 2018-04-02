@@ -8,6 +8,7 @@ import com.meta.leon.discordbot.model.Role;
 import com.meta.leon.discordbot.service.RoleService;
 import com.meta.leon.discordbot.validator.RoleValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * !getRole <id or role_name or short_name>
  * Command for getting a role entry from a database
  *
- * @author Leon, created on 19/03/2018
+ * Created by Leon on 19/03/2018
  */
 @Component
 public class GetRoleCommand extends AbstractCommand{
@@ -35,7 +36,7 @@ public class GetRoleCommand extends AbstractCommand{
     }
 
     @Override
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
 
         // validate passed arguments
         if(!roleValidator.validateNumberOfArguments(arguments, 1)){

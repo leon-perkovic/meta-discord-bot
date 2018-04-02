@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author Leon, created on 16/03/2018
+ * Created by Leon on 16/03/2018
  */
 @Configuration
 public class JacksonConfig{

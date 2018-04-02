@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 /**
  * PlayerRole service - uses PlayerRole repository to manage PlayerRole entries in a database
  *
- * @author Leon, created on 19/03/2018
+ * Created by Leon on 19/03/2018
  */
 @Service
 public class PlayerRoleServiceImpl implements PlayerRoleService{

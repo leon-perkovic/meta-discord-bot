@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * Entity class for database table "player"
  *
- * @author Leon, created on 16/03/2018
+ * Created by Leon on 16/03/2018
  */
 @Entity
 @Table(name = "player")

@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Interface for Role service
  *
- * @author Leon, created on 18/03/2018
+ * Created by Leon on 18/03/2018
  */
 public interface RoleService{
 

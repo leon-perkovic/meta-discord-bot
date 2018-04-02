@@ -5,7 +5,7 @@ import com.meta.leon.discordbot.model.PlayerRole;
 /**
  * Interface for PlayerRole service
  *
- * @author Leon, created on 19/03/2018
+ * Created by Leon on 19/03/2018
  */
 public interface PlayerRoleService{
 

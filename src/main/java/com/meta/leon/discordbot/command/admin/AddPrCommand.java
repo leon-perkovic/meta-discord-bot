@@ -8,6 +8,7 @@ import com.meta.leon.discordbot.service.PlayerRoleService;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.service.RoleService;
 import com.meta.leon.discordbot.validator.GlobalValidator;
+import net.dv8tion.jda.core.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
  * Multiple <role_name or short_name> arguments can be passed
  * Command for connecting a role to a player
  *
- * @author Leon, created on 19/03/2018
+ * Created by Leon on 19/03/2018
  */
 @Component
 public class AddPrCommand extends AbstractCommand{
@@ -46,7 +47,7 @@ public class AddPrCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
 
         // validate passed arguments
         if(!globalValidator.validateMinNumberOfArguments(arguments, 2)){

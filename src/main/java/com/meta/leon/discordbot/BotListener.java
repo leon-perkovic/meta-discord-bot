@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Listener class - used to handle events
  *
- * @author Leon, created on 17/03/2018
+ * Created by Leon on 17/03/2018
  */
 @Component
 public class BotListener extends ListenerAdapter{
@@ -46,8 +46,8 @@ public class BotListener extends ListenerAdapter{
         HashMap<String, AbstractCommand> commands = commandContainer.getCommands();
 
         // get user roles and set authority level
-        Member member = event.getMember();
-        List<String> roleNames = getUserRoles(member);
+        User user = event.getAuthor();
+        List<String> roleNames = getUserRoles(user);
 
         CommandAuthority authority = getUserAuthority(roleNames);
 
@@ -68,7 +68,7 @@ public class BotListener extends ListenerAdapter{
                     }
                 }
                 // call corresponding command and get its response
-                Object response = command.execute(arguments).getResponse();
+                Object response = command.execute(user, arguments).getResponse();
 
                 // send corresponding response
                 if(response instanceof  String){
@@ -95,28 +95,47 @@ public class BotListener extends ListenerAdapter{
         return false;
     }
 
-    private List<String> getUserRoles(Member member){
-        List<Role> roles = member.getRoles();
+    public static List<String> getUserRoles(User user){
+        List<Guild> guilds = user.getMutualGuilds();
+        Member member = null;
+
+        for(Guild guild : guilds){
+            if(guild.getId().equals(DiscordBotApp.getServerId())){
+                member = guild.getMember(user);
+            }
+        }
+
         List<String> roleNames = new ArrayList<>();
 
-        for(Role role : roles){
-            if(role.getName().startsWith("@")){
-                roleNames.add(role.getName().substring(1));
-            }else{
-                roleNames.add(role.getName());
+        if(member != null){
+            List<Role> roles = member.getRoles();
+
+            for(Role role : roles){
+                if(role.getName().startsWith("@")){
+                    roleNames.add(role.getName().substring(1));
+                }else{
+                    roleNames.add(role.getName());
+                }
             }
         }
 
         return roleNames;
     }
 
-    public CommandAuthority getUserAuthority(List<String> roleNames){
+    public static CommandAuthority getUserAuthority(List<String> roleNames){
         CommandAuthority authority = CommandAuthority.PUBLIC;
 
         if(roleNames.contains(DiscordBotApp.getAdminRole())){
             authority = CommandAuthority.ADMIN;
+
+        }else if(roleNames.contains(DiscordBotApp.getEventLeaderRole())){
+            authority = CommandAuthority.EVENT_LEADER;
+
         }else if(roleNames.contains(DiscordBotApp.getMemberRole())){
             authority = CommandAuthority.MEMBER;
+
+        }else if(roleNames.contains(DiscordBotApp.getTrialRole())){
+            authority = CommandAuthority.TRIAL;
         }
 
         return authority;

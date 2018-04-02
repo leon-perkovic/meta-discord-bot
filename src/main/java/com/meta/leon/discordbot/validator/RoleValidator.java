@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * Role Validator for passed arguments
  *
- * @author Leon, created on 18/03/2018
+ * Created by Leon on 18/03/2018
  */
 @Component
 public class RoleValidator extends GlobalValidator{

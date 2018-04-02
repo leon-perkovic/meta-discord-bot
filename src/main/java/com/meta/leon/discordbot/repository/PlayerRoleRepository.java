@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * PlayerRole repository - used to manage PlayerRole entries in a database
  *
- * @author Leon, created on 19/03/2018
+ * Created by Leon on 19/03/2018
  */
 public interface PlayerRoleRepository extends JpaRepository<PlayerRole, Long>{
 

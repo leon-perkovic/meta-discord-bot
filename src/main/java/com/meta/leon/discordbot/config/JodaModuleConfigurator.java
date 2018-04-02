@@ -11,7 +11,7 @@ import org.springframework.format.datetime.joda.DateTimeFormatterFactory;
 import java.util.TimeZone;
 
 /**
- * @author Leon, created on 16/03/2018
+ * Created by Leon on 16/03/2018
  */
 public class JodaModuleConfigurator{
 

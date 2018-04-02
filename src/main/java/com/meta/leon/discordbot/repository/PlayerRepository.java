@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Player repository - used to manage Player entries in a database
  *
- * @author Leon, created on 17/03/2018
+ * Created by Leon on 17/03/2018
  */
 public interface PlayerRepository extends JpaRepository<Player, Long>{
 

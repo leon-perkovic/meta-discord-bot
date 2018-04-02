@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Interface for Event service
  *
- * @author Leon, created on 21/03/2018
+ * Created by Leon on 21/03/2018
  */
 public interface EventService{
 

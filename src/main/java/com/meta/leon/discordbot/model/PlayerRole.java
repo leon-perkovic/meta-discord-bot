@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Entity class for database table "player_role"
  *
- * @author Leon, created on 19/03/2018
+ * Created by Leon on 19/03/2018
  */
 @Entity
 @IdClass(PlayerRoleKey.class)

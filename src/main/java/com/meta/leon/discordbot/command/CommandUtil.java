@@ -1,9 +1,13 @@
 package com.meta.leon.discordbot.command;
 
+import com.meta.leon.discordbot.DiscordBotApp;
+import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.model.Player;
+import com.meta.leon.discordbot.service.EventSignupService;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.GlobalValidator;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +17,7 @@ import java.util.HashMap;
 /**
  * Utility class for common command operations
  *
- * @author Leon, created on 20/03/2018
+ * Created by Leon on 20/03/2018
  */
 @Component
 public class CommandUtil{
@@ -22,6 +26,9 @@ public class CommandUtil{
 
     @Autowired
     PlayerService playerService;
+
+    @Autowired
+    EventSignupService eventSignupService;
 
     @Autowired
     GlobalValidator globalValidator;
@@ -43,7 +50,7 @@ public class CommandUtil{
 
         Player player;
 
-        // determine which reference was used for a player and get its ID
+        // determine which reference was used for a player and get their ID
         if(globalValidator.validateIfNumeric(arguments.get(0))){
             Long id = Long.valueOf(arguments.get(0));
 
@@ -54,7 +61,7 @@ public class CommandUtil{
             }
 
         }else if(globalValidator.validateIfDiscordId(arguments.get(0))){
-            player = playerService.findByDiscordId(arguments.get(0));
+            player = playerService.findByDiscordId(arguments.get(0).replace("!", ""));
 
             if(player == null){
                 return player;
@@ -77,7 +84,6 @@ public class CommandUtil{
 
         int hours = 0;
         int minutes = 0;
-        System.out.println(">>>>>Current: Hour: " + nowHours + ", Minute: " + nowMinutes);
 
         if(time.contains(":")){
             hours = Integer.valueOf(time.split(":")[0]);
@@ -119,6 +125,37 @@ public class CommandUtil{
                 + "-" + eventTime.getMinuteOfHour();
 
         return eventName;
+    }
+
+    public String createEventBody(Event event){
+        DateTimeZone timeZone = event.getEventTime().getZone();
+        String zone = timeZone.getShortName(event.getEventTime().getMillis());
+
+        String fieldValue = "*Description:*  **" + event.getDescription() + "**\n"
+                + "*Time:*  **" + event.getEventTime().toString("dd/MM/yyyy - HH:mm") + " " + zone + "**\n"
+                + "*Total players:*  **"
+                + eventSignupService.getNumOfSignups(event.getId(), false)
+                + "/" + event.getPlayerLimit() + "**\n";
+
+        fieldValue += "*Members:*  **"
+                    + eventSignupService.getNumOfSignupsByRank(event.getId(), DiscordBotApp.getMemberRole(), false)
+                    + "/" + event.getMemberLimit() + "**\n";
+
+        fieldValue += "*Trials:*  **"
+                    + eventSignupService.getNumOfSignupsByRank(event.getId(), DiscordBotApp.getTrialRole(), false)
+                    + "/" + event.getTrialLimit() + "**\n";
+
+        fieldValue += "*Leader:*  **" + event.getEventLeader() + "**";
+
+        return fieldValue;
+    }
+
+    public String convertDiscordMentionToId(String mention){
+        mention = mention.replace("<", "");
+        mention = mention.replace(">", "");
+        mention = mention.replace("@", "");
+
+        return mention;
     }
 
     // -- getters and setters -------------------------------------------------
