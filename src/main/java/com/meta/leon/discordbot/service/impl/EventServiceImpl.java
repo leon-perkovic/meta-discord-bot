@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Event service - uses Event repository to manage Event entries in a database
  *
- * @author Leon, created on 21/03/2018
+ * Created by Leon on 21/03/2018
  */
 @Service
 public class EventServiceImpl implements EventService{

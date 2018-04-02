@@ -8,6 +8,7 @@ import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * !getPlayer <id or nickname or @username>
  * Command for getting a player entry from a database
  *
- * @author Leon, created on 18/03/2018
+ * Created by Leon on 18/03/2018
  */
 @Component
 public class GetPlayerCommand extends AbstractCommand{
@@ -35,7 +36,7 @@ public class GetPlayerCommand extends AbstractCommand{
     }
 
     @Override
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
 
         // validate passed arguments
         if(!playerValidator.validateNumberOfArguments(arguments, 1)){
@@ -48,7 +49,7 @@ public class GetPlayerCommand extends AbstractCommand{
             player = playerService.findById(id);
 
         }else if(playerValidator.validateIfDiscordId(arguments.get(0))){
-            player = playerService.findByDiscordId(arguments.get(0));
+            player = playerService.findByDiscordId(arguments.get(0).replace("!", ""));
 
         }else{
             player = playerService.findByNickname(arguments.get(0));
@@ -58,15 +59,12 @@ public class GetPlayerCommand extends AbstractCommand{
             EmbedBuilder embedBuilder = new EmbedBuilder();
 
             embedBuilder.setTitle("__Player info:__");
+            embedBuilder.setDescription("**" + player.getNickname()
+                            + "**, " + player.getAccountName()
+                            + ", " + "*id:* " + player.getId()
+                            + ", " + player.getDiscordId() + "\n"
+                            + player.rolesToString());
             embedBuilder.setColor(Color.decode("#D02F00"));
-            embedBuilder.addField(
-                    "",
-                    "**" + player.getNickname()
-                    + "**, " + player.getAccountName()
-                    + ", " + "*id:* " + player.getId()
-                    + ", " + player.getDiscordId() + "\n"
-                    + player.rolesToString(),
-                    true);
 
             return new ResponseForm(embedBuilder.build());
         }

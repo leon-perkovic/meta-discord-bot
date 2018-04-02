@@ -3,6 +3,7 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.*;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.EventValidator;
+import net.dv8tion.jda.core.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  * Command for removing event entries from a database
  * Event name will be determined and set automatically for first upcoming day if only day was specified
  *
- * @author Leon, created on 22/03/2018
+ * Created by Leon on 22/03/2018
  */
 @Component
 public class RemoveEventCommand extends AbstractCommand{
@@ -31,12 +32,12 @@ public class RemoveEventCommand extends AbstractCommand{
 
 
     public RemoveEventCommand(){
-        super("removeevent", "Remove an event from a database", "N/A", CommandAuthority.ADMIN);
+        super("removeevent", "Remove an event from a database", "N/A", CommandAuthority.EVENT_LEADER);
     }
 
     @Override
     @Transactional
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
 
         // validate passed arguments
         if(!eventValidator.validateMinNumberOfArguments(arguments, 1)){

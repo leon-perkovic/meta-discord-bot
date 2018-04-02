@@ -1,9 +1,7 @@
 package com.meta.leon.discordbot.command;
 
 import com.meta.leon.discordbot.command.admin.*;
-import com.meta.leon.discordbot.command.member.GetEventCommand;
-import com.meta.leon.discordbot.command.member.GetEventsCommand;
-import com.meta.leon.discordbot.command.member.GetPastEventsCommand;
+import com.meta.leon.discordbot.command.member.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +10,7 @@ import java.util.HashMap;
 /**
  * Container for all autowired commands
  *
- * @author Leon, created on 17/03/2018
+ * Created by Leon on 17/03/2018
  */
 @Component
 public class CommandContainer{
@@ -70,6 +68,15 @@ public class CommandContainer{
     @Autowired
     private GetPastEventsCommand getPastEventsCommand;
 
+    @Autowired
+    private EventDetailCommand eventDetailCommand;
+
+    @Autowired
+    private SignupCommand signupCommand;
+
+    @Autowired
+    private DropoutCommand dropoutCommand;
+
 
     // Used to map all autowired commands to their key values
     public void mapCommands(){
@@ -93,6 +100,9 @@ public class CommandContainer{
         commands.put("getevent", getEventCommand);
         commands.put("getevents", getEventsCommand);
         commands.put("getpastevents", getPastEventsCommand);
+        commands.put("eventdetail", eventDetailCommand);
+        commands.put("signup", signupCommand);
+        commands.put("dropout", dropoutCommand);
     }
 
     // -- getters and setters -------------------------------------------------

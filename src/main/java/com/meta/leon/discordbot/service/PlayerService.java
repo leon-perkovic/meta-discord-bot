@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Interface for Player service
  *
- * @author Leon, created on 17/03/2018
+ * Created by Leon on 17/03/2018
  */
 public interface PlayerService{
 

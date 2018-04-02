@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command;
 /**
  * Class containing various response messages
  *
- * @author Leon, created on 18/03/2018
+ * Created by Leon on 18/03/2018
  */
 public class CommandResponses{
 
@@ -22,6 +22,10 @@ public class CommandResponses{
     public static final String EVENT_NOT_FOUND = "That event doesn't exist :no_entry_sign:";
 
     public static final String EVENT_ALREADY_EXISTS = "That event already exists :no_entry_sign:";
+
+    public static final String SIGNUP_ALREADY_EXISTS = "You're already signed up for this event :wink:";
+
+    public static final String SIGNUP_NOT_FOUND = "You're not signed up for this event :no_entry_sign:";
 
     // -- AddPlayer -----------------------------------------------------------
 
@@ -111,5 +115,27 @@ public class CommandResponses{
     // -- GetPastEvents -------------------------------------------------------
 
     public static final String GET_PAST_EVENTS_INVALID_ARGUMENT = "Invalid argument :no_entry_sign: Try: ```!getPastEvents [page_number]```";
+
+    // -- EventDetail ------------------------------------------------------------
+
+    public static final String EVENT_DETAIL_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!eventDetail <id or name or day> [HH:mm]```";
+
+    // -- Signup --------------------------------------------------------------
+
+    public static final String  SIGNUP_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!signup <id or name or day> [HH:mm]```";
+
+    public static final String SIGNUP_INVALID_PLAYER = "Can't sign you up, sorry. Your discord ID isn't connected :cry:";
+
+    public static final String SIGNUP_FULL = "There are no free spots left for this event :confused: You've been signed up as a **backup**.";
+
+    public static final String SIGNUP_SUCCESS = "You've been signed up successfully :white_check_mark:";
+
+    // -- Dropout -------------------------------------------------------------
+
+    public static final String DROPOUT_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!dropout <id or name or day> [HH:mm]```";
+
+    public static final String DROPOUT_INVALID_PLAYER = "Can't drop out of the event, sorry. Your discord ID isn't connected :cry:";
+
+    public static final String DROPOUT_SUCCESS = "You've dropped out of the event successfully :white_check_mark:";
 
 }

@@ -8,6 +8,7 @@ import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,7 @@ import java.util.List;
  * !getPlayers
  * Command for getting all player entries from a database
  *
- * @author Leon, created on 18/03/2018
+ * Created by Leon on 18/03/2018
  */
 @Component
 public class GetPlayersCommand extends AbstractCommand{
@@ -36,7 +37,7 @@ public class GetPlayersCommand extends AbstractCommand{
     }
 
     @Override
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
 
         // validate passed arguments
         if(!playerValidator.validateNumberOfArguments(arguments, 0)){
@@ -49,21 +50,28 @@ public class GetPlayersCommand extends AbstractCommand{
             return new ResponseForm(CommandResponses.GET_PLAYERS_NONE_FOUND);
         }
 
-        EmbedBuilder embedBuilder = new EmbedBuilder();
-
-        embedBuilder.setTitle("__Player info:__");
-        embedBuilder.setColor(Color.decode("#D02F00"));
+        StringBuilder playersInfo = new StringBuilder("");
 
         for(Player player : players){
-            embedBuilder.addField(
-                    "--------------------",
-                    "**" + player.getNickname()
-                    + "**, " + player.getAccountName()
-                    + ", " + "*id:* " + player.getId()
-                    + ", " + player.getDiscordId() + "\n"
-                    + player.rolesToString(),
-                    true);
+            playersInfo.append("**")
+                        .append(player.getNickname())
+                        .append("**, ")
+                        .append(player.getAccountName())
+                        .append(", *id:* ")
+                        .append(player.getId())
+                        .append(", ")
+                        .append(player.getDiscordId())
+                        .append("\n")
+                        .append(player.rolesToString())
+                        .append("\n");
         }
+
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+
+        embedBuilder.setTitle("__Players:__");
+        embedBuilder.setDescription(playersInfo.toString());
+        embedBuilder.setColor(Color.decode("#D02F00"));
+
         return new ResponseForm(embedBuilder.build());
     }
 

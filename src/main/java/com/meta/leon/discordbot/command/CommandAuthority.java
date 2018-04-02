@@ -1,13 +1,15 @@
 package com.meta.leon.discordbot.command;
 
 /**
- * @author Leon, created on 17/03/2018
+ * Created by Leon on 17/03/2018
  */
 public enum CommandAuthority{
 
     PUBLIC(1),
+    TRIAL(2),
     MEMBER(2),
-    ADMIN(3);
+    EVENT_LEADER(3),
+    ADMIN(4);
 
     private final int level;
 

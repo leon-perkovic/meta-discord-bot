@@ -8,6 +8,7 @@ import com.meta.leon.discordbot.model.Role;
 import com.meta.leon.discordbot.service.RoleService;
 import com.meta.leon.discordbot.validator.RoleValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,7 @@ import java.util.List;
  * !getRoles
  * Command for getting all role entries from a database
  *
- * @author Leon, created on 19/03/2018
+ * Created by Leon on 19/03/2018
  */
 @Component
 public class GetRolesCommand extends AbstractCommand{
@@ -36,7 +37,7 @@ public class GetRolesCommand extends AbstractCommand{
     }
 
     @Override
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
 
         // validate passed arguments
         if(!roleValidator.validateNumberOfArguments(arguments, 0)){
@@ -49,15 +50,22 @@ public class GetRolesCommand extends AbstractCommand{
             return new ResponseForm(CommandResponses.GET_ROLES_NONE_FOUND);
         }
 
-        String rolesInfo = "";
+        StringBuilder rolesInfo = new StringBuilder("");
+
         for(Role role : roles){
-            rolesInfo += "**" + role.getRoleName() + "** (" + role.getShortName() + ", *id:* " + role.getId() + ")\n";
+            rolesInfo.append("**")
+                    .append(role.getRoleName())
+                    .append("** (")
+                    .append(role.getShortName())
+                    .append(", *id:* ")
+                    .append(role.getId())
+                    .append(")\n");
         }
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
 
-        embedBuilder.setTitle("__Role info:__");
-        embedBuilder.setDescription(rolesInfo);
+        embedBuilder.setTitle("__Roles:__");
+        embedBuilder.setDescription(rolesInfo.toString());
         embedBuilder.setColor(Color.decode("#D02F00"));
 
         return new ResponseForm(embedBuilder.build());

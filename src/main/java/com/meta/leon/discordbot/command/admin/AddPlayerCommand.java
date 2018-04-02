@@ -7,6 +7,7 @@ import com.meta.leon.discordbot.command.ResponseForm;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
+import net.dv8tion.jda.core.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * [@username] is optional
  * Command for adding new player entries to a database
  *
- * @author Leon, created on 17/03/2018
+ * Created by Leon on 17/03/2018
  */
 @Component
 public class AddPlayerCommand extends AbstractCommand{
@@ -40,7 +41,7 @@ public class AddPlayerCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
 
         // if @username wasn't specified - add it as null
         if(arguments.size() == 2){
@@ -60,6 +61,9 @@ public class AddPlayerCommand extends AbstractCommand{
         this.nickname = arguments.get(0);
         this.accountName = arguments.get(1);
         this.discordId = arguments.get(2);
+        if(discordId != null){
+            discordId = discordId.replace("!", "");
+        }
 
         if(!playerValidator.validateIfUniquePlayer(nickname, accountName, discordId)){
             return new ResponseForm(CommandResponses.PLAYER_ALREADY_EXISTS);

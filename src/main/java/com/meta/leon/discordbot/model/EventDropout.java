@@ -9,14 +9,14 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Entity class for database table "event_signup"
+ * Entity class for database table "event_dropout"
  *
- * Created by Leon on 16/03/2018
+ * Created by Leon on 02/04/2018
  */
 @Entity
-@IdClass(EventSignupKey.class)
-@Table(name = "event_signup")
-public class EventSignup implements Serializable{
+@IdClass(EventDropoutKey.class)
+@Table(name = "event_dropout")
+public class EventDropout implements Serializable{
 
     @Id
     @Column(name = "event_id")
@@ -25,6 +25,9 @@ public class EventSignup implements Serializable{
     @Id
     @Column(name = "player_id")
     private Long playerId;
+
+    @Column(name = "nickname")
+    private String nickname;
 
     @Column(name = "discord_rank")
     private String discordRank;
@@ -36,17 +39,23 @@ public class EventSignup implements Serializable{
     @Column(name = "signup_time")
     private DateTime signupTime;
 
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Column(name = "dropout_time")
+    private DateTime dropoutTime;
 
-    public EventSignup(){
+
+    public EventDropout(){
         // default constructor
     }
 
-    public EventSignup(Long eventId, Long playerId, String discordRank, boolean isBackup, DateTime signupTime){
+    public EventDropout(Long eventId, Long playerId, String nickname, String discordRank, boolean isBackup, DateTime signupTime, DateTime dropoutTime){
         this.eventId = eventId;
         this.playerId = playerId;
+        this.nickname = nickname;
         this.discordRank = discordRank;
         this.isBackup = isBackup;
         this.signupTime = signupTime;
+        this.dropoutTime = dropoutTime;
     }
 
     @Override
@@ -56,9 +65,11 @@ public class EventSignup implements Serializable{
 
         stringBuilder.append("eventId", eventId);
         stringBuilder.append("playerId", playerId);
+        stringBuilder.append("nickname", nickname);
         stringBuilder.append("discordRank", discordRank);
         stringBuilder.append("isBackup", isBackup);
         stringBuilder.append("signupTime", signupTime);
+        stringBuilder.append("dropoutTime", dropoutTime);
 
         return stringBuilder.toString();
     }
@@ -79,6 +90,14 @@ public class EventSignup implements Serializable{
 
     public void setPlayerId(Long playerId){
         this.playerId=playerId;
+    }
+
+    public String getNickname(){
+        return nickname;
+    }
+
+    public void setNickname(String nickname){
+        this.nickname = nickname;
     }
 
     public String getDiscordRank(){
@@ -105,4 +124,11 @@ public class EventSignup implements Serializable{
         this.signupTime=signupTime;
     }
 
+    public DateTime getDropoutTime(){
+        return dropoutTime;
+    }
+
+    public void setDropoutTime(DateTime dropoutTime){
+        this.dropoutTime = dropoutTime;
+    }
 }

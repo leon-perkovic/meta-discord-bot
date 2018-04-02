@@ -6,6 +6,7 @@ import com.meta.leon.discordbot.command.CommandResponses;
 import com.meta.leon.discordbot.command.ResponseForm;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
+import net.dv8tion.jda.core.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  * !removePlayer <id or nickname or @username>
  * Command for removing player entries from a database
  *
- * @author Leon, created on 18/03/2018
+ * Created by Leon on 18/03/2018
  */
 @Component
 public class RemovePlayerCommand extends AbstractCommand{
@@ -34,7 +35,7 @@ public class RemovePlayerCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
 
         // validate passed arguments
         if(!playerValidator.validateNumberOfArguments(arguments, 1)){
@@ -47,7 +48,7 @@ public class RemovePlayerCommand extends AbstractCommand{
             numOfRemoved = playerService.removeById(id);
 
         }else if(playerValidator.validateIfDiscordId(arguments.get(0))){
-            numOfRemoved = playerService.removeByDiscordId(arguments.get(0));
+            numOfRemoved = playerService.removeByDiscordId(arguments.get(0).replace("!", ""));
 
         }else{
             numOfRemoved = playerService.removeByNickname(arguments.get(0));

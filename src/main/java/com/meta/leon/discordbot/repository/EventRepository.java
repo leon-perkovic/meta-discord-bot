@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Event repository - used to manage Event entries in a database
  *
- * @author Leon, created on 21/03/2018
+ * Created by Leon on 21/03/2018
  */
 public interface EventRepository extends JpaRepository<Event, Long>{
 

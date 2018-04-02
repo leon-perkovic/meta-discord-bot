@@ -3,11 +3,11 @@ package com.meta.leon.discordbot.model;
 import java.io.Serializable;
 
 /**
- * Container class for EventSignup's composite primary key
+ * Container class for EventDropout's composite primary key
  *
- * Created by Leon on 16/03/2018
+ * Created by Leon on 02/04/2018
  */
-public class EventSignupKey implements Serializable{
+public class EventDropoutKey implements Serializable{
 
     private Long eventId;
 

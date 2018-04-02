@@ -7,6 +7,7 @@ import com.meta.leon.discordbot.command.ResponseForm;
 import com.meta.leon.discordbot.model.Role;
 import com.meta.leon.discordbot.service.RoleService;
 import com.meta.leon.discordbot.validator.RoleValidator;
+import net.dv8tion.jda.core.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  * !addRole <role_name> <short_name>
  * Command for adding new role entries to a database
  *
- * @author Leon, created on 18/03/2018
+ * Created by Leon on 18/03/2018
  */
 @Component
 public class AddRoleCommand extends AbstractCommand{
@@ -38,7 +39,7 @@ public class AddRoleCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(ArrayList<String> arguments){
+    public ResponseForm execute(User user, ArrayList<String> arguments){
 
         // validate passed arguments
         if(!roleValidator.validateNumberOfArguments(arguments, 2)){

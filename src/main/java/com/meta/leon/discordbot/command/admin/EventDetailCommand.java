@@ -1,11 +1,14 @@
-package com.meta.leon.discordbot.command.member;
+package com.meta.leon.discordbot.command.admin;
 
 import com.meta.leon.discordbot.command.*;
 import com.meta.leon.discordbot.model.Event;
+import com.meta.leon.discordbot.model.EventDropout;
 import com.meta.leon.discordbot.model.EventSignup;
 import com.meta.leon.discordbot.model.Player;
+import com.meta.leon.discordbot.service.EventDropoutService;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.service.EventSignupService;
+import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.EventValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.User;
@@ -16,23 +19,30 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * !getEvent <id or name or day> [HH:mm]
+ * !eventDetail <id or name or day> [HH:mm]
  * [HH:mm] is optional, only needed in combination with <day>
- * Command for getting event entries from a database
+ * Command for getting detailed event entries from a database
  * Event name will be determined and set automatically for first upcoming day if only day was specified
  *
- * Created by Leon on 22/03/2018
+ * Created by Leon on 02/04/2018
  */
 @Component
-public class GetEventCommand extends AbstractCommand{
+public class EventDetailCommand extends AbstractCommand{
 
     @Autowired
     EventService eventService;
 
     @Autowired
+    PlayerService playerService;
+
+    @Autowired
     EventSignupService eventSignupService;
+
+    @Autowired
+    EventDropoutService eventDropoutService;
 
     @Autowired
     EventValidator eventValidator;
@@ -41,8 +51,8 @@ public class GetEventCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public GetEventCommand(){
-        super("getevent", "Get event info from a database", "N/A", CommandAuthority.MEMBER);
+    public EventDetailCommand(){
+        super("eventdetail", "Get detailed event info from a database", "N/A", CommandAuthority.EVENT_LEADER);
     }
 
     @Override
@@ -84,10 +94,14 @@ public class GetEventCommand extends AbstractCommand{
 
             StringBuilder signups = new StringBuilder("");
             StringBuilder backups = new StringBuilder("");
+            StringBuilder dropouts = new StringBuilder("");
 
             for(Player player : event.getPlayers()){
                 EventSignup eventSignup = eventSignupService.findEventSignup(event.getId(), player.getId());
                 String discordRank = eventSignup.getDiscordRank();
+
+                DateTimeZone timeZone = event.getEventTime().getZone();
+                String zone = timeZone.getShortName(event.getEventTime().getMillis());
 
                 if(eventSignup.isBackup()){
                     backups.append("\n**")
@@ -97,7 +111,10 @@ public class GetEventCommand extends AbstractCommand{
                             .append("), ")
                             .append(player.getDiscordId())
                             .append("\n")
-                            .append(player.rolesToString());
+                            .append(player.rolesToString())
+                            .append("\n- *Signup time:* **")
+                            .append(eventSignup.getSignupTime().toString("dd/MM/yyyy - HH:mm:ss"))
+                            .append(" ").append(zone).append("**");
                 }else{
                     signups.append("\n**")
                             .append(player.getNickname())
@@ -106,15 +123,43 @@ public class GetEventCommand extends AbstractCommand{
                             .append("), ")
                             .append(player.getDiscordId())
                             .append("\n")
-                            .append(player.rolesToString());
+                            .append(player.rolesToString())
+                            .append("\n- *Signup time:* **")
+                            .append(eventSignup.getSignupTime().toString("dd/MM/yyyy - HH:mm:ss"))
+                            .append(" ").append(zone).append("**");
                 }
             }
 
+            List<EventDropout> eventDropouts = eventDropoutService.findAllByEventId(event.getId());
+
+            for(EventDropout eventDropout : eventDropouts){
+                DateTimeZone timeZone = event.getEventTime().getZone();
+                String zone = timeZone.getShortName(event.getEventTime().getMillis());
+
+                dropouts.append("\n**")
+                        .append(eventDropout.getNickname())
+                        .append("** (")
+                        .append(eventDropout.getDiscordRank())
+                        .append(")");
+
+                if(eventDropout.isBackup()){
+                    dropouts.append(" [*backup*]");
+                }
+                dropouts.append("\n- *Signup time:* **")
+                        .append(eventDropout.getSignupTime().toString("dd/MM/yyyy - HH:mm:ss"))
+                        .append(" ").append(zone).append("**")
+                        .append("\n- *Dropout time:* **")
+                        .append(eventDropout.getDropoutTime().toString("dd/MM/yyyy - HH:mm:ss"))
+                        .append(" ").append(zone).append("**");
+            }
+
             signups.append("\n------------------------------");
+            backups.append("\n------------------------------");
 
             embedBuilder.addField(event.getName() + " (id: " + event.getId() + ")", fieldValue, false);
             embedBuilder.addField("Signups:", signups.toString(), false);
             embedBuilder.addField("Backups:", backups.toString(), false);
+            embedBuilder.addField("Dropouts:", dropouts.toString(), false);
 
             return new ResponseForm(embedBuilder.build());
         }
