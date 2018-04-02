@@ -1,11 +1,13 @@
 package com.meta.leon.discordbot.command;
 
 import com.meta.leon.discordbot.command.admin.*;
+import com.meta.leon.discordbot.command.everyone.HelpCommand;
+import com.meta.leon.discordbot.command.everyone.RollCommand;
 import com.meta.leon.discordbot.command.member.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * Container for all autowired commands
@@ -15,7 +17,7 @@ import java.util.HashMap;
 @Component
 public class CommandContainer{
 
-    private HashMap<String, AbstractCommand> commands;
+    private TreeMap<String, AbstractCommand> commands;
 
     @Autowired
     private AddPlayerCommand addPlayerCommand;
@@ -77,11 +79,32 @@ public class CommandContainer{
     @Autowired
     private DropoutCommand dropoutCommand;
 
+    @Autowired
+    private AddDpsReportCommand addDpsReportCommand;
+
+    @Autowired
+    private RemoveDpsReportCommand removeDpsReportCommand;
+
+    @Autowired
+    private GetDpsReportCommand getDpsReportCommand;
+
+    @Autowired
+    private AnnounceCommand announceCommand;
+
+    @Autowired
+    private HelpCommand helpCommand;
+
+    @Autowired
+    private RollCommand rollCommand;
+
+    @Autowired
+    private KataCommand kataCommand;
+
 
     // Used to map all autowired commands to their key values
     public void mapCommands(){
 
-        commands = new HashMap<>();
+        commands = new TreeMap<>();
 
         commands.put("addplayer", addPlayerCommand);
         commands.put("removeplayer", removePlayerCommand);
@@ -103,11 +126,18 @@ public class CommandContainer{
         commands.put("eventdetail", eventDetailCommand);
         commands.put("signup", signupCommand);
         commands.put("dropout", dropoutCommand);
+        commands.put("adddpsreport", addDpsReportCommand);
+        commands.put("removedpsreport", removeDpsReportCommand);
+        commands.put("getdpsreport", getDpsReportCommand);
+        commands.put("announce", announceCommand);
+        commands.put("help", helpCommand);
+        commands.put("roll", rollCommand);
+        commands.put("kata", kataCommand);
     }
 
     // -- getters and setters -------------------------------------------------
 
-    public HashMap<String, AbstractCommand> getCommands(){
+    public TreeMap<String, AbstractCommand> getCommands(){
         return commands;
     }
 

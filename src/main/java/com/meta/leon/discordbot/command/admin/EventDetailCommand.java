@@ -52,7 +52,11 @@ public class EventDetailCommand extends AbstractCommand{
 
 
     public EventDetailCommand(){
-        super("eventdetail", "Get detailed event info from a database", "N/A", CommandAuthority.EVENT_LEADER);
+        super("eventdetail",
+                "**!eventDetail <id or name or day> [HH:mm]**"
+                + "\n -> Get detailed information about a specific event. Date will be set for the first upcoming day in the week.",
+                "N/A",
+                CommandAuthority.EVENT_LEADER);
     }
 
     @Override
@@ -61,11 +65,11 @@ public class EventDetailCommand extends AbstractCommand{
 
         // validate passed arguments
         if(!eventValidator.validateMinNumberOfArguments(arguments, 1)){
-            return new ResponseForm(CommandResponses.GET_EVENT_INVALID_ARGUMENTS);
+            return new ResponseForm(CommandResponses.EVENT_DETAIL_INVALID_ARGUMENTS);
         }
         if(arguments.size() == 2){
             if(!eventValidator.validateIfTime(arguments.get(1))){
-                return new ResponseForm(CommandResponses.GET_EVENT_INVALID_ARGUMENTS);
+                return new ResponseForm(CommandResponses.EVENT_DETAIL_INVALID_ARGUMENTS);
             }
         }
 

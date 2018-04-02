@@ -42,7 +42,11 @@ public class AddPrCommand extends AbstractCommand{
 
 
     public AddPrCommand(){
-        super("addpr", "Connect a new role to a player", "N/A", CommandAuthority.ADMIN);
+        super("addpr",
+                "**!addPR <id or nickname or @username> <role_name or short_name ...>**"
+                + "\n -> Add roles for a specific player.",
+                "N/A",
+                CommandAuthority.ADMIN);
     }
 
     @Override

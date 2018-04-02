@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Listener class - used to handle events
@@ -43,7 +43,7 @@ public class BotListener extends ListenerAdapter{
 
         // map commands in command container
         commandContainer.mapCommands();
-        HashMap<String, AbstractCommand> commands = commandContainer.getCommands();
+        TreeMap<String, AbstractCommand> commands = commandContainer.getCommands();
 
         // get user roles and set authority level
         User user = event.getAuthor();
@@ -102,6 +102,7 @@ public class BotListener extends ListenerAdapter{
         for(Guild guild : guilds){
             if(guild.getId().equals(DiscordBotApp.getServerId())){
                 member = guild.getMember(user);
+                break;
             }
         }
 

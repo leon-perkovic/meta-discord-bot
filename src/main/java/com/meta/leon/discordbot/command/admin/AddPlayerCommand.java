@@ -36,7 +36,11 @@ public class AddPlayerCommand extends AbstractCommand{
 
 
     public AddPlayerCommand(){
-        super("addplayer", "Add new player to a database", "N/A", CommandAuthority.ADMIN);
+        super("addplayer",
+                "**!addPlayer <nickname> <account_name> [@username]**"
+                + "\n -> Add a new player to the roster.",
+                "N/A",
+                CommandAuthority.ADMIN);
     }
 
     @Override

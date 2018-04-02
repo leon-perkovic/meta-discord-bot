@@ -35,7 +35,11 @@ public class UpdateRoleCommand extends AbstractCommand{
 
 
     public UpdateRoleCommand(){
-        super("updaterole", "Update role info in a database", "N/A", CommandAuthority.ADMIN);
+        super("updaterole",
+                "**!updateRole <id> <role_name> <short_name>**"
+                + "\n -> Update information about a specific role.",
+                "N/A",
+                CommandAuthority.ADMIN);
     }
 
     @Override

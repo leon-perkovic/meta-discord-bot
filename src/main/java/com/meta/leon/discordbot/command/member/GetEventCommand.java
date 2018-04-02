@@ -9,7 +9,6 @@ import com.meta.leon.discordbot.service.EventSignupService;
 import com.meta.leon.discordbot.validator.EventValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.User;
-import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +41,11 @@ public class GetEventCommand extends AbstractCommand{
 
 
     public GetEventCommand(){
-        super("getevent", "Get event info from a database", "N/A", CommandAuthority.MEMBER);
+        super("getevent",
+                "**!getEvent <id or name or day> [HH:mm]**"
+                + "\n -> Get information about a specific event. Date will be set for the first upcoming day in the week.",
+                "N/A",
+                CommandAuthority.MEMBER);
     }
 
     @Override

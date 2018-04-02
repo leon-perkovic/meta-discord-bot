@@ -7,7 +7,6 @@ import com.meta.leon.discordbot.validator.EventValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.User;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +39,11 @@ public class GetPastEventsCommand extends AbstractCommand{
 
 
     public GetPastEventsCommand(){
-        super("getpastevents", "Get past events info from a database", "N/A", CommandAuthority.MEMBER);
+        super("getpastevents",
+                "**!getPastEvents [page_number]**"
+                + "\n -> Get information about all past events. Shows 10 events per page.",
+                "N/A",
+                CommandAuthority.MEMBER);
     }
 
     @Override

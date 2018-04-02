@@ -7,7 +7,6 @@ import com.meta.leon.discordbot.validator.EventValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.User;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +35,11 @@ public class GetEventsCommand extends AbstractCommand{
 
 
     public GetEventsCommand(){
-        super("getevents", "Get upcoming events info from a database", "N/A", CommandAuthority.MEMBER);
+        super("getevents",
+                "**!getEvents**"
+                + "\n -> Get information about all upcoming events.",
+                "N/A",
+                CommandAuthority.MEMBER);
     }
 
     @Override
