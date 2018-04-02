@@ -34,7 +34,11 @@ public class AddRoleCommand extends AbstractCommand{
 
 
     public AddRoleCommand(){
-        super("addrole", "Add new role to a database", "N/A", CommandAuthority.ADMIN);
+        super("addrole",
+                "**!addRole <role_name> <short_name>**"
+                + "\n -> Add a new role.",
+                "N/A",
+                CommandAuthority.ADMIN);
     }
 
     @Override

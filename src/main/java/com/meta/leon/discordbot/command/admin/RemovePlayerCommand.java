@@ -30,7 +30,11 @@ public class RemovePlayerCommand extends AbstractCommand{
 
 
     public RemovePlayerCommand(){
-        super("removeplayer", "Remove a player from a database", "N/A", CommandAuthority.ADMIN);
+        super("removeplayer",
+                "**!removePlayer <id or nickname or @username>**"
+                + "\n -> Remove a specific player from the roster.",
+                "N/A",
+                CommandAuthority.ADMIN);
     }
 
     @Override

@@ -30,7 +30,11 @@ public class RemoveRoleCommand extends AbstractCommand{
 
 
     public RemoveRoleCommand(){
-        super("removerole", "Remove a role from a database", "N/A", CommandAuthority.ADMIN);
+        super("removerole",
+                "**!removeRole <id or role_name or short_name>**"
+                + "\n -> Remove a specific role.",
+                "N/A",
+                CommandAuthority.ADMIN);
     }
 
     @Override

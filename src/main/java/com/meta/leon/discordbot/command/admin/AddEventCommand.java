@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 
 /**
- * !addEvent <day> <HH:mm> <player_limit> <trial_limit> <member_limit> [event_leader] [description]
+ * !addEvent <day> <HH:mm> <player_limit> <member_limit> <trial_limit> [event_leader] [description]
  * [event_leader] and [description] are optional
  * Command for adding new event entries to a database
  * Event date will be determined and set automatically for first upcoming day in the week
@@ -42,7 +42,11 @@ public class AddEventCommand extends AbstractCommand{
 
 
     public AddEventCommand(){
-        super("addevent", "Add new event to a database", "N/A", CommandAuthority.EVENT_LEADER);
+        super("addevent",
+                "**!addEvent <day> <HH:mm> <player_limit> <member_limit> <trial_limit> [event_leader] [description]**"
+                + "\n -> Create new event. Date will be set for the first upcoming day in the week.",
+                "N/A",
+                CommandAuthority.EVENT_LEADER);
     }
 
     @Override

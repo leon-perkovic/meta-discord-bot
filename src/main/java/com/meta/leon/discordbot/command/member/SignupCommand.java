@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * !signup <id or name or day> [HH:mm]
+ * !signup <id or event_name or day> [HH:mm]
  * [HH:mm] is optional, only needed in combination with <day>
  * Command for signing up for an event
  * Event name will be determined and set automatically for first upcoming day if only day was specified
@@ -50,9 +50,12 @@ public class SignupCommand extends AbstractCommand{
 
 
     public SignupCommand(){
-        super("signup", "Sign up for an event", "N/A", CommandAuthority.MEMBER);
+        super("signup",
+                "**!signup <id or event_name or day> [HH:mm]**"
+                + "\n -> Sign up for a specific event. Date will be set for the first upcoming day in the week.",
+                "N/A",
+                CommandAuthority.MEMBER);
     }
-
 
     @Override
     @Transactional

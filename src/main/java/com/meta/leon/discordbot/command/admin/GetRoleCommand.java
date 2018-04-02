@@ -32,7 +32,11 @@ public class GetRoleCommand extends AbstractCommand{
 
 
     public GetRoleCommand(){
-        super("getrole", "Get a role from a database", "N/A", CommandAuthority.ADMIN);
+        super("getrole",
+                "**!getRole <id or role_name or short_name>**"
+                + "\n -> Get information about a specific role.",
+                "N/A",
+                CommandAuthority.EVENT_LEADER);
     }
 
     @Override

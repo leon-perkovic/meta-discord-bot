@@ -33,7 +33,11 @@ public class GetPlayersCommand extends AbstractCommand{
 
 
     public GetPlayersCommand(){
-        super("getplayers", "Get all players from a database", "N/A", CommandAuthority.ADMIN);
+        super("getplayers",
+                "**!getPlayers**"
+                + "\n -> Get information about all players.",
+                "N/A",
+                CommandAuthority.EVENT_LEADER);
     }
 
     @Override

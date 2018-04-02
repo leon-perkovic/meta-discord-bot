@@ -41,7 +41,11 @@ public class RemovePrCommand extends AbstractCommand{
 
 
     public RemovePrCommand(){
-        super("removepr", "Remove a role from a player", "N/A", CommandAuthority.ADMIN);
+        super("removepr",
+                "**!removePR <id or nickname or @username> <role_name or short_name ...>**"
+                + "\n -> Remove roles for a specific player.",
+                "N/A",
+                CommandAuthority.ADMIN);
     }
 
     @Override

@@ -94,7 +94,7 @@ public class CommandResponses{
 
     // -- AddEvent ------------------------------------------------------------
 
-    public static final String ADD_EVENT_INVALID_ARGUMENTS = "Expected at least 3 arguments :no_entry_sign: Try: ```!addEvent <day> <HH:mm> <player_limit> [event_leader] [description]```";
+    public static final String ADD_EVENT_INVALID_ARGUMENTS = "Expected at least 3 arguments :no_entry_sign: Try: ```!addEvent <day> <HH:mm> <player_limit> <member_limit> <trial_limit> [event_leader] [description]```";
 
     // -- RemoveEvent ---------------------------------------------------------
 
@@ -122,7 +122,7 @@ public class CommandResponses{
 
     // -- Signup --------------------------------------------------------------
 
-    public static final String  SIGNUP_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!signup <id or name or day> [HH:mm]```";
+    public static final String  SIGNUP_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!signup <id or event_name or day> [HH:mm]```";
 
     public static final String SIGNUP_INVALID_PLAYER = "Can't sign you up, sorry. Your discord ID isn't connected :cry:";
 
@@ -132,10 +132,32 @@ public class CommandResponses{
 
     // -- Dropout -------------------------------------------------------------
 
-    public static final String DROPOUT_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!dropout <id or name or day> [HH:mm]```";
+    public static final String DROPOUT_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!dropout <id or event_name or day> [HH:mm]```";
 
     public static final String DROPOUT_INVALID_PLAYER = "Can't drop out of the event, sorry. Your discord ID isn't connected :cry:";
 
     public static final String DROPOUT_SUCCESS = "You've dropped out of the event successfully :white_check_mark:";
+
+    // -- AddDpsReport --------------------------------------------------------
+
+    public static final String ADD_DPS_REPORT_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!getDpsReport <id or event_name> <dps_report_links...>```";
+
+    public static final String ADD_DPS_REPORT_SUCCESS = "DPS reports added successfully :white_check_mark:";
+
+    // -- RemoveDpsReport -----------------------------------------------------
+
+    public static final String REMOVE_DPS_REPORT_INVALID_ARGUMENTS = "Expected 1 argument :no_entry_sign: Try: ```!removeDpsReport <id or event_name>```";
+
+    public static final String REMOVE_DPS_REPORT_SUCCESS = "DPS reports removed successfully :white_check_mark:";
+
+    // -- GetDpsReport --------------------------------------------------------
+
+    public static final String GET_DPS_REPORT_INVALID_ARGUMENTS = "Expected 1 argument :no_entry_sign: Try: ```!getDpsReport <id or event_name>```";
+
+    public static final String GET_DPS_REPORTS_NONE_FOUND = "I couldn't find any DPS reports for that event :cry:";
+
+    // -- Roll ----------------------------------------------------------------
+
+    public static final String ROLL_INVALID_ARGUMENTS = "Unexpected arguments :no_entry_sign: Try: ```!roll```";
 
 }

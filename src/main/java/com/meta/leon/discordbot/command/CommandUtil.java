@@ -6,6 +6,9 @@ import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.EventSignupService;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.GlobalValidator;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.User;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Utility class for common command operations
@@ -22,7 +28,9 @@ import java.util.HashMap;
 @Component
 public class CommandUtil{
 
-    HashMap<String, Integer> days;
+    private HashMap<String, Integer> days;
+
+    public static final String DPS_REPORT_PATTERN = "(https?)://dps.report[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 
     @Autowired
     PlayerService playerService;
@@ -145,7 +153,7 @@ public class CommandUtil{
                     + eventSignupService.getNumOfSignupsByRank(event.getId(), DiscordBotApp.getTrialRole(), false)
                     + "/" + event.getTrialLimit() + "**\n";
 
-        fieldValue += "*Leader:*  **" + event.getEventLeader() + "**";
+        fieldValue += "*Event leader:*  **" + event.getEventLeader() + "**";
 
         return fieldValue;
     }
@@ -156,6 +164,40 @@ public class CommandUtil{
         mention = mention.replace("@", "");
 
         return mention;
+    }
+
+    public ArrayList<String> extractDpsReports(String argument){
+        Pattern pattern = Pattern.compile(DPS_REPORT_PATTERN);
+        Matcher matcher = pattern.matcher(argument);
+
+        ArrayList<String> dpsReports = new ArrayList<>();
+
+        while(matcher.find()){
+            dpsReports.add(matcher.group());
+            System.out.println(matcher.group());
+        }
+        return dpsReports;
+    }
+
+    public Role getRoleByName(User user, String roleName){
+        List<Guild> guilds = user.getMutualGuilds();
+        Guild guild = null;
+
+        for(Guild g : guilds){
+            if(g.getId().equals(DiscordBotApp.getServerId())){
+                guild = g;
+                break;
+            }
+        }
+
+        Role role = null;
+        for(Role r : guild.getRoles()){
+            if(r.getName().equals(roleName)){
+                role = r;
+                break;
+            }
+        }
+        return role;
     }
 
     // -- getters and setters -------------------------------------------------

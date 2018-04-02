@@ -37,7 +37,11 @@ public class UpdatePlayerCommand extends AbstractCommand{
 
 
     public UpdatePlayerCommand(){
-        super("updateplayer", "Update player info in a database", "N/A", CommandAuthority.ADMIN);
+        super("updateplayer",
+                "**!updatePlayer <id> <nickname> <account_name> [@username]**"
+                + "\n -> Update information about a specific player.",
+                "N/A",
+                CommandAuthority.ADMIN);
     }
 
     @Override

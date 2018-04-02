@@ -32,7 +32,11 @@ public class RemoveEventCommand extends AbstractCommand{
 
 
     public RemoveEventCommand(){
-        super("removeevent", "Remove an event from a database", "N/A", CommandAuthority.EVENT_LEADER);
+        super("removeevent",
+                "**!removeEvent <id or name or day> [HH:mm]**"
+                + "\n -> Delete/cancel a specific event",
+                "N/A",
+                CommandAuthority.EVENT_LEADER);
     }
 
     @Override

@@ -33,7 +33,11 @@ public class GetRolesCommand extends AbstractCommand{
 
 
     public GetRolesCommand(){
-        super("getroles", "Get all roles from a database", "N/A", CommandAuthority.ADMIN);
+        super("getroles",
+                "**!getRoles**"
+                + "\n -> Get information about all roles.",
+                "N/A",
+                CommandAuthority.EVENT_LEADER);
     }
 
     @Override

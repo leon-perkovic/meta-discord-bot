@@ -11,8 +11,7 @@ import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.service.EventSignupService;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.EventSignupValidator;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * !dropout <id or name or day> [HH:mm]
+ * !dropout <id or event_name or day> [HH:mm]
  * [HH:mm] is optional, only needed in combination with <day>
  * Command for dropping out of an event
  * Event name will be determined and set automatically for first upcoming day if only day was specified
@@ -55,7 +55,11 @@ public class DropoutCommand extends AbstractCommand{
 
 
     public DropoutCommand(){
-        super("dropout", "Drop out of an event", "N/A", CommandAuthority.MEMBER);
+        super("dropout",
+                "**!dropout <id or event_name or day> [HH:mm]**"
+                + "\n -> Sign out of an event. Date will be set for the first upcoming day in the week.",
+                "N/A",
+                CommandAuthority.MEMBER);
     }
 
     @Override
@@ -139,6 +143,37 @@ public class DropoutCommand extends AbstractCommand{
                     User backupUser = DiscordBotApp.getJdaBot().getUserById(commandUtil.convertDiscordMentionToId(backupPlayer.getDiscordId()));
                     backupUser.openPrivateChannel().queue((channel) -> channel.sendMessage(message).queue());
                 }
+            }else{
+                // get roles for Member and Trial
+                Role memberRole = commandUtil.getRoleByName(user, DiscordBotApp.getMemberRole());
+                Role trialRole = commandUtil.getRoleByName(user, DiscordBotApp.getTrialRole());
+
+                String day = event.getName().split("-")[0];
+                day = day.substring(0, 1).toUpperCase() + day.substring(1);
+
+                DateTime eventTime = event.getEventTime();
+
+                DateTimeZone timeZone = event.getEventTime().getZone();
+                String zone = timeZone.getShortName(event.getEventTime().getMillis());
+
+                // build announcement message
+                String announcement = memberRole.getAsMention() + ", " + trialRole.getAsMention()
+                        + " - Need one player for: \n**" + day + "**, **"
+                        + eventTime.toString("dd/MM/yyyy - HH:mm") + " " + zone + "**."
+                        + "\n*Description:* **" + event.getDescription() + "**";
+
+                List<Guild> guilds = user.getMutualGuilds();
+                Guild guild = null;
+
+                for(Guild g : guilds){
+                    if(g.getId().equals(DiscordBotApp.getServerId())){
+                        guild = g;
+                        break;
+                    }
+                }
+                MessageChannel messageChannel = guild.getTextChannelsByName(DiscordBotApp.getAnnouncementChannel(), false).get(0);
+
+                messageChannel.sendMessage(announcement).queue();
             }
         }
 
