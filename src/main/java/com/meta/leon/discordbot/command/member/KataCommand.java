@@ -69,11 +69,13 @@ public class KataCommand extends AbstractCommand{
 
         player = playerService.findByNickname("kata");
 
-        if(authority.getLevel() >= CommandAuthority.EVENT_LEADER.getLevel()){
-            for(int i=0; i<range; i++){
-                spam.append(player.getDiscordId() + "\n");
+        if(player != null){
+            if(authority.getLevel() >= CommandAuthority.EVENT_LEADER.getLevel()){
+                for(int i=0; i<range; i++){
+                    spam.append(player.getDiscordId() + "\n");
+                }
+                return new ResponseForm(spam.toString());
             }
-            return new ResponseForm(spam.toString());
         }
 
         return new ResponseForm("Sorry, you're not the spam-queen :wink:");

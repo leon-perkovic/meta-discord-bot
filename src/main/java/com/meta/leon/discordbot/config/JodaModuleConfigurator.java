@@ -25,7 +25,7 @@ public class JodaModuleConfigurator{
 
         jodaModule.addSerializer(DateTime.class, new DateTimeSerializer(
                 new JacksonJodaDateFormat(
-                        formatterFactory.createDateTimeFormatter().withZone(DateTimeZone.forTimeZone(TimeZone.getTimeZone("CET")))
+                        formatterFactory.createDateTimeFormatter().withZone(DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Amsterdam")))
                 )));
 
         return jodaModule;

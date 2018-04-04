@@ -3,6 +3,7 @@ package com.meta.leon.discordbot;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -41,6 +42,9 @@ public class DiscordBotApp implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception{
+
+        // set default time zone
+        DateTimeZone.setDefault(DateTimeZone.forID("Europe/Amsterdam"));
 
         // load application.properties file
         Properties prop = new Properties();
