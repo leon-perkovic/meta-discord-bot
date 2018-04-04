@@ -68,7 +68,11 @@ public class GlobalValidator{
         Matcher matcher = pattern.matcher(argument);
 
         if(validateIfNumeric(argument)){
-            return true;
+            int time = Integer.valueOf(argument);
+
+            if(time >= 0 && time <= 23){
+                return true;
+            }
         }
         return matcher.matches();
     }

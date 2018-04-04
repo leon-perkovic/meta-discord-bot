@@ -124,8 +124,22 @@ public class DropoutCommand extends AbstractCommand{
 
         // if event is full and user dropping out wasn't backup - notify first backup a spot opened up
         if(!eventSignup.isBackup()){
-            String discordRank = eventSignup.getDiscordRank();
-            EventSignup backupEventSignup = eventSignupService.findFirstByRankAndBackup(eventId, discordRank, true);
+            EventSignup backupEventSignup = null;
+            EventSignup backupMemberSignup = eventSignupService.findFirstByRankAndBackup(eventId, DiscordBotApp.getMemberRole(), true);
+            EventSignup backupTrialSignup = eventSignupService.findFirstByRankAndBackup(eventId, DiscordBotApp.getTrialRole(), true);
+
+            if(backupMemberSignup != null){
+                backupEventSignup = backupMemberSignup;
+            }
+            if(backupTrialSignup != null){
+                if(backupMemberSignup != null){
+                    if(backupTrialSignup.getSignupTime().getMillis() < backupMemberSignup.getSignupTime().getMillis()){
+                        backupEventSignup = backupTrialSignup;
+                    }
+                }else{
+                    backupEventSignup = backupTrialSignup;
+                }
+            }
 
             // check if there are candidates
             if(backupEventSignup != null){
@@ -143,7 +157,7 @@ public class DropoutCommand extends AbstractCommand{
                     User backupUser = DiscordBotApp.getJdaBot().getUserById(commandUtil.convertDiscordMentionToId(backupPlayer.getDiscordId()));
                     backupUser.openPrivateChannel().queue((channel) -> channel.sendMessage(message).queue());
                 }
-            }else{
+            }else if(eventSignupService.getNumOfSignups(eventId, false) == event.getPlayerLimit()){
                 // get roles for Member and Trial
                 Role memberRole = commandUtil.getRoleByName(user, DiscordBotApp.getMemberRole());
                 Role trialRole = commandUtil.getRoleByName(user, DiscordBotApp.getTrialRole());

@@ -43,7 +43,7 @@ public class RollCommand extends AbstractCommand{
 
         Random rng = new Random();
 
-        return new ResponseForm(user.getName() + " rolls: " + rng.nextInt(100) + 1);
+        return new ResponseForm(user.getName() + " rolls: **" + (rng.nextInt(100) + 1) + "**");
     }
 
 }

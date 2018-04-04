@@ -53,7 +53,7 @@ public class KataCommand extends AbstractCommand{
         }
 
         Random rng = new Random();
-        int range = rng.nextInt(11) + 5;
+        int range = rng.nextInt(16) + 5;
         StringBuilder spam = new StringBuilder("");
 
         Player player = playerService.findByDiscordId(user.getAsMention());
@@ -76,7 +76,7 @@ public class KataCommand extends AbstractCommand{
             return new ResponseForm(spam.toString());
         }
 
-        return new ResponseForm(CommandResponses.NOT_AUTHORIZED);
+        return new ResponseForm("Sorry, you're not the spam-queen :wink:");
     }
 
 }
