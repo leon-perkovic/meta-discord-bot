@@ -7,8 +7,9 @@
 ### Initial Setup
 1. Clone the repository: `git clone https://github.com/leon-perkovic/meta-discord-bot.git`
 2. Run `./gradlew clean build` in **/meta-discord-bot** folder
-3. Create new Application on Discord's Developers site
-4. Invite bot to the server
+3. Set Active Profile to **bootrun*
+4. Create new Application on Discord's Developers site
+5. Invite bot to the server
 
 ### Postgres Setup
 1. Create new role with desired name and password
@@ -24,7 +25,7 @@
 ### Application properties
 1. Move to **/src/main/resources** folder
 2. Open **application.properties** file
-3. Set *token* to created Application's bot token
-4. Set *serverId* to ID of the server bot will be used on
+3. Set *token* to your bot's token
+4. Set *serverId* to ID of your server
 5. Set *announcementChannel* to default channel that will be used for bot announcements
-6. Set roles to names of the roles on server bot will be used on
+6. Set all *roles* to role names on your discord server

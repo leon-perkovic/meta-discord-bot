@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 /**
  * Listener class - used to handle events
@@ -43,7 +43,7 @@ public class BotListener extends ListenerAdapter{
 
         // map commands in command container
         commandContainer.mapCommands();
-        TreeMap<String, AbstractCommand> commands = commandContainer.getCommands();
+        LinkedHashMap<String, AbstractCommand> commands = commandContainer.getCommands();
 
         // get user roles and set authority level
         User user = event.getAuthor();
@@ -124,22 +124,20 @@ public class BotListener extends ListenerAdapter{
     }
 
     public static CommandAuthority getUserAuthority(List<String> roleNames){
-        CommandAuthority authority = CommandAuthority.PUBLIC;
-
+        System.out.println(DiscordBotApp.getEventLeaderRole());
         if(roleNames.contains(DiscordBotApp.getAdminRole())){
-            authority = CommandAuthority.ADMIN;
-
-        }else if(roleNames.contains(DiscordBotApp.getEventLeaderRole())){
-            authority = CommandAuthority.EVENT_LEADER;
-
-        }else if(roleNames.contains(DiscordBotApp.getMemberRole())){
-            authority = CommandAuthority.MEMBER;
-
-        }else if(roleNames.contains(DiscordBotApp.getTrialRole())){
-            authority = CommandAuthority.TRIAL;
+            return CommandAuthority.ADMIN;
         }
-
-        return authority;
+        if(roleNames.contains(DiscordBotApp.getEventLeaderRole())){
+            return CommandAuthority.EVENT_LEADER;
+        }
+        if(roleNames.contains(DiscordBotApp.getMemberRole())){
+            return CommandAuthority.MEMBER;
+        }
+        if(roleNames.contains(DiscordBotApp.getTrialRole())){
+            return CommandAuthority.TRIAL;
+        }
+        return CommandAuthority.PUBLIC;
     }
 
 }

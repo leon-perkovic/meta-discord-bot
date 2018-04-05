@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 /**
  * !help [command_name]
@@ -42,7 +42,7 @@ public class HelpCommand extends AbstractCommand{
 
         // map commands in command container
         commandContainer.mapCommands();
-        TreeMap<String, AbstractCommand> commands = commandContainer.getCommands();
+        LinkedHashMap<String, AbstractCommand> commands = commandContainer.getCommands();
 
         // get user roles and set authority level
         List<String> roleNames = BotListener.getUserRoles(user);

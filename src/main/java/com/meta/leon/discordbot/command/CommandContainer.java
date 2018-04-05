@@ -7,7 +7,7 @@ import com.meta.leon.discordbot.command.member.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 /**
  * Container for all autowired commands
@@ -17,7 +17,7 @@ import java.util.TreeMap;
 @Component
 public class CommandContainer{
 
-    private TreeMap<String, AbstractCommand> commands;
+    private LinkedHashMap<String, AbstractCommand> commands;
 
     @Autowired
     private AddPlayerCommand addPlayerCommand;
@@ -78,18 +78,18 @@ public class CommandContainer{
     // Used to map all autowired commands to their key values
     public void mapCommands(){
 
-        commands = new TreeMap<>();
+        commands = new LinkedHashMap<>();
 
         commands.put("addplayer", addPlayerCommand);
+        commands.put("updateplayer", updatePlayerCommand);
         commands.put("removeplayer", removePlayerCommand);
         commands.put("player", playerCommand);
         commands.put("players", playersCommand);
-        commands.put("updateplayer", updatePlayerCommand);
         commands.put("addrole", addRoleCommand);
+        commands.put("updaterole", updateRoleCommand);
         commands.put("removerole", removeRoleCommand);
         commands.put("role", roleCommand);
         commands.put("roles", rolesCommand);
-        commands.put("updaterole", updateRoleCommand);
         commands.put("addpr", addPrCommand);
         commands.put("removepr", removePrCommand);
         commands.put("addevent", addEventCommand);
@@ -98,12 +98,12 @@ public class CommandContainer{
         commands.put("events", eventsCommand);
         commands.put("pastevents", pastEventsCommand);
         commands.put("eventdetail", eventDetailCommand);
-        commands.put("signup", signupCommand);
-        commands.put("dropout", dropoutCommand);
+        commands.put("announce", announceCommand);
         commands.put("adddpsreport", addDpsReportCommand);
         commands.put("removedpsreport", removeDpsReportCommand);
         commands.put("dpsreport", dpsReportCommand);
-        commands.put("announce", announceCommand);
+        commands.put("signup", signupCommand);
+        commands.put("dropout", dropoutCommand);
         commands.put("help", helpCommand);
         commands.put("roll", rollCommand);
         commands.put("kata", kataCommand);
@@ -111,7 +111,7 @@ public class CommandContainer{
 
     // -- getters and setters -------------------------------------------------
 
-    public TreeMap<String, AbstractCommand> getCommands(){
+    public LinkedHashMap<String, AbstractCommand> getCommands(){
         return commands;
     }
 
