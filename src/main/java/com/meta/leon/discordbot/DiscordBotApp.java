@@ -3,6 +3,7 @@ package com.meta.leon.discordbot;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.entities.Game;
 import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -67,6 +68,9 @@ public class DiscordBotApp implements CommandLineRunner{
 
         // add autowired BotListener bean to event listener
         jdaBot.addEventListener(botListener);
+
+        // set !help as currently played "game"
+        jdaBot.getPresence().setGame(Game.of(Game.GameType.DEFAULT, "!help"));
     }
 
     // -- getters and setters -------------------------------------------------

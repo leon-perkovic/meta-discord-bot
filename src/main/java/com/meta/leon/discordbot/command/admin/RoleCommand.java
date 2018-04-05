@@ -16,13 +16,13 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * !getRole <id or role_name or short_name>
+ * !role <id or role_name or short_name>
  * Command for getting a role entry from a database
  *
  * Created by Leon on 19/03/2018
  */
 @Component
-public class GetRoleCommand extends AbstractCommand{
+public class RoleCommand extends AbstractCommand{
 
     @Autowired
     RoleService roleService;
@@ -31,9 +31,9 @@ public class GetRoleCommand extends AbstractCommand{
     RoleValidator roleValidator;
 
 
-    public GetRoleCommand(){
-        super("getrole",
-                "**!getRole <id or role_name or short_name>**"
+    public RoleCommand(){
+        super("role",
+                "**!role <id or role_name or short_name>**"
                 + "\n -> Get information about a specific role.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
@@ -44,7 +44,7 @@ public class GetRoleCommand extends AbstractCommand{
 
         // validate passed arguments
         if(!roleValidator.validateNumberOfArguments(arguments, 1)){
-            return new ResponseForm(CommandResponses.GET_ROLE_INVALID_ARGUMENTS);
+            return new ResponseForm(CommandResponses.ROLE_INVALID_ARGUMENTS);
         }
 
         Role role;

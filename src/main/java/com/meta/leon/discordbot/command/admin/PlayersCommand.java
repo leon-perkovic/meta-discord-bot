@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * !getPlayers
+ * !players
  * Command for getting all player entries from a database
  *
  * Created by Leon on 18/03/2018
  */
 @Component
-public class GetPlayersCommand extends AbstractCommand{
+public class PlayersCommand extends AbstractCommand{
 
     @Autowired
     PlayerService playerService;
@@ -32,9 +32,9 @@ public class GetPlayersCommand extends AbstractCommand{
     PlayerValidator playerValidator;
 
 
-    public GetPlayersCommand(){
-        super("getplayers",
-                "**!getPlayers**"
+    public PlayersCommand(){
+        super("players",
+                "**!players**"
                 + "\n -> Get information about all players.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
@@ -45,13 +45,13 @@ public class GetPlayersCommand extends AbstractCommand{
 
         // validate passed arguments
         if(!playerValidator.validateNumberOfArguments(arguments, 0)){
-            return new ResponseForm(CommandResponses.GET_PLAYERS_INVALID_ARGUMENTS);
+            return new ResponseForm(CommandResponses.PLAYERS_INVALID_ARGUMENTS);
         }
 
         List<Player> players = playerService.findAll();
 
         if(players.isEmpty()){
-            return new ResponseForm(CommandResponses.GET_PLAYERS_NONE_FOUND);
+            return new ResponseForm(CommandResponses.PLAYERS_NONE_FOUND);
         }
 
         StringBuilder playersInfo = new StringBuilder("");

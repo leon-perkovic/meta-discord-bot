@@ -17,14 +17,14 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * !getPastEvents [page_number]
+ * !pastEvents [page_number]
  * [page_number] is optional, if not specified it defaults at 1
  * Command for getting past event entries from a database, 10 per page
  *
  * Created by Leon on 22/03/2018
  */
 @Component
-public class GetPastEventsCommand extends AbstractCommand{
+public class PastEventsCommand extends AbstractCommand{
 
     private static final Integer PAGE_SIZE = 10;
 
@@ -38,9 +38,9 @@ public class GetPastEventsCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public GetPastEventsCommand(){
-        super("getpastevents",
-                "**!getPastEvents [page_number]**"
+    public PastEventsCommand(){
+        super("pastevents",
+                "**!pastEvents [page_number]**"
                 + "\n -> Get information about all past events. Shows 10 events per page.",
                 "N/A",
                 CommandAuthority.MEMBER);
@@ -52,7 +52,7 @@ public class GetPastEventsCommand extends AbstractCommand{
 
         // validate passed arguments
         if(!eventValidator.validateMinNumberOfArguments(arguments, 0)){
-            return new ResponseForm(CommandResponses.GET_PAST_EVENTS_INVALID_ARGUMENT);
+            return new ResponseForm(CommandResponses.PAST_EVENTS_INVALID_ARGUMENT);
         }
 
         // set default page
@@ -60,7 +60,7 @@ public class GetPastEventsCommand extends AbstractCommand{
 
         if(arguments.size() == 1){
             if(!eventValidator.validateIfNumeric(arguments.get(0))){
-                return new ResponseForm(CommandResponses.GET_PAST_EVENTS_INVALID_ARGUMENT);
+                return new ResponseForm(CommandResponses.PAST_EVENTS_INVALID_ARGUMENT);
             }
             page = Integer.valueOf(arguments.get(0));
         }
@@ -104,7 +104,7 @@ public class GetPastEventsCommand extends AbstractCommand{
 
             return new ResponseForm(embedBuilder.build());
         }
-        return new ResponseForm(CommandResponses.GET_EVENTS_NONE_FOUND);
+        return new ResponseForm(CommandResponses.EVENTS_NONE_FOUND);
     }
 
 }

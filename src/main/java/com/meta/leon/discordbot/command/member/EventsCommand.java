@@ -16,13 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * !getEvents
+ * !events
  * Command for getting upcoming event entries from a database
  *
  * Created by Leon on 22/03/2018
  */
 @Component
-public class GetEventsCommand extends AbstractCommand{
+public class EventsCommand extends AbstractCommand{
 
     @Autowired
     EventService eventService;
@@ -34,9 +34,9 @@ public class GetEventsCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public GetEventsCommand(){
-        super("getevents",
-                "**!getEvents**"
+    public EventsCommand(){
+        super("events",
+                "**!events**"
                 + "\n -> Get information about all upcoming events.",
                 "N/A",
                 CommandAuthority.MEMBER);
@@ -48,7 +48,7 @@ public class GetEventsCommand extends AbstractCommand{
 
         // validate passed arguments
         if(!eventValidator.validateNumberOfArguments(arguments, 0)){
-            return new ResponseForm(CommandResponses.GET_EVENTS_INVALID_ARGUMENTS);
+            return new ResponseForm(CommandResponses.EVENTS_INVALID_ARGUMENTS);
         }
 
         List<Event> events = eventService.findUpcoming(new DateTime());
@@ -69,7 +69,7 @@ public class GetEventsCommand extends AbstractCommand{
 
             return new ResponseForm(embedBuilder.build());
         }
-        return new ResponseForm(CommandResponses.GET_EVENTS_NONE_FOUND);
+        return new ResponseForm(CommandResponses.EVENTS_NONE_FOUND);
     }
 
 }

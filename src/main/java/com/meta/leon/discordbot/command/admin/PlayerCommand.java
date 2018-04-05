@@ -16,13 +16,13 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * !getPlayer <id or nickname or @username>
+ * !player <id or nickname or @username>
  * Command for getting a player entry from a database
  *
  * Created by Leon on 18/03/2018
  */
 @Component
-public class GetPlayerCommand extends AbstractCommand{
+public class PlayerCommand extends AbstractCommand{
 
     @Autowired
     PlayerService playerService;
@@ -31,9 +31,9 @@ public class GetPlayerCommand extends AbstractCommand{
     PlayerValidator playerValidator;
 
 
-    public GetPlayerCommand(){
-        super("getplayer",
-                "**!getPlayer <id or nickname or @username>**"
+    public PlayerCommand(){
+        super("player",
+                "**!player <id or nickname or @username>**"
                 + "\n -> Get information about a specific player.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
@@ -44,7 +44,7 @@ public class GetPlayerCommand extends AbstractCommand{
 
         // validate passed arguments
         if(!playerValidator.validateNumberOfArguments(arguments, 1)){
-            return new ResponseForm(CommandResponses.GET_PLAYER_INVALID_ARGUMENTS);
+            return new ResponseForm(CommandResponses.PLAYER_INVALID_ARGUMENTS);
         }
 
         Player player;

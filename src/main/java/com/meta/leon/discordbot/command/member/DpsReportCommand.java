@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * !getDpsReport <id or event_name>
+ * !dpsReport <id or event_name>
  * Command for getting dps report entries from a database
  *
  * Created by Leon on 02/04/2018
  */
 @Component
-public class GetDpsReportCommand extends AbstractCommand{
+public class DpsReportCommand extends AbstractCommand{
 
     private Long eventId;
 
@@ -40,9 +40,9 @@ public class GetDpsReportCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public GetDpsReportCommand(){
-        super("getdpsreport",
-                "**!getDpsReport <id or event_name>**"
+    public DpsReportCommand(){
+        super("dpsreport",
+                "**!dpsReport <id or event_name>**"
                 + "\n -> Get dps reports for a specific event.",
                 "N/A",
                 CommandAuthority.MEMBER);
@@ -54,7 +54,7 @@ public class GetDpsReportCommand extends AbstractCommand{
 
         // validate passed arguments
         if(!globalValidator.validateNumberOfArguments(arguments, 1)){
-            return new ResponseForm(CommandResponses.GET_DPS_REPORT_INVALID_ARGUMENTS);
+            return new ResponseForm(CommandResponses.DPS_REPORT_INVALID_ARGUMENTS);
         }
 
         Event event;
@@ -81,7 +81,7 @@ public class GetDpsReportCommand extends AbstractCommand{
         List<DpsReport> dpsReports = dpsReportService.findAllByEventId(eventId);
 
         if(dpsReports.isEmpty()){
-            return new ResponseForm(CommandResponses.GET_DPS_REPORTS_NONE_FOUND);
+            return new ResponseForm(CommandResponses.DPS_REPORTS_NONE_FOUND);
         }
 
         EmbedBuilder embedBuilder = new EmbedBuilder();

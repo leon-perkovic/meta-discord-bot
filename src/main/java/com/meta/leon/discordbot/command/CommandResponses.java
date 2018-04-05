@@ -39,15 +39,15 @@ public class CommandResponses{
 
     public static final String REMOVE_PLAYER_SUCCESS = "Player removed successfully :white_check_mark:";
 
-    // -- GetPlayer -----------------------------------------------------------
+    // -- Player --------------------------------------------------------------
 
-    public static final String GET_PLAYER_INVALID_ARGUMENTS = "Expected 1 argument :no_entry_sign: Try: ```!getPlayer <id or nickname or @username>```";
+    public static final String PLAYER_INVALID_ARGUMENTS = "Expected 1 argument :no_entry_sign: Try: ```!player <id or nickname or @username>```";
 
-    // -- GetPlayers ----------------------------------------------------------
+    // -- Players -------------------------------------------------------------
 
-    public static final String GET_PLAYERS_INVALID_ARGUMENTS = "Unexpected arguments :no_entry_sign: Try: ```!getPlayers```";
+    public static final String PLAYERS_INVALID_ARGUMENTS = "Unexpected arguments :no_entry_sign: Try: ```!players```";
 
-    public static final String GET_PLAYERS_NONE_FOUND = "I couldn't find any players :cry:";
+    public static final String PLAYERS_NONE_FOUND = "I couldn't find any players :cry:";
 
     // -- UpdatePlayer --------------------------------------------------------
 
@@ -70,15 +70,15 @@ public class CommandResponses{
 
     public static final String REMOVE_ROLE_SUCCESS = "Role removed successfully :white_check_mark:";
 
-    // -- GetRole -------------------------------------------------------------
+    // -- Role ----------------------------------------------------------------
 
-    public static final String GET_ROLE_INVALID_ARGUMENTS = "Expected 1 argument :no_entry_sign: Try: ```!getRole <id or role_name or short_name>```";
+    public static final String ROLE_INVALID_ARGUMENTS = "Expected 1 argument :no_entry_sign: Try: ```!role <id or role_name or short_name>```";
 
-    // -- GetRoles ------------------------------------------------------------
+    // -- Roles ---------------------------------------------------------------
 
-    public static final String GET_ROLES_INVALID_ARGUMENTS = "Unexpected arguments :no_entry_sign: Try: ```!getRoles```";
+    public static final String ROLES_INVALID_ARGUMENTS = "Unexpected arguments :no_entry_sign: Try: ```!roles```";
 
-    public static final String GET_ROLES_NONE_FOUND = "I couldn't find any roles :cry:";
+    public static final String ROLES_NONE_FOUND = "I couldn't find any roles :cry:";
 
     // -- UpdateRole ----------------------------------------------------------
 
@@ -102,19 +102,19 @@ public class CommandResponses{
 
     public static final String REMOVE_EVENT_SUCCESS = "Event removed successfully :white_check_mark:";
 
-    // -- GetEvent ------------------------------------------------------------
+    // -- Event ---------------------------------------------------------------
 
-    public static final String GET_EVENT_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!getEvent <id or name or day> [HH:mm]```";
+    public static final String EVENT_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!event <id or name or day> [HH:mm]```";
 
-    // -- GetEvents -----------------------------------------------------------
+    // -- Events --------------------------------------------------------------
 
-    public static final String GET_EVENTS_INVALID_ARGUMENTS = "Unexpected arguments :no_entry_sign: Try: ```!getEvents```";
+    public static final String EVENTS_INVALID_ARGUMENTS = "Unexpected arguments :no_entry_sign: Try: ```!events```";
 
-    public static final String GET_EVENTS_NONE_FOUND = "I couldn't find any events :cry:";
+    public static final String EVENTS_NONE_FOUND = "I couldn't find any events :cry:";
 
-    // -- GetPastEvents -------------------------------------------------------
+    // -- PastEvents ----------------------------------------------------------
 
-    public static final String GET_PAST_EVENTS_INVALID_ARGUMENT = "Invalid argument :no_entry_sign: Try: ```!getPastEvents [page_number]```";
+    public static final String PAST_EVENTS_INVALID_ARGUMENT = "Invalid argument :no_entry_sign: Try: ```!pastEvents [page_number]```";
 
     // -- EventDetail ------------------------------------------------------------
 
@@ -140,7 +140,7 @@ public class CommandResponses{
 
     // -- AddDpsReport --------------------------------------------------------
 
-    public static final String ADD_DPS_REPORT_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!getDpsReport <id or event_name> <dps_report_links...>```";
+    public static final String ADD_DPS_REPORT_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!addDpsReport <id or event_name> <dps_report_links...>```";
 
     public static final String ADD_DPS_REPORT_SUCCESS = "DPS reports added successfully :white_check_mark:";
 
@@ -150,11 +150,11 @@ public class CommandResponses{
 
     public static final String REMOVE_DPS_REPORT_SUCCESS = "DPS reports removed successfully :white_check_mark:";
 
-    // -- GetDpsReport --------------------------------------------------------
+    // -- DpsReport -----------------------------------------------------------
 
-    public static final String GET_DPS_REPORT_INVALID_ARGUMENTS = "Expected 1 argument :no_entry_sign: Try: ```!getDpsReport <id or event_name>```";
+    public static final String DPS_REPORT_INVALID_ARGUMENTS = "Expected 1 argument :no_entry_sign: Try: ```!dpsReport <id or event_name>```";
 
-    public static final String GET_DPS_REPORTS_NONE_FOUND = "I couldn't find any DPS reports for that event :cry:";
+    public static final String DPS_REPORTS_NONE_FOUND = "I couldn't find any DPS reports for that event :cry:";
 
     // -- Roll ----------------------------------------------------------------
 

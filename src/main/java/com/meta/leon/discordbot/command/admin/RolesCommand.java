@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * !getRoles
+ * !roles
  * Command for getting all role entries from a database
  *
  * Created by Leon on 19/03/2018
  */
 @Component
-public class GetRolesCommand extends AbstractCommand{
+public class RolesCommand extends AbstractCommand{
 
     @Autowired
     RoleService roleService;
@@ -32,9 +32,9 @@ public class GetRolesCommand extends AbstractCommand{
     RoleValidator roleValidator;
 
 
-    public GetRolesCommand(){
-        super("getroles",
-                "**!getRoles**"
+    public RolesCommand(){
+        super("roles",
+                "**!roles**"
                 + "\n -> Get information about all roles.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
@@ -45,13 +45,13 @@ public class GetRolesCommand extends AbstractCommand{
 
         // validate passed arguments
         if(!roleValidator.validateNumberOfArguments(arguments, 0)){
-            return new ResponseForm(CommandResponses.GET_ROLES_INVALID_ARGUMENTS);
+            return new ResponseForm(CommandResponses.ROLES_INVALID_ARGUMENTS);
         }
 
         List<Role> roles = roleService.findAll();
 
         if(roles.isEmpty()){
-            return new ResponseForm(CommandResponses.GET_ROLES_NONE_FOUND);
+            return new ResponseForm(CommandResponses.ROLES_NONE_FOUND);
         }
 
         StringBuilder rolesInfo = new StringBuilder("");

@@ -17,7 +17,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * !getEvent <id or name or day> [HH:mm]
+ * !event <id or name or day> [HH:mm]
  * [HH:mm] is optional, only needed in combination with <day>
  * Command for getting event entries from a database
  * Event name will be determined and set automatically for first upcoming day if only day was specified
@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * Created by Leon on 22/03/2018
  */
 @Component
-public class GetEventCommand extends AbstractCommand{
+public class EventCommand extends AbstractCommand{
 
     @Autowired
     EventService eventService;
@@ -40,9 +40,9 @@ public class GetEventCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public GetEventCommand(){
-        super("getevent",
-                "**!getEvent <id or name or day> [HH:mm]**"
+    public EventCommand(){
+        super("event",
+                "**!event <id or name or day> [HH:mm]**"
                 + "\n -> Get information about a specific event. Date will be set for the first upcoming day in the week.",
                 "N/A",
                 CommandAuthority.MEMBER);
@@ -54,11 +54,11 @@ public class GetEventCommand extends AbstractCommand{
 
         // validate passed arguments
         if(!eventValidator.validateMinNumberOfArguments(arguments, 1)){
-            return new ResponseForm(CommandResponses.GET_EVENT_INVALID_ARGUMENTS);
+            return new ResponseForm(CommandResponses.EVENT_INVALID_ARGUMENTS);
         }
         if(arguments.size() == 2){
             if(!eventValidator.validateIfTime(arguments.get(1))){
-                return new ResponseForm(CommandResponses.GET_EVENT_INVALID_ARGUMENTS);
+                return new ResponseForm(CommandResponses.EVENT_INVALID_ARGUMENTS);
             }
         }
 

@@ -21,82 +21,56 @@ public class CommandContainer{
 
     @Autowired
     private AddPlayerCommand addPlayerCommand;
-
     @Autowired
     private RemovePlayerCommand removePlayerCommand;
-
     @Autowired
-    private GetPlayerCommand getPlayerCommand;
-
+    private PlayerCommand playerCommand;
     @Autowired
-    private GetPlayersCommand getPlayersCommand;
-
+    private PlayersCommand playersCommand;
     @Autowired
     private UpdatePlayerCommand updatePlayerCommand;
-
     @Autowired
     private AddRoleCommand addRoleCommand;
-
     @Autowired
     private RemoveRoleCommand removeRoleCommand;
-
     @Autowired
-    private GetRoleCommand getRoleCommand;
-
+    private RoleCommand roleCommand;
     @Autowired
-    private GetRolesCommand getRolesCommand;
-
+    private RolesCommand rolesCommand;
     @Autowired
     private UpdateRoleCommand updateRoleCommand;
-
     @Autowired
     private AddPrCommand addPrCommand;
-
     @Autowired
     private RemovePrCommand removePrCommand;
-
     @Autowired
     private AddEventCommand addEventCommand;
-
     @Autowired
     private RemoveEventCommand removeEventCommand;
-
     @Autowired
-    private GetEventCommand getEventCommand;
-
+    private EventCommand eventCommand;
     @Autowired
-    private GetEventsCommand getEventsCommand;
-
+    private EventsCommand eventsCommand;
     @Autowired
-    private GetPastEventsCommand getPastEventsCommand;
-
+    private PastEventsCommand pastEventsCommand;
     @Autowired
     private EventDetailCommand eventDetailCommand;
-
     @Autowired
     private SignupCommand signupCommand;
-
     @Autowired
     private DropoutCommand dropoutCommand;
-
     @Autowired
     private AddDpsReportCommand addDpsReportCommand;
-
     @Autowired
     private RemoveDpsReportCommand removeDpsReportCommand;
-
     @Autowired
-    private GetDpsReportCommand getDpsReportCommand;
-
+    private DpsReportCommand dpsReportCommand;
     @Autowired
     private AnnounceCommand announceCommand;
-
     @Autowired
     private HelpCommand helpCommand;
-
     @Autowired
     private RollCommand rollCommand;
-
     @Autowired
     private KataCommand kataCommand;
 
@@ -108,27 +82,27 @@ public class CommandContainer{
 
         commands.put("addplayer", addPlayerCommand);
         commands.put("removeplayer", removePlayerCommand);
-        commands.put("getplayer", getPlayerCommand);
-        commands.put("getplayers", getPlayersCommand);
+        commands.put("player", playerCommand);
+        commands.put("players", playersCommand);
         commands.put("updateplayer", updatePlayerCommand);
         commands.put("addrole", addRoleCommand);
         commands.put("removerole", removeRoleCommand);
-        commands.put("getrole", getRoleCommand);
-        commands.put("getroles", getRolesCommand);
+        commands.put("role", roleCommand);
+        commands.put("roles", rolesCommand);
         commands.put("updaterole", updateRoleCommand);
         commands.put("addpr", addPrCommand);
         commands.put("removepr", removePrCommand);
         commands.put("addevent", addEventCommand);
         commands.put("removeevent", removeEventCommand);
-        commands.put("getevent", getEventCommand);
-        commands.put("getevents", getEventsCommand);
-        commands.put("getpastevents", getPastEventsCommand);
+        commands.put("event", eventCommand);
+        commands.put("events", eventsCommand);
+        commands.put("pastevents", pastEventsCommand);
         commands.put("eventdetail", eventDetailCommand);
         commands.put("signup", signupCommand);
         commands.put("dropout", dropoutCommand);
         commands.put("adddpsreport", addDpsReportCommand);
         commands.put("removedpsreport", removeDpsReportCommand);
-        commands.put("getdpsreport", getDpsReportCommand);
+        commands.put("dpsreport", dpsReportCommand);
         commands.put("announce", announceCommand);
         commands.put("help", helpCommand);
         commands.put("roll", rollCommand);
