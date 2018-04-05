@@ -124,7 +124,6 @@ public class BotListener extends ListenerAdapter{
     }
 
     public static CommandAuthority getUserAuthority(List<String> roleNames){
-        System.out.println(DiscordBotApp.getEventLeaderRole());
         if(roleNames.contains(DiscordBotApp.getAdminRole())){
             return CommandAuthority.ADMIN;
         }
