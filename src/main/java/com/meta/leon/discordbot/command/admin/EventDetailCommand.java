@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -94,11 +95,13 @@ public class EventDetailCommand extends AbstractCommand{
             embedBuilder.setColor(Color.decode("#D02F00"));
 
             String fieldValue = commandUtil.createEventBody(event);
-            fieldValue += "\n------------------------------";
 
-            StringBuilder signups = new StringBuilder("");
-            StringBuilder backups = new StringBuilder("");
-            StringBuilder dropouts = new StringBuilder("");
+            String signup;
+            String dropout;
+
+            LinkedList<String> backupsList = new LinkedList<>();
+            LinkedList<String> signupsList = new LinkedList<>();
+            LinkedList<String> dropoutsList = new LinkedList<>();
 
             for(Player player : event.getPlayers()){
                 EventSignup eventSignup = eventSignupService.findEventSignup(event.getId(), player.getId());
@@ -107,30 +110,18 @@ public class EventDetailCommand extends AbstractCommand{
                 DateTimeZone timeZone = event.getEventTime().getZone();
                 String zone = timeZone.getShortName(event.getEventTime().getMillis());
 
+                signup = "\n**" + player.getNickname() + "** ("
+                        + discordRank + "), "
+                        + player.getDiscordId() + "\n"
+                        + player.rolesToString() + "\n- *Signup time:* **"
+                        + eventSignup.getSignupTime().toString("dd/MM/yyyy - HH:mm:ss")
+                        + " " + zone + "**";
+
                 if(eventSignup.isBackup()){
-                    backups.append("\n**")
-                            .append(player.getNickname())
-                            .append("** (")
-                            .append(discordRank)
-                            .append("), ")
-                            .append(player.getDiscordId())
-                            .append("\n")
-                            .append(player.rolesToString())
-                            .append("\n- *Signup time:* **")
-                            .append(eventSignup.getSignupTime().toString("dd/MM/yyyy - HH:mm:ss"))
-                            .append(" ").append(zone).append("**");
+                    backupsList.add(signup);
+
                 }else{
-                    signups.append("\n**")
-                            .append(player.getNickname())
-                            .append("** (")
-                            .append(discordRank)
-                            .append("), ")
-                            .append(player.getDiscordId())
-                            .append("\n")
-                            .append(player.rolesToString())
-                            .append("\n- *Signup time:* **")
-                            .append(eventSignup.getSignupTime().toString("dd/MM/yyyy - HH:mm:ss"))
-                            .append(" ").append(zone).append("**");
+                    signupsList.add(signup);
                 }
             }
 
@@ -140,30 +131,46 @@ public class EventDetailCommand extends AbstractCommand{
                 DateTimeZone timeZone = event.getEventTime().getZone();
                 String zone = timeZone.getShortName(event.getEventTime().getMillis());
 
-                dropouts.append("\n**")
-                        .append(eventDropout.getNickname())
-                        .append("** (")
-                        .append(eventDropout.getDiscordRank())
-                        .append(")");
+                dropout = "\n**" + eventDropout.getNickname()
+                        + "** (" + eventDropout.getDiscordRank()
+                        + ")";
 
                 if(eventDropout.isBackup()){
-                    dropouts.append(" [*backup*]");
+                    dropout += " [*backup*]";
                 }
-                dropouts.append("\n- *Signup time:* **")
-                        .append(eventDropout.getSignupTime().toString("dd/MM/yyyy - HH:mm:ss"))
-                        .append(" ").append(zone).append("**")
-                        .append("\n- *Dropout time:* **")
-                        .append(eventDropout.getDropoutTime().toString("dd/MM/yyyy - HH:mm:ss"))
-                        .append(" ").append(zone).append("**");
+                dropout += "\n- *Signup time:* **"
+                        + eventDropout.getSignupTime().toString("dd/MM/yyyy - HH:mm:ss")
+                        + " " + zone + "**"
+                        +"\n- *Dropout time:* **"
+                        + eventDropout.getDropoutTime().toString("dd/MM/yyyy - HH:mm:ss")
+                        + " " + zone + "**";
+
+                dropoutsList.add(dropout);
             }
 
-            signups.append("\n------------------------------");
-            backups.append("\n------------------------------");
-
             embedBuilder.addField(event.getName() + " (id: " + event.getId() + ")", fieldValue, false);
-            embedBuilder.addField("Signups:", signups.toString(), false);
-            embedBuilder.addField("Backups:", backups.toString(), false);
-            embedBuilder.addField("Dropouts:", dropouts.toString(), false);
+
+            embedBuilder.addField("------------------------------", "**Signups:**", false);
+            if(!signupsList.isEmpty()){
+                for(String su : signupsList){
+                    embedBuilder.addField("", su, false);
+
+                }
+            }
+            embedBuilder.addField("------------------------------", "**Backups:**", false);
+            if(!backupsList.isEmpty()){
+                for(String bu : backupsList){
+                    embedBuilder.addField("", bu, false);
+
+                }
+            }
+            embedBuilder.addField("------------------------------", "**Dropouts:**", false);
+            if(!dropoutsList.isEmpty()){
+                for(String du : dropoutsList){
+                    embedBuilder.addField("", du, false);
+
+                }
+            }
 
             return new ResponseForm(embedBuilder.build());
         }

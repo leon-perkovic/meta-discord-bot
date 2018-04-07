@@ -54,27 +54,21 @@ public class PlayersCommand extends AbstractCommand{
             return new ResponseForm(CommandResponses.PLAYERS_NONE_FOUND);
         }
 
-        StringBuilder playersInfo = new StringBuilder("");
-
-        for(Player player : players){
-            playersInfo.append("**")
-                        .append(player.getNickname())
-                        .append("**, ")
-                        .append(player.getAccountName())
-                        .append(", *id:* ")
-                        .append(player.getId())
-                        .append(", ")
-                        .append(player.getDiscordId())
-                        .append("\n")
-                        .append(player.rolesToString())
-                        .append("\n");
-        }
-
         EmbedBuilder embedBuilder = new EmbedBuilder();
 
         embedBuilder.setTitle("__Players:__");
-        embedBuilder.setDescription(playersInfo.toString());
         embedBuilder.setColor(Color.decode("#D02F00"));
+
+        for(Player player : players){
+            String fieldValue = "**" + player.getNickname()
+                        + "**, " + player.getAccountName()
+                        + ", " + "*id:* " + player.getId()
+                        + ", " + player.getDiscordId() + "\n"
+                        + player.rolesToString();
+
+            embedBuilder.addField("", fieldValue, false);
+        }
+
 
         return new ResponseForm(embedBuilder.build());
     }

@@ -98,18 +98,14 @@ public class EventCommand extends AbstractCommand{
                             .append("** (")
                             .append(discordRank)
                             .append("), ")
-                            .append(player.getDiscordId())
-                            .append("\n")
-                            .append(player.rolesToString());
+                            .append(player.getDiscordId());
                 }else{
                     signups.append("\n**")
                             .append(player.getNickname())
                             .append("** (")
                             .append(discordRank)
                             .append("), ")
-                            .append(player.getDiscordId())
-                            .append("\n")
-                            .append(player.rolesToString());
+                            .append(player.getDiscordId());
                 }
             }
 

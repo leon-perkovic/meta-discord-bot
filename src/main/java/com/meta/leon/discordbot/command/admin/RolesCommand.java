@@ -63,7 +63,7 @@ public class RolesCommand extends AbstractCommand{
                     .append(role.getShortName())
                     .append(", *id:* ")
                     .append(role.getId())
-                    .append(")\n");
+                    .append(")\n\n");
         }
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
