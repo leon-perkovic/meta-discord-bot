@@ -122,17 +122,17 @@ public class CommandResponses{
 
     // -- Signup --------------------------------------------------------------
 
-    public static final String  SIGNUP_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!signup <id or event_name or day> [HH:mm]```";
+    public static final String  SIGNUP_INVALID_ARGUMENTS = "Expected 2 arguments :no_entry_sign: Try: ```!signup <day> <HH:mm>```";
 
     public static final String SIGNUP_INVALID_PLAYER = "Can't sign you up, sorry. Your discord ID isn't connected :cry:";
 
-    public static final String SIGNUP_FULL = "There are no free spots left for this event :confused: You've been signed up as a **backup**.";
+    public static final String SIGNUP_FULL = "There are no free spots left for this event :confused: You've been signed up as **backup**.";
 
     public static final String SIGNUP_SUCCESS = "You've been signed up successfully :white_check_mark:";
 
     // -- Dropout -------------------------------------------------------------
 
-    public static final String DROPOUT_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!dropout <id or event_name or day> [HH:mm]```";
+    public static final String DROPOUT_INVALID_ARGUMENTS = "Expected 2 arguments :no_entry_sign: Try: ```!dropout <day> <HH:mm>```";
 
     public static final String DROPOUT_INVALID_PLAYER = "Can't drop out of the event, sorry. Your discord ID isn't connected :cry:";
 

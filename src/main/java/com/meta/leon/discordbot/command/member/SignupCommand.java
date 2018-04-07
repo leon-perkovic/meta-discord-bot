@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * !signup <id or event_name or day> [HH:mm]
- * [HH:mm] is optional, only needed in combination with <day>
+ * !signup <day> <HH:mm>
  * Command for signing up for an event
  * Event name will be determined and set automatically for first upcoming day if only day was specified
  *
@@ -51,7 +50,7 @@ public class SignupCommand extends AbstractCommand{
 
     public SignupCommand(){
         super("signup",
-                "**!signup <id or event_name or day> [HH:mm]**"
+                "**!signup <day> <HH:mm>**"
                 + "\n -> Sign up for a specific event. Date will be set for the first upcoming day in the week.",
                 "N/A",
                 CommandAuthority.MEMBER);
@@ -62,53 +61,30 @@ public class SignupCommand extends AbstractCommand{
     public ResponseForm execute(User user, ArrayList<String> arguments){
 
         // validate passed arguments
-        if(!eventSignupValidator.validateMinNumberOfArguments(arguments, 1)){
+        if(!eventSignupValidator.validateNumberOfArguments(arguments, 2)){
             return new ResponseForm(CommandResponses.SIGNUP_INVALID_ARGUMENTS);
         }
-        if(arguments.size() == 2){
-            if(!eventSignupValidator.validateIfTime(arguments.get(1))){
-                return new ResponseForm(CommandResponses.SIGNUP_INVALID_ARGUMENTS);
-            }
+        if(!eventSignupValidator.validateIfDay(arguments.get(0))){
+            return new ResponseForm(CommandResponses.SIGNUP_INVALID_ARGUMENTS);
+        }
+        if(!eventSignupValidator.validateIfTime(arguments.get(1))){
+            return new ResponseForm(CommandResponses.SIGNUP_INVALID_ARGUMENTS);
         }
 
+        // get player
         Player player = playerService.findByDiscordId(user.getAsMention());
-
-        // check if player exists
         if(player == null){
             return new ResponseForm(CommandResponses.SIGNUP_INVALID_PLAYER);
         }
         this.playerId = player.getId();
 
-        Event event;
-
-        // check if event exists
-        if(eventSignupValidator.validateIfNumeric(arguments.get(0))){
-            this.eventId = Long.valueOf(arguments.get(0));
-
-            event = eventService.findById(eventId);
-
-            if(event == null){
-                return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
-            }
-
-        }else if(eventSignupValidator.validateIfDay(arguments.get(0)) && arguments.size() == 2){
-            String eventName = commandUtil.createEventName(arguments.get(0), arguments.get(1));
-
-            event = eventService.findByName(eventName);
-
-            if(event == null){
-                return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
-            }
-            this.eventId = event.getId();
-
-        }else{
-            event = eventService.findByName(arguments.get(0));
-
-            if(event == null){
-                return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
-            }
-            this.eventId = event.getId();
+        // get event
+        String eventName = commandUtil.createEventName(arguments.get(0), arguments.get(1));
+        Event event = eventService.findByName(eventName);
+        if(event == null){
+            return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
         }
+        this.eventId = event.getId();
 
         // check if player is already signed up for this event
         if(!eventSignupValidator.validateIfUniqueSignup(eventId, playerId)){
