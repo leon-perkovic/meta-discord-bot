@@ -7,7 +7,8 @@ import com.meta.leon.discordbot.command.ResponseForm;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +47,8 @@ public class UpdatePlayerCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         // if @username wasn't specified - add it as null
         if(arguments.size() == 3){
@@ -55,11 +57,13 @@ public class UpdatePlayerCommand extends AbstractCommand{
 
         // validate passed arguments
         if(!playerValidator.validateNumberOfArguments(arguments, 4)){
-            return new ResponseForm(CommandResponses.UPDATE_PLAYER_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.UPDATE_PLAYER_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(arguments.get(3) != null){
             if(!playerValidator.validateIfDiscordId(arguments.get(3))){
-                return new ResponseForm(CommandResponses.UPDATE_PLAYER_INVALID_DISCORD_ID);
+                messageChannel.sendMessage(CommandResponses.UPDATE_PLAYER_INVALID_DISCORD_ID).queue();
+                return;
             }
         }
 
@@ -74,11 +78,13 @@ public class UpdatePlayerCommand extends AbstractCommand{
 
             Player player = playerService.findById(id);
             if(player == null){
-                return new ResponseForm(CommandResponses.PLAYER_NOT_FOUND);
+                messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
+                return;
             }
 
             if(!playerValidator.validateIfUniquePlayerUpdate(id, nickname, accountName, discordId)){
-                return new ResponseForm(CommandResponses.UPDATE_PLAYER_ALREADY_TAKEN);
+                messageChannel.sendMessage(CommandResponses.UPDATE_PLAYER_ALREADY_TAKEN).queue();
+                return;
             }
 
             player.setNickname(nickname);
@@ -87,8 +93,9 @@ public class UpdatePlayerCommand extends AbstractCommand{
 
             playerService.savePlayer(player);
 
-            return new ResponseForm("Successfully updated player with *id:* **" + id + "** :white_check_mark:");
+            messageChannel.sendMessage("Successfully updated player with *id:* **" + id + "** :white_check_mark:").queue();
+            return;
         }
-        return new ResponseForm(CommandResponses.UPDATE_PLAYER_INVALID_ID);
+        messageChannel.sendMessage(CommandResponses.UPDATE_PLAYER_INVALID_ID).queue();
     }
 }

@@ -3,7 +3,8 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.*;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.EventValidator;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,20 +42,22 @@ public class RemoveEventCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
         if(!eventValidator.validateMinNumberOfArguments(arguments, 1)){
-            return new ResponseForm(CommandResponses.REMOVE_EVENT_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.REMOVE_EVENT_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(arguments.size() == 2){
             if(!eventValidator.validateIfTime(arguments.get(1))){
-                return new ResponseForm(CommandResponses.REMOVE_EVENT_INVALID_ARGUMENTS);
+                messageChannel.sendMessage(CommandResponses.REMOVE_EVENT_INVALID_ARGUMENTS).queue();
+                return;
             }
         }
 
         int numOfRemoved;
-
         if(eventValidator.validateIfNumeric(arguments.get(0))){
             numOfRemoved = eventService.removeById(Long.valueOf(arguments.get(0)));
 
@@ -67,9 +70,10 @@ public class RemoveEventCommand extends AbstractCommand{
         }
 
         if(numOfRemoved > 0){
-            return new ResponseForm(CommandResponses.REMOVE_EVENT_SUCCESS);
+            messageChannel.sendMessage(CommandResponses.REMOVE_EVENT_SUCCESS).queue();
+            return;
         }
-        return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
+        messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
     }
 
 }

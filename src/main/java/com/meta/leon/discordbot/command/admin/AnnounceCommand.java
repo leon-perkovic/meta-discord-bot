@@ -5,8 +5,10 @@ import com.meta.leon.discordbot.command.*;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.GlobalValidator;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,49 +50,50 @@ public class AnnounceCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
+        User user = discordEvent.getAuthor();
 
         // validate passed arguments
         if(!globalValidator.validateMinNumberOfArguments(arguments, 1)){
-            return new ResponseForm(CommandResponses.SIGNUP_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.SIGNUP_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(arguments.size() == 2){
             if(!globalValidator.validateIfTime(arguments.get(1))){
-                return new ResponseForm(CommandResponses.SIGNUP_INVALID_ARGUMENTS);
+                messageChannel.sendMessage(CommandResponses.SIGNUP_INVALID_ARGUMENTS).queue();
+                return;
             }
         }
 
         Event event;
-
         // check if event exists
         if(globalValidator.validateIfNumeric(arguments.get(0))){
             this.eventId = Long.valueOf(arguments.get(0));
 
             event = eventService.findById(eventId);
-
             if(event == null){
-                return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
+                messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
+                return;
             }
-
         }else if(globalValidator.validateIfDay(arguments.get(0)) && arguments.size() == 2){
             String eventName = commandUtil.createEventName(arguments.get(0), arguments.get(1));
 
             event = eventService.findByName(eventName);
-
             if(event == null){
-                return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
+                messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
+                return;
             }
             this.eventId = event.getId();
 
         }else{
             event = eventService.findByName(arguments.get(0));
-
             if(event == null){
-                return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
+                messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
+                return;
             }
             this.eventId = event.getId();
         }
-
 
         // get roles for Member and Trial
         Role memberRole = commandUtil.getRoleByName(user, DiscordBotApp.getMemberRole());
@@ -121,7 +124,7 @@ public class AnnounceCommand extends AbstractCommand{
                     + "\n--------------------------\nTo sign-up, please use: "
                     + "```!signup " + day + " " + eventTime.toString("HH:mm") + "```";
 
-        return new ResponseForm(announcement);
+        messageChannel.sendMessage(announcement).queue();
     }
 
 }

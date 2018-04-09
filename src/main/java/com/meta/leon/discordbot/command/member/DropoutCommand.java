@@ -11,7 +11,11 @@ import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.service.EventSignupService;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.EventSignupValidator;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,23 +67,29 @@ public class DropoutCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
+        User user = discordEvent.getAuthor();
 
         // validate passed arguments
         if(!eventSignupValidator.validateNumberOfArguments(arguments, 2)){
-            return new ResponseForm(CommandResponses.DROPOUT_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.DROPOUT_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(!eventSignupValidator.validateIfDay(arguments.get(0))){
-            return new ResponseForm(CommandResponses.DROPOUT_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.DROPOUT_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(!eventSignupValidator.validateIfTime(arguments.get(1))){
-            return new ResponseForm(CommandResponses.DROPOUT_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.DROPOUT_INVALID_ARGUMENTS).queue();
+            return;
         }
 
         // get player
         Player player = playerService.findByDiscordId(user.getAsMention());
         if(player == null){
-            return new ResponseForm(CommandResponses.DROPOUT_INVALID_PLAYER);
+            messageChannel.sendMessage(CommandResponses.DROPOUT_INVALID_PLAYER).queue();
+            return;
         }
         this.playerId = player.getId();
 
@@ -87,13 +97,15 @@ public class DropoutCommand extends AbstractCommand{
         String eventName = commandUtil.createEventName(arguments.get(0), arguments.get(1));
         Event event = eventService.findByName(eventName);
         if(event == null){
-            return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
+            messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
+            return;
         }
         this.eventId = event.getId();
 
         // check if player is already signed up for this event
         if(eventSignupValidator.validateIfUniqueSignup(eventId, playerId)){
-            return new ResponseForm(CommandResponses.SIGNUP_NOT_FOUND);
+            messageChannel.sendMessage(CommandResponses.SIGNUP_NOT_FOUND).queue();
+            return;
         }
 
         EventSignup eventSignup = eventSignupService.findEventSignup(eventId, playerId);
@@ -154,16 +166,14 @@ public class DropoutCommand extends AbstractCommand{
 
                 List<Guild> guilds = user.getMutualGuilds();
                 Guild guild = null;
-
                 for(Guild g : guilds){
                     if(g.getId().equals(DiscordBotApp.getServerId())){
                         guild = g;
                         break;
                     }
                 }
-                MessageChannel messageChannel = guild.getTextChannelsByName(DiscordBotApp.getAnnouncementChannel(), false).get(0);
-
-                messageChannel.sendMessage(announcement).queue();
+                MessageChannel announcementChannel = guild.getTextChannelsByName(DiscordBotApp.getAnnouncementChannel(), false).get(0);
+                announcementChannel.sendMessage(announcement).queue();
             }
         }
 
@@ -173,7 +183,7 @@ public class DropoutCommand extends AbstractCommand{
 
         eventSignupService.removeEventSignup(eventId, playerId);
 
-        return new ResponseForm(CommandResponses.DROPOUT_SUCCESS);
+        messageChannel.sendMessage(CommandResponses.DROPOUT_SUCCESS).queue();
     }
 
 }

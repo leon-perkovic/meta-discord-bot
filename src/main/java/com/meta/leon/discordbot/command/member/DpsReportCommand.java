@@ -7,7 +7,8 @@ import com.meta.leon.discordbot.service.DpsReportService;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.GlobalValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,30 +51,31 @@ public class DpsReportCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
         if(!globalValidator.validateNumberOfArguments(arguments, 1)){
-            return new ResponseForm(CommandResponses.DPS_REPORT_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.DPS_REPORT_INVALID_ARGUMENTS).queue();
+            return;
         }
 
         Event event;
-
         // check if event exists
         if(globalValidator.validateIfNumeric(arguments.get(0))){
             this.eventId = Long.valueOf(arguments.get(0));
 
             event = eventService.findById(eventId);
-
             if(event == null){
-                return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
+                messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
+                return;
             }
 
         }else{
             event = eventService.findByName(arguments.get(0));
-
             if(event == null){
-                return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
+                messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
+                return;
             }
             this.eventId = event.getId();
         }
@@ -81,11 +83,11 @@ public class DpsReportCommand extends AbstractCommand{
         List<DpsReport> dpsReports = dpsReportService.findAllByEventId(eventId);
 
         if(dpsReports.isEmpty()){
-            return new ResponseForm(CommandResponses.DPS_REPORTS_NONE_FOUND);
+            messageChannel.sendMessage(CommandResponses.DPS_REPORTS_NONE_FOUND).queue();
+            return;
         }
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
-
         embedBuilder.setTitle("__DPS reports:__");
         embedBuilder.setColor(Color.decode("#D02F00"));
 
@@ -93,7 +95,6 @@ public class DpsReportCommand extends AbstractCommand{
         fieldValue += "\n------------------------------";
 
         StringBuilder reports = new StringBuilder("");
-
         for(DpsReport dpsReport: dpsReports){
             reports.append("\n")
                     .append(dpsReport.getLink());
@@ -101,7 +102,7 @@ public class DpsReportCommand extends AbstractCommand{
 
         embedBuilder.addField(event.getName() + " (id: " + event.getId() + ")", fieldValue + reports, false);
 
-        return new ResponseForm(embedBuilder.build());
+        messageChannel.sendMessage(embedBuilder.build()).queue();
     }
 
 }

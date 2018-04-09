@@ -8,7 +8,8 @@ import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,11 +41,13 @@ public class PlayerCommand extends AbstractCommand{
     }
 
     @Override
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
         if(!playerValidator.validateNumberOfArguments(arguments, 1)){
-            return new ResponseForm(CommandResponses.PLAYER_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.PLAYER_INVALID_ARGUMENTS).queue();
+            return;
         }
 
         Player player;
@@ -61,7 +64,6 @@ public class PlayerCommand extends AbstractCommand{
 
         if(player != null){
             EmbedBuilder embedBuilder = new EmbedBuilder();
-
             embedBuilder.setTitle("__Player info:__");
             embedBuilder.setDescription("**" + player.getNickname()
                             + "**, " + player.getAccountName()
@@ -70,9 +72,10 @@ public class PlayerCommand extends AbstractCommand{
                             + player.rolesToString());
             embedBuilder.setColor(Color.decode("#D02F00"));
 
-            return new ResponseForm(embedBuilder.build());
+            messageChannel.sendMessage(embedBuilder.build()).queue();
+            return;
         }
-        return new ResponseForm(CommandResponses.PLAYER_NOT_FOUND);
+        messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
     }
 
 }

@@ -8,7 +8,8 @@ import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.service.DpsReportService;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.GlobalValidator;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,37 +47,38 @@ public class RemoveDpsReportCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
         if(!globalValidator.validateNumberOfArguments(arguments, 1)){
-            return new ResponseForm(CommandResponses.REMOVE_DPS_REPORT_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.REMOVE_DPS_REPORT_INVALID_ARGUMENTS).queue();
+            return;
         }
 
         Event event;
-
         // check if event exists
         if(globalValidator.validateIfNumeric(arguments.get(0))){
             this.eventId = Long.valueOf(arguments.get(0));
 
             event = eventService.findById(eventId);
-
             if(event == null){
-                return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
+                messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
+                return;
             }
 
         }else{
             event = eventService.findByName(arguments.get(0));
-
             if(event == null){
-                return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
+                messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
+                return;
             }
             this.eventId = event.getId();
         }
 
         dpsReportService.removeAllByEventId(eventId);
 
-        return new ResponseForm(CommandResponses.REMOVE_DPS_REPORT_SUCCESS);
+        messageChannel.sendMessage(CommandResponses.REMOVE_DPS_REPORT_SUCCESS).queue();
     }
 
 }

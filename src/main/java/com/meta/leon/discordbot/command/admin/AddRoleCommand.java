@@ -7,7 +7,8 @@ import com.meta.leon.discordbot.command.ResponseForm;
 import com.meta.leon.discordbot.model.Role;
 import com.meta.leon.discordbot.service.RoleService;
 import com.meta.leon.discordbot.validator.RoleValidator;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,24 +44,27 @@ public class AddRoleCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
         if(!roleValidator.validateNumberOfArguments(arguments, 2)){
-            return new ResponseForm(CommandResponses.ADD_ROLE_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.ADD_ROLE_INVALID_ARGUMENTS).queue();
+            return;
         }
 
         this.roleName = arguments.get(0);
         this.shortName = arguments.get(1);
 
         if(!roleValidator.validateIfUniqueRole(roleName, shortName)){
-            return new ResponseForm(CommandResponses.ROLE_ALREADY_EXISTS);
+            messageChannel.sendMessage(CommandResponses.ROLE_ALREADY_EXISTS).queue();
+            return;
         }
 
         Role role = new Role(roleName, shortName);
         roleService.saveRole(role);
 
-        return new ResponseForm("Successfully added role: **" + roleName + "** :white_check_mark:");
+        messageChannel.sendMessage("Successfully added role: **" + roleName + "** :white_check_mark:").queue();
     }
 
 }

@@ -8,7 +8,8 @@ import com.meta.leon.discordbot.model.Role;
 import com.meta.leon.discordbot.service.RoleService;
 import com.meta.leon.discordbot.validator.RoleValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,21 +42,22 @@ public class RolesCommand extends AbstractCommand{
     }
 
     @Override
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
         if(!roleValidator.validateNumberOfArguments(arguments, 0)){
-            return new ResponseForm(CommandResponses.ROLES_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.ROLES_INVALID_ARGUMENTS).queue();
+            return;
         }
 
         List<Role> roles = roleService.findAll();
-
         if(roles.isEmpty()){
-            return new ResponseForm(CommandResponses.ROLES_NONE_FOUND);
+            messageChannel.sendMessage(CommandResponses.ROLES_NONE_FOUND).queue();
+            return;
         }
 
         StringBuilder rolesInfo = new StringBuilder("");
-
         for(Role role : roles){
             rolesInfo.append("**")
                     .append(role.getRoleName())
@@ -67,12 +69,11 @@ public class RolesCommand extends AbstractCommand{
         }
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
-
         embedBuilder.setTitle("__Roles:__");
         embedBuilder.setDescription(rolesInfo.toString());
         embedBuilder.setColor(Color.decode("#D02F00"));
 
-        return new ResponseForm(embedBuilder.build());
+        messageChannel.sendMessage(embedBuilder.build()).queue();
     }
 
 }

@@ -8,7 +8,8 @@ import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,36 +42,46 @@ public class PlayersCommand extends AbstractCommand{
     }
 
     @Override
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
         if(!playerValidator.validateNumberOfArguments(arguments, 0)){
-            return new ResponseForm(CommandResponses.PLAYERS_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.PLAYERS_INVALID_ARGUMENTS).queue();
+            return;
         }
 
         List<Player> players = playerService.findAll();
-
         if(players.isEmpty()){
-            return new ResponseForm(CommandResponses.PLAYERS_NONE_FOUND);
+            messageChannel.sendMessage(CommandResponses.PLAYERS_NONE_FOUND).queue();
+            return;
         }
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
-
-        embedBuilder.setTitle("__Players:__");
+        embedBuilder.setTitle("__Players (" + players.size() + "):__");
         embedBuilder.setColor(Color.decode("#D02F00"));
 
+        String playerInfo;
+        StringBuilder playersBuilder = new StringBuilder();
+
         for(Player player : players){
-            String fieldValue = "**" + player.getNickname()
-                        + "**, " + player.getAccountName()
-                        + ", " + "*id:* " + player.getId()
-                        + ", " + player.getDiscordId() + "\n"
-                        + player.rolesToString();
+            playerInfo = "**" + player.getNickname()
+                    + "**, " + player.getAccountName()
+                    + ", " + "*id:* " + player.getId()
+                    + ", " + player.getDiscordId() + "\n"
+                    + player.rolesToString();
 
-            embedBuilder.addField("", fieldValue, false);
+            playersBuilder.append(playerInfo).append("\n\n");
+
+            if(playersBuilder.length() > 750){
+                embedBuilder.addField("", playersBuilder.toString(), false);
+                playersBuilder.setLength(0);
+            }
         }
-
-
-        return new ResponseForm(embedBuilder.build());
+        if(playersBuilder.length() > 0){
+            embedBuilder.addField("", playersBuilder.toString(), false);
+        }
+        messageChannel.sendMessage(embedBuilder.build()).queue();
     }
 
 }

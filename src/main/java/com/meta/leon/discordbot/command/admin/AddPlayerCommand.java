@@ -7,7 +7,8 @@ import com.meta.leon.discordbot.command.ResponseForm;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,8 @@ public class AddPlayerCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         // if @username wasn't specified - add it as null
         if(arguments.size() == 2){
@@ -54,11 +56,13 @@ public class AddPlayerCommand extends AbstractCommand{
 
         // validate passed arguments
         if(!playerValidator.validateNumberOfArguments(arguments, 3)){
-            return new ResponseForm(CommandResponses.ADD_PLAYER_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.ADD_PLAYER_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(arguments.get(2) != null){
             if(!playerValidator.validateIfDiscordId(arguments.get(2))){
-                return new ResponseForm(CommandResponses.ADD_PLAYER_INVALID_DISCORD_ID);
+                messageChannel.sendMessage(CommandResponses.ADD_PLAYER_INVALID_DISCORD_ID).queue();
+                return;
             }
         }
 
@@ -70,13 +74,14 @@ public class AddPlayerCommand extends AbstractCommand{
         }
 
         if(!playerValidator.validateIfUniquePlayer(nickname, accountName, discordId)){
-            return new ResponseForm(CommandResponses.PLAYER_ALREADY_EXISTS);
+            messageChannel.sendMessage(CommandResponses.PLAYER_ALREADY_EXISTS).queue();
+            return;
         }
 
         Player player = new Player(nickname, accountName, discordId);
         playerService.savePlayer(player);
 
-        return new ResponseForm("Successfully added player: **" + nickname + "** :white_check_mark:");
+        messageChannel.sendMessage("Successfully added player: **" + nickname + "** :white_check_mark:").queue();
     }
 
 }
