@@ -6,7 +6,8 @@ import com.meta.leon.discordbot.command.CommandResponses;
 import com.meta.leon.discordbot.command.ResponseForm;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,11 +40,13 @@ public class RemovePlayerCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
         if(!playerValidator.validateNumberOfArguments(arguments, 1)){
-            return new ResponseForm(CommandResponses.REMOVE_PLAYER_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.REMOVE_PLAYER_INVALID_ARGUMENTS).queue();
+            return;
         }
 
         int numOfRemoved;
@@ -59,9 +62,10 @@ public class RemovePlayerCommand extends AbstractCommand{
         }
 
         if(numOfRemoved > 0){
-            return new ResponseForm(CommandResponses.REMOVE_PLAYER_SUCCESS);
+            messageChannel.sendMessage(CommandResponses.REMOVE_PLAYER_SUCCESS).queue();
+            return;
         }
-        return new ResponseForm(CommandResponses.PLAYER_NOT_FOUND);
+        messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
     }
 
 }

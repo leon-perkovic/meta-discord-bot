@@ -1,6 +1,6 @@
 package com.meta.leon.discordbot.command;
 
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
 
@@ -32,8 +32,8 @@ public abstract class AbstractCommand{
         this.authority = authority;
     }
 
-    public ResponseForm execute(User user, ArrayList<String> arguments){
-        return null;
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+
     }
 
     // -- getters and setters -------------------------------------------------

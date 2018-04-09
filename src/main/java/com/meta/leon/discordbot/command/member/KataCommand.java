@@ -5,7 +5,9 @@ import com.meta.leon.discordbot.command.*;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.GlobalValidator;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +43,9 @@ public class KataCommand extends AbstractCommand{
     }
 
     @Override
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
+        User user = discordEvent.getAuthor();
 
         // get user roles and set authority level
         List<String> roleNames = BotListener.getUserRoles(user);
@@ -49,7 +53,8 @@ public class KataCommand extends AbstractCommand{
 
         // validate passed arguments
         if(!globalValidator.validateNumberOfArguments(arguments, 0)){
-            return new ResponseForm(CommandResponses.ROLL_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.ROLL_INVALID_ARGUMENTS).queue();
+            return;
         }
 
         Random rng = new Random();
@@ -57,28 +62,29 @@ public class KataCommand extends AbstractCommand{
         StringBuilder spam = new StringBuilder("");
 
         Player player = playerService.findByDiscordId(user.getAsMention());
-
         if(player != null){
             if(player.getNickname().toLowerCase().equals("kata")){
                 for(int i=0; i<range; i++){
                     spam.append("[Sun Spirit]\n");
                 }
-                return new ResponseForm(spam.toString());
+                messageChannel.sendMessage(spam.toString()).queue();
+                return;
             }
         }
 
         player = playerService.findByNickname("kata");
-
         if(player != null){
             if(authority.getLevel() >= CommandAuthority.EVENT_LEADER.getLevel()){
                 for(int i=0; i<range; i++){
-                    spam.append(player.getDiscordId() + "\n");
+                    spam.append(player.getDiscordId())
+                        .append("\n");
                 }
-                return new ResponseForm(spam.toString());
+                messageChannel.sendMessage(spam.toString()).queue();
+                return;
             }
         }
 
-        return new ResponseForm("Sorry, you're not the spam-queen :wink:");
+        messageChannel.sendMessage("Sorry, you're not the spam-queen :wink:").queue();
     }
 
 }

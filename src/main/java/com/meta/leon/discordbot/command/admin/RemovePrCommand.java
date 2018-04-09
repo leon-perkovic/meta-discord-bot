@@ -7,7 +7,8 @@ import com.meta.leon.discordbot.service.PlayerRoleService;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.service.RoleService;
 import com.meta.leon.discordbot.validator.GlobalValidator;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,21 +51,22 @@ public class RemovePrCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
         if(!globalValidator.validateMinNumberOfArguments(arguments, 2)){
-            return new ResponseForm(CommandResponses.ADD_PR_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.ADD_PR_INVALID_ARGUMENTS).queue();
+            return;
         }
 
         Player player = commandUtil.findPlayerByAnyReference(arguments);
-
         if(player == null){
-            return new ResponseForm(CommandResponses.PLAYER_NOT_FOUND);
+            messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
+            return;
         }
 
         Long playerId = player.getId();
-
         // remove player reference (first argument)
         arguments.remove(0);
 
@@ -79,7 +81,8 @@ public class RemovePrCommand extends AbstractCommand{
             }
 
             if(role == null){
-                return new ResponseForm(CommandResponses.ROLE_NOT_FOUND);
+                messageChannel.sendMessage(CommandResponses.ROLE_NOT_FOUND).queue();
+                return;
             }
             roleIds.add(role.getId());
         }
@@ -87,7 +90,7 @@ public class RemovePrCommand extends AbstractCommand{
         for(Long roleId : roleIds){
             playerRoleService.removePlayerRole(playerId, roleId);
         }
-        return new ResponseForm("Successfully removed roles for player: **" + player.getNickname() + "** :white_check_mark:");
+        messageChannel.sendMessage("Successfully removed roles for player: **" + player.getNickname() + "** :white_check_mark:").queue();
     }
 
 }

@@ -4,7 +4,8 @@ import com.meta.leon.discordbot.command.*;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.EventValidator;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -51,10 +52,10 @@ public class AddEventCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         int descStart = 5;
-
         // if @username was passed as an argument, push start of description
         if(arguments.size() > 5){
             if(eventValidator.validateIfDiscordId(arguments.get(5))){
@@ -72,22 +73,28 @@ public class AddEventCommand extends AbstractCommand{
 
         // validate passed arguments
         if(!eventValidator.validateMinNumberOfArguments(arguments, descStart+1)){
-            return new ResponseForm(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(!eventValidator.validateIfDay(arguments.get(0))){
-            return new ResponseForm(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(!eventValidator.validateIfTime(arguments.get(1))){
-            return new ResponseForm(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(!eventValidator.validateIfNumeric(arguments.get(2))){
-            return new ResponseForm(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(!eventValidator.validateIfNumeric(arguments.get(3))){
-            return new ResponseForm(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(!eventValidator.validateIfNumeric(arguments.get(4))){
-            return new ResponseForm(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS).queue();
+            return;
         }
 
         // if description was split as multiple arguments - combine them
@@ -100,14 +107,12 @@ public class AddEventCommand extends AbstractCommand{
 
         }else{
             this.description = arguments.get(descStart);
-
             if(description != null){
                 description = description.trim();
             }
         }
 
         this.eventTime = commandUtil.getEventDateTime(arguments.get(0), arguments.get(1));
-
         this.name = arguments.get(0).toLowerCase()
                 + "-" + eventTime.getYearOfCentury()
                 + "-" + eventTime.getMonthOfYear()
@@ -127,12 +132,13 @@ public class AddEventCommand extends AbstractCommand{
         }
 
         if(!eventValidator.validateIfUniqueEvent(name)){
-            return new ResponseForm(CommandResponses.EVENT_ALREADY_EXISTS);
+            messageChannel.sendMessage(CommandResponses.EVENT_ALREADY_EXISTS).queue();
+            return;
         }
 
         Event event = new Event(name, eventTime, description, playerLimit, memberLimit, trialLimit, eventLeader);
         eventService.saveEvent(event);
 
-        return new ResponseForm("Successfully added event: **" + name + "** :white_check_mark:");
+        messageChannel.sendMessage("Successfully added event: **" + name + "** :white_check_mark:").queue();
     }
 }

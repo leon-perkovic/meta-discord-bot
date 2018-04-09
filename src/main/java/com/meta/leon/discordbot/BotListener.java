@@ -29,10 +29,9 @@ public class BotListener extends ListenerAdapter{
     @Override
     public void onMessageReceived(MessageReceivedEvent event){
 
-        // get received message and channel
+        // get received message, channel and raw content
         Message message = event.getMessage();
         MessageChannel messageChannel = event.getChannel();
-
         String messageContent = message.getContentRaw();
 
         // check if passed message is a command
@@ -69,15 +68,10 @@ public class BotListener extends ListenerAdapter{
                     }
                 }
                 // call corresponding command and get its response
-                Object response = command.execute(user, arguments).getResponse();
-
-                // send corresponding response
-                if(response instanceof  String){
-                    messageChannel.sendMessage((String) response).queue();
-                }else if(response instanceof MessageEmbed){
-                    messageChannel.sendMessage((MessageEmbed) response).queue();
-                }else{
-                    messageChannel.sendMessage(response.toString()).queue();
+                try{
+                    command.execute(event, arguments);
+                }catch(Exception ex){
+                    messageChannel.sendMessage("Oops, something went wrong :cry:").queue();
                 }
             }else{
                 // if user isn't authorized - send corresponding response
@@ -90,7 +84,6 @@ public class BotListener extends ListenerAdapter{
             if(DiscordBotApp.spamCounter == 5){
                 DiscordBotApp.spamCounter = 0;
                 messageChannel.sendMessage("Stop spamming me random stuff :angry: ").queue();
-
             }else{
                 // if command doesn't exist - send corresponding response
                 messageChannel.sendMessage(CommandResponses.INVALID_COMMAND).queue();
@@ -99,10 +92,7 @@ public class BotListener extends ListenerAdapter{
     }
 
     private boolean isCommand(String messageContent){
-        if(messageContent.startsWith("!")){
-            return true;
-        }
-        return false;
+        return messageContent.startsWith("!");
     }
 
     public static List<String> getUserRoles(User user){
@@ -120,7 +110,6 @@ public class BotListener extends ListenerAdapter{
 
         if(member != null){
             List<Role> roles = member.getRoles();
-
             for(Role role : roles){
                 if(role.getName().startsWith("@")){
                     roleNames.add(role.getName().substring(1));

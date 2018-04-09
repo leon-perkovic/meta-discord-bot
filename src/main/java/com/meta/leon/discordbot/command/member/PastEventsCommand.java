@@ -5,7 +5,8 @@ import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.EventValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -48,19 +49,21 @@ public class PastEventsCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
         if(!eventValidator.validateMinNumberOfArguments(arguments, 0)){
-            return new ResponseForm(CommandResponses.PAST_EVENTS_INVALID_ARGUMENT);
+            messageChannel.sendMessage(CommandResponses.PAST_EVENTS_INVALID_ARGUMENT).queue();
+            return;
         }
 
         // set default page
         int page = 1;
-
         if(arguments.size() == 1){
             if(!eventValidator.validateIfNumeric(arguments.get(0))){
-                return new ResponseForm(CommandResponses.PAST_EVENTS_INVALID_ARGUMENT);
+                messageChannel.sendMessage(CommandResponses.PAST_EVENTS_INVALID_ARGUMENT).queue();
+                return;
             }
             page = Integer.valueOf(arguments.get(0));
         }
@@ -79,12 +82,10 @@ public class PastEventsCommand extends AbstractCommand{
 
         if(!events.isEmpty()){
             EmbedBuilder embedBuilder = new EmbedBuilder();
-
-            embedBuilder.setTitle("__Past events - page " + page + ":__");
+            embedBuilder.setTitle("__Past events - page " + page + "/" + maxPage + ":__");
             embedBuilder.setColor(Color.decode("#D02F00"));
 
             List<Event> eventsPage;
-
             if(events.size() >= page*PAGE_SIZE){
                 eventsPage = events.subList((page-1)*PAGE_SIZE, page*PAGE_SIZE);
             }else{
@@ -95,16 +96,16 @@ public class PastEventsCommand extends AbstractCommand{
             Collections.reverse(eventsPage);
 
             for(Event event : eventsPage){
-
                 String fieldValue = commandUtil.createEventBody(event);
                 fieldValue += "\n------------------------------";
 
                 embedBuilder.addField(event.getName() + " (id: " + event.getId() + ")", fieldValue, false);
             }
 
-            return new ResponseForm(embedBuilder.build());
+            messageChannel.sendMessage(embedBuilder.build()).queue();
+            return;
         }
-        return new ResponseForm(CommandResponses.EVENTS_NONE_FOUND);
+        messageChannel.sendMessage(CommandResponses.EVENTS_NONE_FOUND).queue();
     }
 
 }

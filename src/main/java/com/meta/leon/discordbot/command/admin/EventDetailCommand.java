@@ -1,6 +1,9 @@
 package com.meta.leon.discordbot.command.admin;
 
-import com.meta.leon.discordbot.command.*;
+import com.meta.leon.discordbot.command.AbstractCommand;
+import com.meta.leon.discordbot.command.CommandAuthority;
+import com.meta.leon.discordbot.command.CommandResponses;
+import com.meta.leon.discordbot.command.CommandUtil;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.model.EventDropout;
 import com.meta.leon.discordbot.model.EventSignup;
@@ -11,7 +14,8 @@ import com.meta.leon.discordbot.service.EventSignupService;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.EventValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -62,20 +65,22 @@ public class EventDetailCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
         if(!eventValidator.validateMinNumberOfArguments(arguments, 1)){
-            return new ResponseForm(CommandResponses.EVENT_DETAIL_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.EVENT_DETAIL_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(arguments.size() == 2){
             if(!eventValidator.validateIfTime(arguments.get(1))){
-                return new ResponseForm(CommandResponses.EVENT_DETAIL_INVALID_ARGUMENTS);
+                messageChannel.sendMessage(CommandResponses.EVENT_DETAIL_INVALID_ARGUMENTS).queue();
+                return;
             }
         }
 
         Event event;
-
         if(eventValidator.validateIfNumeric(arguments.get(0))){
             event = eventService.findById(Long.valueOf(arguments.get(0)));
 
@@ -89,19 +94,12 @@ public class EventDetailCommand extends AbstractCommand{
         }
 
         if(event != null){
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-
-            embedBuilder.setTitle("__Event info:__");
-            embedBuilder.setColor(Color.decode("#D02F00"));
-
-            String fieldValue = commandUtil.createEventBody(event);
-
             String signup;
             String dropout;
 
-            LinkedList<String> backupsList = new LinkedList<>();
-            LinkedList<String> signupsList = new LinkedList<>();
-            LinkedList<String> dropoutsList = new LinkedList<>();
+            StringBuilder signups = new StringBuilder();
+            StringBuilder backups = new StringBuilder();
+            StringBuilder dropouts = new StringBuilder();
 
             for(Player player : event.getPlayers()){
                 EventSignup eventSignup = eventSignupService.findEventSignup(event.getId(), player.getId());
@@ -118,15 +116,13 @@ public class EventDetailCommand extends AbstractCommand{
                         + " " + zone + "**";
 
                 if(eventSignup.isBackup()){
-                    backupsList.add(signup);
-
+                    backups.append(signup);
                 }else{
-                    signupsList.add(signup);
+                    signups.append(signup);
                 }
             }
 
             List<EventDropout> eventDropouts = eventDropoutService.findAllByEventId(event.getId());
-
             for(EventDropout eventDropout : eventDropouts){
                 DateTimeZone timeZone = event.getEventTime().getZone();
                 String zone = timeZone.getShortName(event.getEventTime().getMillis());
@@ -145,36 +141,33 @@ public class EventDetailCommand extends AbstractCommand{
                         + eventDropout.getDropoutTime().toString("dd/MM/yyyy - HH:mm:ss")
                         + " " + zone + "**";
 
-                dropoutsList.add(dropout);
+                dropouts.append(dropout);
             }
 
-            embedBuilder.addField(event.getName() + " (id: " + event.getId() + ")", fieldValue, false);
+            EmbedBuilder embedBuilder = new EmbedBuilder();
+            embedBuilder.setTitle(event.getName() + " (id: " + event.getId() + ")");
+            embedBuilder.setColor(Color.decode("#D02F00"));
 
-            embedBuilder.addField("------------------------------", "**Signups:**", false);
-            if(!signupsList.isEmpty()){
-                for(String su : signupsList){
-                    embedBuilder.addField("", su, false);
+            String fieldValue = commandUtil.createEventBody(event);
 
-                }
-            }
-            embedBuilder.addField("------------------------------", "**Backups:**", false);
-            if(!backupsList.isEmpty()){
-                for(String bu : backupsList){
-                    embedBuilder.addField("", bu, false);
+            embedBuilder.setDescription(fieldValue);
+            messageChannel.sendMessage(embedBuilder.build()).queue();
 
-                }
-            }
-            embedBuilder.addField("------------------------------", "**Dropouts:**", false);
-            if(!dropoutsList.isEmpty()){
-                for(String du : dropoutsList){
-                    embedBuilder.addField("", du, false);
+            embedBuilder.setTitle("**Signups:**");
+            embedBuilder.setDescription(signups.toString());
+            messageChannel.sendMessage(embedBuilder.build()).queue();
 
-                }
-            }
+            embedBuilder.setTitle("**Backups:**");
+            embedBuilder.setDescription(backups.toString());
+            messageChannel.sendMessage(embedBuilder.build()).queue();
 
-            return new ResponseForm(embedBuilder.build());
+            embedBuilder.setTitle("**Dropouts:**");
+            embedBuilder.setDescription(dropouts.toString());
+            messageChannel.sendMessage(embedBuilder.build()).queue();
+
+            return;
         }
-        return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
+        messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
     }
 
 }

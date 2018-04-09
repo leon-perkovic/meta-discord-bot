@@ -4,7 +4,9 @@ import com.meta.leon.discordbot.BotListener;
 import com.meta.leon.discordbot.command.*;
 import com.meta.leon.discordbot.validator.GlobalValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +40,9 @@ public class HelpCommand extends AbstractCommand{
     }
 
     @Override
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
+        User user = discordEvent.getAuthor();
 
         // map commands in command container
         commandContainer.mapCommands();
@@ -53,29 +57,29 @@ public class HelpCommand extends AbstractCommand{
                 AbstractCommand command = commands.get(arguments.get(0).toLowerCase());
 
                 if(authority.getLevel() >= command.getAuthority().getLevel()){
-                    return new ResponseForm(command.getDescription());
+                    messageChannel.sendMessage(command.getDescription()).queue();
+                    return;
 
                 }else{
-                    return new ResponseForm(CommandResponses.NOT_AUTHORIZED);
+                    messageChannel.sendMessage(CommandResponses.NOT_AUTHORIZED).queue();
+                    return;
                 }
             }else{
-                return new ResponseForm("I don't know any command called **" + arguments.get(0) + "** :cry:");
+                messageChannel.sendMessage("I don't know any command called **" + arguments.get(0) + "** :cry:");
             }
         }
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
-
         embedBuilder.setTitle("__Commands:__");
         embedBuilder.setDescription("**< ... > - Required\n[ ... ] - Optional**");
         embedBuilder.setColor(Color.decode("#D02F00"));
 
         for(String key : commands.keySet()){
             if(authority.getLevel() >= commands.get(key).getAuthority().getLevel()){
-
                 embedBuilder.addField("", commands.get(key).getDescription(), false);
             }
         }
-        return new ResponseForm(embedBuilder.build());
+        messageChannel.sendMessage(embedBuilder.build()).queue();
     }
 
 }

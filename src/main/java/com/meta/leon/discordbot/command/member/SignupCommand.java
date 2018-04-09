@@ -10,7 +10,9 @@ import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.service.EventSignupService;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.EventSignupValidator;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -58,23 +60,29 @@ public class SignupCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public ResponseForm execute(User user, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+        MessageChannel messageChannel = discordEvent.getChannel();
+        User user = discordEvent.getAuthor();
 
         // validate passed arguments
         if(!eventSignupValidator.validateNumberOfArguments(arguments, 2)){
-            return new ResponseForm(CommandResponses.SIGNUP_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.SIGNUP_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(!eventSignupValidator.validateIfDay(arguments.get(0))){
-            return new ResponseForm(CommandResponses.SIGNUP_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.SIGNUP_INVALID_ARGUMENTS).queue();
+            return;
         }
         if(!eventSignupValidator.validateIfTime(arguments.get(1))){
-            return new ResponseForm(CommandResponses.SIGNUP_INVALID_ARGUMENTS);
+            messageChannel.sendMessage(CommandResponses.SIGNUP_INVALID_ARGUMENTS).queue();
+            return;
         }
 
         // get player
         Player player = playerService.findByDiscordId(user.getAsMention());
         if(player == null){
-            return new ResponseForm(CommandResponses.SIGNUP_INVALID_PLAYER);
+            messageChannel.sendMessage(CommandResponses.SIGNUP_INVALID_PLAYER).queue();
+            return;
         }
         this.playerId = player.getId();
 
@@ -82,18 +90,19 @@ public class SignupCommand extends AbstractCommand{
         String eventName = commandUtil.createEventName(arguments.get(0), arguments.get(1));
         Event event = eventService.findByName(eventName);
         if(event == null){
-            return new ResponseForm(CommandResponses.EVENT_NOT_FOUND);
+            messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
+            return;
         }
         this.eventId = event.getId();
 
         // check if player is already signed up for this event
         if(!eventSignupValidator.validateIfUniqueSignup(eventId, playerId)){
-            return new ResponseForm(CommandResponses.SIGNUP_ALREADY_EXISTS);
+            messageChannel.sendMessage(CommandResponses.SIGNUP_ALREADY_EXISTS).queue();
+            return;
         }
 
         // determine if user is member or trial
         List<String> roleNames = BotListener.getUserRoles(user);
-
         String userRole = "";
         if(roleNames.contains(DiscordBotApp.getMemberRole())){
             userRole = DiscordBotApp.getMemberRole();
@@ -104,7 +113,6 @@ public class SignupCommand extends AbstractCommand{
 
         // determine if user is backup
         boolean isBackup = false;
-
         Integer totalSignups = eventSignupService.getNumOfSignups(eventId, false);
         Integer totalSignupsForRank = eventSignupService.getNumOfSignupsByRank(eventId, userRole, false);
 
@@ -122,10 +130,11 @@ public class SignupCommand extends AbstractCommand{
         eventSignupService.saveEventSignup(eventSignup);
 
         if(isBackup){
-            return new ResponseForm(CommandResponses.SIGNUP_FULL);
+            messageChannel.sendMessage(CommandResponses.SIGNUP_FULL).queue();
+            return;
         }
 
-        return new ResponseForm(CommandResponses.SIGNUP_SUCCESS);
+        messageChannel.sendMessage(CommandResponses.SIGNUP_SUCCESS).queue();
     }
 
 }
