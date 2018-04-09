@@ -55,6 +55,7 @@ public class BotListener extends ListenerAdapter{
 
         // check if command exists
         if(commands.keySet().contains(splitContent[0].toLowerCase())){
+            DiscordBotApp.spamCounter = 0;
             AbstractCommand command = commands.get(splitContent[0].toLowerCase());
 
             // check if user is authorized to use the command
@@ -83,8 +84,17 @@ public class BotListener extends ListenerAdapter{
                 messageChannel.sendMessage(CommandResponses.NOT_AUTHORIZED).queue();
             }
         }else{
-            // if command doesn't exist - send corresponding response
-            messageChannel.sendMessage(CommandResponses.INVALID_COMMAND).queue();
+            DiscordBotApp.spamCounter++;
+
+            // if spammed invalid commands too long
+            if(DiscordBotApp.spamCounter == 5){
+                DiscordBotApp.spamCounter = 0;
+                messageChannel.sendMessage("Stop spamming me random stuff :angry: ").queue();
+
+            }else{
+                // if command doesn't exist - send corresponding response
+                messageChannel.sendMessage(CommandResponses.INVALID_COMMAND).queue();
+            }
         }
     }
 

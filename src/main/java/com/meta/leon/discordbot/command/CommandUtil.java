@@ -100,7 +100,9 @@ public class CommandUtil{
             hours = Integer.valueOf(time);
         }
 
-        if(eventDay < today || (nowHours*60+nowMinutes) > (hours*60+minutes)){
+        if(eventDay < today){
+            eventDay += 7;
+        }else if(eventDay == today && (nowHours*60+nowMinutes) > (hours*60+minutes)){
             eventDay += 7;
         }
         eventDay = now.getDayOfMonth() + (eventDay-today);

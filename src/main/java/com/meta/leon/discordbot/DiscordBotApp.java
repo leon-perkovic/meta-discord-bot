@@ -34,6 +34,8 @@ public class DiscordBotApp implements CommandLineRunner{
     private static String trialRole;
     private static String publicRole;
 
+    public static int spamCounter = 0;
+
 
     public static void main(String[] args){
 
