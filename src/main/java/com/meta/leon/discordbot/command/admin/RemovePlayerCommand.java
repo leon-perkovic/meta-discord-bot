@@ -3,7 +3,8 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.ResponseForm;
+import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -29,6 +30,9 @@ public class RemovePlayerCommand extends AbstractCommand{
     @Autowired
     PlayerValidator playerValidator;
 
+    @Autowired
+    CommandUtil commandUtil;
+
 
     public RemovePlayerCommand(){
         super("removeplayer",
@@ -49,23 +53,14 @@ public class RemovePlayerCommand extends AbstractCommand{
             return;
         }
 
-        int numOfRemoved;
-        if(playerValidator.validateIfNumeric(arguments.get(0))){
-            Long id = Long.valueOf(arguments.get(0));
-            numOfRemoved = playerService.removeById(id);
-
-        }else if(playerValidator.validateIfDiscordId(arguments.get(0))){
-            numOfRemoved = playerService.removeByDiscordId(arguments.get(0).replace("!", ""));
-
-        }else{
-            numOfRemoved = playerService.removeByNickname(arguments.get(0));
+        Player player = commandUtil.findPlayerByAnyReference(arguments.get(0));
+        if(player == null){
+            messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
         }
 
-        if(numOfRemoved > 0){
-            messageChannel.sendMessage(CommandResponses.REMOVE_PLAYER_SUCCESS).queue();
-            return;
-        }
-        messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
+        playerService.removeById(player.getId());
+
+        messageChannel.sendMessage(CommandResponses.REMOVE_PLAYER_SUCCESS).queue();
     }
 
 }

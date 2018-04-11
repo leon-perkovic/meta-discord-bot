@@ -1,7 +1,10 @@
 package com.meta.leon.discordbot.command.admin;
 
 import com.meta.leon.discordbot.DiscordBotApp;
-import com.meta.leon.discordbot.command.*;
+import com.meta.leon.discordbot.command.AbstractCommand;
+import com.meta.leon.discordbot.command.CommandAuthority;
+import com.meta.leon.discordbot.command.CommandResponses;
+import com.meta.leon.discordbot.command.CommandUtil;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.GlobalValidator;
@@ -103,9 +106,8 @@ public class AnnounceCommand extends AbstractCommand{
         day = day.substring(0, 1).toUpperCase() + day.substring(1);
 
         DateTime eventTime = event.getEventTime();
-
-        DateTimeZone timeZone = event.getEventTime().getZone();
-        String zone = timeZone.getShortName(event.getEventTime().getMillis());
+        DateTimeZone timeZone = eventTime.getZone();
+        String zone = timeZone.getShortName(eventTime.getMillis());
 
         // build announcement message
         String announcement = memberRole.getAsMention() + ", " + trialRole.getAsMention()

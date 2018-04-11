@@ -54,29 +54,20 @@ public class CommandUtil{
         days.put("sunday", 7);
     }
 
-    public Player findPlayerByAnyReference(ArrayList<String> arguments){
+    public Player findPlayerByAnyReference(String argument){
 
         Player player;
 
         // determine which reference was used for a player and get their ID
-        if(globalValidator.validateIfNumeric(arguments.get(0))){
-            Long id = Long.valueOf(arguments.get(0));
-
+        if(globalValidator.validateIfNumeric(argument)){
+            Long id = Long.valueOf(argument);
             player = playerService.findById(id);
 
-            if(player == null){
-                return player;
-            }
-
-        }else if(globalValidator.validateIfDiscordId(arguments.get(0))){
-            player = playerService.findByDiscordId(arguments.get(0).replace("!", ""));
-
-            if(player == null){
-                return player;
-            }
+        }else if(globalValidator.validateIfDiscordId(argument)){
+            player = playerService.findByDiscordId(argument.replace("!", ""));
 
         }else{
-            player = playerService.findByNickname(arguments.get(0));
+            player = playerService.findByNickname(argument);
         }
 
         return player;

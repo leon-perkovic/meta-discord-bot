@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.ResponseForm;
+import com.meta.leon.discordbot.command.CommandUtil;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
@@ -31,6 +31,9 @@ public class PlayerCommand extends AbstractCommand{
     @Autowired
     PlayerValidator playerValidator;
 
+    @Autowired
+    CommandUtil commandUtil;
+
 
     public PlayerCommand(){
         super("player",
@@ -50,18 +53,7 @@ public class PlayerCommand extends AbstractCommand{
             return;
         }
 
-        Player player;
-        if(playerValidator.validateIfNumeric(arguments.get(0))){
-            Long id = Long.valueOf(arguments.get(0));
-            player = playerService.findById(id);
-
-        }else if(playerValidator.validateIfDiscordId(arguments.get(0))){
-            player = playerService.findByDiscordId(arguments.get(0).replace("!", ""));
-
-        }else{
-            player = playerService.findByNickname(arguments.get(0));
-        }
-
+        Player player = commandUtil.findPlayerByAnyReference(arguments.get(0));
         if(player != null){
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.setTitle("__Player info:__");

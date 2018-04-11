@@ -3,7 +3,6 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.ResponseForm;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
@@ -65,13 +64,13 @@ public class PlayersCommand extends AbstractCommand{
         StringBuilder playersBuilder = new StringBuilder();
 
         for(Player player : players){
-            playerInfo = "**" + player.getNickname()
+            playerInfo = "\n**" + player.getNickname()
                     + "**, " + player.getAccountName()
                     + ", " + "*id:* " + player.getId()
                     + ", " + player.getDiscordId() + "\n"
                     + player.rolesToString();
 
-            playersBuilder.append(playerInfo).append("\n\n");
+            playersBuilder.append(playerInfo).append("\n");
 
             if(playersBuilder.length() > 750){
                 embedBuilder.addField("", playersBuilder.toString(), false);

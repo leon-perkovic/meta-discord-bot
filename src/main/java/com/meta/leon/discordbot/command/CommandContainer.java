@@ -1,6 +1,7 @@
 package com.meta.leon.discordbot.command;
 
 import com.meta.leon.discordbot.command.admin.*;
+import com.meta.leon.discordbot.command.everyone.GgCommand;
 import com.meta.leon.discordbot.command.everyone.HelpCommand;
 import com.meta.leon.discordbot.command.everyone.RollCommand;
 import com.meta.leon.discordbot.command.member.*;
@@ -73,6 +74,14 @@ public class CommandContainer{
     private RollCommand rollCommand;
     @Autowired
     private KataCommand kataCommand;
+    @Autowired
+    private GgCommand ggCommand;
+    @Autowired
+    private SignupPlayerCommand signupPlayerCommand;
+    @Autowired
+    private DropoutPlayerCommand dropoutPlayerCommand;
+    @Autowired
+    private MeCommand meCommand;
 
 
     // Used to map all autowired commands to their key values
@@ -80,6 +89,7 @@ public class CommandContainer{
 
         commands = new LinkedHashMap<>();
 
+        commands.put("me", meCommand);
         commands.put("addplayer", addPlayerCommand);
         commands.put("updateplayer", updatePlayerCommand);
         commands.put("removeplayer", removePlayerCommand);
@@ -104,9 +114,12 @@ public class CommandContainer{
         commands.put("dpsreport", dpsReportCommand);
         commands.put("signup", signupCommand);
         commands.put("dropout", dropoutCommand);
+        commands.put("signupplayer", signupPlayerCommand);
+        commands.put("dropoutplayer", dropoutPlayerCommand);
         commands.put("help", helpCommand);
-        commands.put("roll", rollCommand);
         commands.put("kata", kataCommand);
+        commands.put("roll", rollCommand);
+        commands.put("gg", ggCommand);
     }
 
     // -- getters and setters -------------------------------------------------

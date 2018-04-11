@@ -1,6 +1,9 @@
 package com.meta.leon.discordbot.command.admin;
 
-import com.meta.leon.discordbot.command.*;
+import com.meta.leon.discordbot.command.AbstractCommand;
+import com.meta.leon.discordbot.command.CommandAuthority;
+import com.meta.leon.discordbot.command.CommandResponses;
+import com.meta.leon.discordbot.command.CommandUtil;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.model.PlayerRole;
 import com.meta.leon.discordbot.model.Role;
@@ -61,7 +64,7 @@ public class AddPrCommand extends AbstractCommand{
             return;
         }
 
-        Player player = commandUtil.findPlayerByAnyReference(arguments);
+        Player player = commandUtil.findPlayerByAnyReference(arguments.get(0));
         if(player == null){
             messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
             return;

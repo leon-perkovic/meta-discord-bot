@@ -1,7 +1,10 @@
 package com.meta.leon.discordbot.command.member;
 
 import com.meta.leon.discordbot.DiscordBotApp;
-import com.meta.leon.discordbot.command.*;
+import com.meta.leon.discordbot.command.AbstractCommand;
+import com.meta.leon.discordbot.command.CommandAuthority;
+import com.meta.leon.discordbot.command.CommandResponses;
+import com.meta.leon.discordbot.command.CommandUtil;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.model.EventDropout;
 import com.meta.leon.discordbot.model.EventSignup;

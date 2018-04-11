@@ -17,10 +17,7 @@ public class EventSignupValidator extends GlobalValidator{
 
 
     public boolean validateIfUniqueSignup(Long eventId, Long playerId){
-        if(eventSignupService.findEventSignup(eventId, playerId) == null){
-            return true;
-        }
-        return false;
+        return eventSignupService.findEventSignup(eventId, playerId) == null;
     }
 
 }

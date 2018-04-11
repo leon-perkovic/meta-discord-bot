@@ -1,7 +1,10 @@
 package com.meta.leon.discordbot.command.member;
 
 import com.meta.leon.discordbot.BotListener;
-import com.meta.leon.discordbot.command.*;
+import com.meta.leon.discordbot.command.AbstractCommand;
+import com.meta.leon.discordbot.command.CommandAuthority;
+import com.meta.leon.discordbot.command.CommandResponses;
+import com.meta.leon.discordbot.command.CommandUtil;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.GlobalValidator;
@@ -65,7 +68,7 @@ public class KataCommand extends AbstractCommand{
         if(player != null){
             if(player.getNickname().toLowerCase().equals("kata")){
                 for(int i=0; i<range; i++){
-                    spam.append("[Sun Spirit]\n");
+                    spam.append("**[Sun Spirit]**\n");
                 }
                 messageChannel.sendMessage(spam.toString()).queue();
                 return;

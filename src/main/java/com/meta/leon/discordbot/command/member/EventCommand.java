@@ -1,8 +1,10 @@
 package com.meta.leon.discordbot.command.member;
 
-import com.meta.leon.discordbot.command.*;
+import com.meta.leon.discordbot.command.AbstractCommand;
+import com.meta.leon.discordbot.command.CommandAuthority;
+import com.meta.leon.discordbot.command.CommandResponses;
+import com.meta.leon.discordbot.command.CommandUtil;
 import com.meta.leon.discordbot.model.Event;
-import com.meta.leon.discordbot.model.EventDropout;
 import com.meta.leon.discordbot.model.EventSignup;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.EventService;
@@ -11,14 +13,12 @@ import com.meta.leon.discordbot.validator.EventValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * !event <id or name or day> [HH:mm]
@@ -97,9 +97,9 @@ public class EventCommand extends AbstractCommand{
                         + player.rolesToString();
 
                 if(eventSignup.isBackup()){
-                    backups.append(signup).append("\n");
+                    backups.append(signup);
                 }else{
-                    signups.append(signup).append("\n");
+                    signups.append(signup);
                 }
             }
 
@@ -112,13 +112,16 @@ public class EventCommand extends AbstractCommand{
             embedBuilder.setDescription(fieldValue);
             messageChannel.sendMessage(embedBuilder.build()).queue();
 
-            embedBuilder.setTitle("**Signups:**");
-            embedBuilder.setDescription(signups.toString());
-            messageChannel.sendMessage(embedBuilder.build()).queue();
-
-            embedBuilder.setTitle("**Backups:**");
-            embedBuilder.setDescription(backups.toString());
-            messageChannel.sendMessage(embedBuilder.build()).queue();
+            if(signups.length() > 0){
+                embedBuilder.setTitle("Signups:");
+                embedBuilder.setDescription(signups.toString());
+                messageChannel.sendMessage(embedBuilder.build()).queue();
+            }
+            if(backups.length() > 0){
+                embedBuilder.setTitle("Backups:");
+                embedBuilder.setDescription(backups.toString());
+                messageChannel.sendMessage(embedBuilder.build()).queue();
+            }
 
             return;
         }

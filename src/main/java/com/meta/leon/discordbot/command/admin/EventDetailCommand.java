@@ -153,17 +153,21 @@ public class EventDetailCommand extends AbstractCommand{
             embedBuilder.setDescription(fieldValue);
             messageChannel.sendMessage(embedBuilder.build()).queue();
 
-            embedBuilder.setTitle("**Signups:**");
-            embedBuilder.setDescription(signups.toString());
-            messageChannel.sendMessage(embedBuilder.build()).queue();
-
-            embedBuilder.setTitle("**Backups:**");
-            embedBuilder.setDescription(backups.toString());
-            messageChannel.sendMessage(embedBuilder.build()).queue();
-
-            embedBuilder.setTitle("**Dropouts:**");
-            embedBuilder.setDescription(dropouts.toString());
-            messageChannel.sendMessage(embedBuilder.build()).queue();
+            if(signups.length() > 0){
+                embedBuilder.setTitle("Signups:");
+                embedBuilder.setDescription(signups.toString());
+                messageChannel.sendMessage(embedBuilder.build()).queue();
+            }
+            if(backups.length() > 0){
+                embedBuilder.setTitle("Backups:");
+                embedBuilder.setDescription(backups.toString());
+                messageChannel.sendMessage(embedBuilder.build()).queue();
+            }
+            if(dropouts.length() > 0){
+                embedBuilder.setTitle("Dropouts:");
+                embedBuilder.setDescription(dropouts.toString());
+                messageChannel.sendMessage(embedBuilder.build()).queue();
+            }
 
             return;
         }

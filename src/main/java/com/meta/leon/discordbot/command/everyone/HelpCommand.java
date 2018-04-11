@@ -1,7 +1,10 @@
 package com.meta.leon.discordbot.command.everyone;
 
 import com.meta.leon.discordbot.BotListener;
-import com.meta.leon.discordbot.command.*;
+import com.meta.leon.discordbot.command.AbstractCommand;
+import com.meta.leon.discordbot.command.CommandAuthority;
+import com.meta.leon.discordbot.command.CommandContainer;
+import com.meta.leon.discordbot.command.CommandResponses;
 import com.meta.leon.discordbot.validator.GlobalValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -74,10 +77,20 @@ public class HelpCommand extends AbstractCommand{
         embedBuilder.setDescription("**< ... > - Required\n[ ... ] - Optional**");
         embedBuilder.setColor(Color.decode("#D02F00"));
 
+        StringBuilder commandDesc = new StringBuilder();
+
         for(String key : commands.keySet()){
             if(authority.getLevel() >= commands.get(key).getAuthority().getLevel()){
-                embedBuilder.addField("", commands.get(key).getDescription(), false);
+                commandDesc.append(commands.get(key).getDescription()).append("\n");
+
+                if(commandDesc.length() > 750){
+                    embedBuilder.addField("", commandDesc.toString(), false);
+                    commandDesc.setLength(0);
+                }
             }
+        }
+        if(commandDesc.length() > 0){
+            embedBuilder.addField("", commandDesc.toString(), false);
         }
         messageChannel.sendMessage(embedBuilder.build()).queue();
     }
