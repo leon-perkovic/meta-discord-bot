@@ -56,7 +56,7 @@ public class SignupPlayerCommand extends AbstractCommand{
 
     public SignupPlayerCommand(){
         super("signupplayer",
-                "**!signupPlayer <id or nickname or @username> <id or name or day> [HH:mm]**"
+                "**!signupPlayer <player_id or nickname or @username> <event_id or name or day> [HH:mm]**"
                         + "\n -> Sign player up for specific event. Date will be set for the first upcoming day in the week.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);

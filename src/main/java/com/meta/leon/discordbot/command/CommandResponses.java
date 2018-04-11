@@ -120,7 +120,7 @@ public class CommandResponses{
 
     // -- SignupPlayer --------------------------------------------------------
 
-    public static final String SIGNUP_PLAYER_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!signupPlayer <user_id or nickname or @username> <event_id or name or day> [HH:mm]```";
+    public static final String SIGNUP_PLAYER_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!signupPlayer <player_id or nickname or @username> <event_id or name or day> [HH:mm]```";
     public static final String SIGNUP_PLAYER_INVALID_PLAYER = "Player can't sign up, sorry. Discord ID isn't connected :cry:";
     public static final String SIGNUP_PLAYER_FULL = "There are no free spots left for this event :confused: Player signed up as **backup**.";
     public static final String PLAYER_SIGNUP_ALREADY_EXISTS = "Player is already signed up for this event :wink:";
@@ -128,7 +128,7 @@ public class CommandResponses{
 
     // -- DropoutPlayer -------------------------------------------------------------
 
-    public static final String DROPOUT_PLAYER_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!dropoutPlayer <user_id or nickname or @username> <event_id or name or day> [HH:mm]```";
+    public static final String DROPOUT_PLAYER_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!dropoutPlayer <player_id or nickname or @username> <event_id or name or day> [HH:mm]```";
     public static final String DROPOUT_PLAYER_INVALID_PLAYER = "Player can't drop out, sorry. Discord ID isn't connected :cry:";
     public static final String PLAYER_SIGNUP_NOT_FOUND = "Player is not signed up for this event :no_entry_sign:";
     public static final String DROPOUT_PLAYER_SUCCESS = "Player dropped out of the event successfully :white_check_mark:";

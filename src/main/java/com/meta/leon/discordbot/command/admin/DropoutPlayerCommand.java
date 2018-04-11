@@ -54,7 +54,7 @@ public class DropoutPlayerCommand extends AbstractCommand{
 
     public DropoutPlayerCommand(){
         super("dropoutplayer",
-                "**!dropoutPlayer <id or nickname or @username> <id or name or day> [HH:mm]**"
+                "**!dropoutPlayer <player_id or nickname or @username> <event_id or name or day> [HH:mm]**"
                         + "\n -> Drop player out of specific event. Date will be set for the first upcoming day in the week.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
