@@ -113,16 +113,26 @@ public class DropoutCommand extends AbstractCommand{
 
         EventSignup eventSignup = eventSignupService.findEventSignup(eventId, playerId);
 
+        EventDropout eventDropout = new EventDropout(eventId, playerId, player.getNickname(),
+                eventSignup.getDiscordRank(), eventSignup.isBackup(), eventSignup.getSignupTime(), new DateTime());
+        eventDropoutService.saveEventDropout(eventDropout);
+
+        eventSignupService.removeEventSignup(eventId, playerId);
+        messageChannel.sendMessage(CommandResponses.DROPOUT_SUCCESS).queue();
+
         // if event is full and user dropping out wasn't backup - notify first backup a spot opened up
         if(!eventSignup.isBackup()){
             EventSignup backupEventSignup = null;
             EventSignup backupMemberSignup = eventSignupService.findFirstByRankAndBackup(eventId, DiscordBotApp.getMemberRole(), true);
             EventSignup backupTrialSignup = eventSignupService.findFirstByRankAndBackup(eventId, DiscordBotApp.getTrialRole(), true);
 
-            if(backupMemberSignup != null){
+            Integer memberSignups = eventSignupService.getNumOfSignupsByRank(eventId, DiscordBotApp.getMemberRole(), false);
+            Integer trialSignups = eventSignupService.getNumOfSignupsByRank(eventId, DiscordBotApp.getTrialRole(), false);
+
+            if(backupMemberSignup != null && memberSignups < event.getMemberLimit()){
                 backupEventSignup = backupMemberSignup;
             }
-            if(backupTrialSignup != null){
+            if(backupTrialSignup != null && trialSignups < event.getTrialLimit()){
                 if(backupMemberSignup != null){
                     if(backupTrialSignup.getSignupTime().getMillis() < backupMemberSignup.getSignupTime().getMillis()){
                         backupEventSignup = backupTrialSignup;
@@ -179,14 +189,6 @@ public class DropoutCommand extends AbstractCommand{
                 announcementChannel.sendMessage(announcement).queue();
             }
         }
-
-        EventDropout eventDropout = new EventDropout(eventId, playerId, player.getNickname(),
-                eventSignup.getDiscordRank(), eventSignup.isBackup(), eventSignup.getSignupTime(), new DateTime());
-        eventDropoutService.saveEventDropout(eventDropout);
-
-        eventSignupService.removeEventSignup(eventId, playerId);
-
-        messageChannel.sendMessage(CommandResponses.DROPOUT_SUCCESS).queue();
     }
 
 }
