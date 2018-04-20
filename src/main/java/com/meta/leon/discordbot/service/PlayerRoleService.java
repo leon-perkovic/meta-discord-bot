@@ -4,10 +4,10 @@ import com.meta.leon.discordbot.model.PlayerRole;
 
 /**
  * Interface for PlayerRole service
- *
+ * <p>
  * Created by Leon on 19/03/2018
  */
-public interface PlayerRoleService{
+public interface PlayerRoleService {
 
     PlayerRole findbyIds(Long playerId, Long roleId);
 

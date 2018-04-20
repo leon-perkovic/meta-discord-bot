@@ -17,11 +17,11 @@ import java.util.ArrayList;
 /**
  * !addRole <role_name> <short_name>
  * Command for adding new role entries to a database
- *
+ * <p>
  * Created by Leon on 18/03/2018
  */
 @Component
-public class AddRoleCommand extends AbstractCommand{
+public class AddRoleCommand extends AbstractCommand {
 
     private String roleName;
     private String shortName;
@@ -33,21 +33,21 @@ public class AddRoleCommand extends AbstractCommand{
     RoleValidator roleValidator;
 
 
-    public AddRoleCommand(){
+    public AddRoleCommand() {
         super("addrole",
                 "**!addRole <role_name> <short_name>**"
-                + "\n -> Add a new role.",
+                        + "\n -> Add a new role.",
                 "N/A",
                 CommandAuthority.ADMIN);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!roleValidator.validateNumberOfArguments(arguments, 2)){
+        if(!roleValidator.validateNumberOfArguments(arguments, 2)) {
             messageChannel.sendMessage(CommandResponses.ADD_ROLE_INVALID_ARGUMENTS).queue();
             return;
         }
@@ -55,7 +55,7 @@ public class AddRoleCommand extends AbstractCommand{
         this.roleName = arguments.get(0);
         this.shortName = arguments.get(1);
 
-        if(!roleValidator.validateIfUniqueRole(roleName, shortName)){
+        if(!roleValidator.validateIfUniqueRole(roleName, shortName)) {
             messageChannel.sendMessage(CommandResponses.ROLE_ALREADY_EXISTS).queue();
             return;
         }

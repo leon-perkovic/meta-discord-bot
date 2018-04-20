@@ -16,18 +16,18 @@ import java.util.List;
 
 /**
  * Listener class - used to handle events
- *
+ * <p>
  * Created by Leon on 17/03/2018
  */
 @Component
-public class BotListener extends ListenerAdapter{
+public class BotListener extends ListenerAdapter {
 
     @Autowired
     private CommandContainer commandContainer;
 
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event){
+    public void onMessageReceived(MessageReceivedEvent event) {
 
         // get received message, channel and raw content
         Message message = event.getMessage();
@@ -35,7 +35,7 @@ public class BotListener extends ListenerAdapter{
         String messageContent = message.getContentRaw();
 
         // check if passed message is a command
-        if(!isCommand(messageContent)){
+        if(!isCommand(messageContent)) {
             return;
         }
         messageContent = messageContent.substring(1);
@@ -53,54 +53,54 @@ public class BotListener extends ListenerAdapter{
         String[] splitContent = messageContent.split(" ");
 
         // check if command exists
-        if(commands.keySet().contains(splitContent[0].toLowerCase())){
+        if(commands.keySet().contains(splitContent[0].toLowerCase())) {
             DiscordBotApp.spamCounter = 0;
             AbstractCommand command = commands.get(splitContent[0].toLowerCase());
 
             // check if user is authorized to use the command
-            if(authority.getLevel() >= command.getAuthority().getLevel()){
+            if(authority.getLevel() >= command.getAuthority().getLevel()) {
                 ArrayList<String> arguments = new ArrayList<>();
 
                 // if there are passed arguments - add them to an array
-                if(splitContent.length > 1){
-                    for(int i = 1; i < splitContent.length; i++){
+                if(splitContent.length > 1) {
+                    for(int i = 1; i < splitContent.length; i++) {
                         arguments.add(splitContent[i]);
                     }
                 }
                 // call corresponding command and get its response
-                try{
+                try {
                     command.execute(event, arguments);
-                }catch(Exception ex){
+                }catch(Exception ex) {
                     messageChannel.sendMessage("Oops, something went wrong :cry:").queue();
                 }
-            }else{
+            }else {
                 // if user isn't authorized - send corresponding response
                 messageChannel.sendMessage(CommandResponses.NOT_AUTHORIZED).queue();
             }
-        }else{
+        }else {
             DiscordBotApp.spamCounter++;
 
             // if spammed invalid commands too long
-            if(DiscordBotApp.spamCounter == 5){
+            if(DiscordBotApp.spamCounter == 5) {
                 DiscordBotApp.spamCounter = 0;
                 messageChannel.sendMessage("Stop spamming me random stuff :angry: ").queue();
-            }else{
+            }else {
                 // if command doesn't exist - send corresponding response
                 messageChannel.sendMessage(CommandResponses.INVALID_COMMAND).queue();
             }
         }
     }
 
-    private boolean isCommand(String messageContent){
+    private boolean isCommand(String messageContent) {
         return messageContent.startsWith("!");
     }
 
-    public static List<String> getUserRoles(User user){
+    public static List<String> getUserRoles(User user) {
         List<Guild> guilds = user.getMutualGuilds();
         Member member = null;
 
-        for(Guild guild : guilds){
-            if(guild.getId().equals(DiscordBotApp.getServerId())){
+        for(Guild guild : guilds) {
+            if(guild.getId().equals(DiscordBotApp.getServerId())) {
                 member = guild.getMember(user);
                 break;
             }
@@ -108,12 +108,12 @@ public class BotListener extends ListenerAdapter{
 
         List<String> roleNames = new ArrayList<>();
 
-        if(member != null){
+        if(member != null) {
             List<Role> roles = member.getRoles();
-            for(Role role : roles){
-                if(role.getName().startsWith("@")){
+            for(Role role : roles) {
+                if(role.getName().startsWith("@")) {
                     roleNames.add(role.getName().substring(1));
-                }else{
+                }else {
                     roleNames.add(role.getName());
                 }
             }
@@ -122,17 +122,17 @@ public class BotListener extends ListenerAdapter{
         return roleNames;
     }
 
-    public static CommandAuthority getUserAuthority(List<String> roleNames){
-        if(roleNames.contains(DiscordBotApp.getAdminRole())){
+    public static CommandAuthority getUserAuthority(List<String> roleNames) {
+        if(roleNames.contains(DiscordBotApp.getAdminRole())) {
             return CommandAuthority.ADMIN;
         }
-        if(roleNames.contains(DiscordBotApp.getEventLeaderRole())){
+        if(roleNames.contains(DiscordBotApp.getEventLeaderRole())) {
             return CommandAuthority.EVENT_LEADER;
         }
-        if(roleNames.contains(DiscordBotApp.getMemberRole())){
+        if(roleNames.contains(DiscordBotApp.getMemberRole())) {
             return CommandAuthority.MEMBER;
         }
-        if(roleNames.contains(DiscordBotApp.getTrialRole())){
+        if(roleNames.contains(DiscordBotApp.getTrialRole())) {
             return CommandAuthority.TRIAL;
         }
         return CommandAuthority.PUBLIC;

@@ -5,10 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * PlayerRole repository - used to manage PlayerRole entries in a database
- *
+ * <p>
  * Created by Leon on 19/03/2018
  */
-public interface PlayerRoleRepository extends JpaRepository<PlayerRole, Long>{
+public interface PlayerRoleRepository extends JpaRepository<PlayerRole, Long> {
 
     PlayerRole findByPlayerIdAndRoleId(Long playerId, Long roleId);
 

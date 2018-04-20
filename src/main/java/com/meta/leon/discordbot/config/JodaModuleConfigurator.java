@@ -13,9 +13,9 @@ import java.util.TimeZone;
 /**
  * Created by Leon on 16/03/2018
  */
-public class JodaModuleConfigurator{
+public class JodaModuleConfigurator {
 
-    public static JodaModule jacksonJodaModule(){
+    public static JodaModule jacksonJodaModule() {
 
         JodaModule jodaModule = new JodaModule();
 

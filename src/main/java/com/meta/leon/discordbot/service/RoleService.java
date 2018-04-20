@@ -6,10 +6,10 @@ import java.util.List;
 
 /**
  * Interface for Role service
- *
+ * <p>
  * Created by Leon on 18/03/2018
  */
-public interface RoleService{
+public interface RoleService {
 
     List<Role> findAll();
 

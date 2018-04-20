@@ -32,11 +32,11 @@ import java.util.List;
  * !dropout <iday> <HH:mm>
  * Command for dropping out of an event
  * Event name will be determined and set automatically for first upcoming day if only day was specified
- *
+ * <p>
  * Created by Leon on 01/04/2018
  */
 @Component
-public class DropoutCommand extends AbstractCommand{
+public class DropoutCommand extends AbstractCommand {
 
     private Long eventId;
     private Long playerId;
@@ -60,37 +60,37 @@ public class DropoutCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public DropoutCommand(){
+    public DropoutCommand() {
         super("dropout",
                 "**!dropout <day> <HH:mm>**"
-                + "\n -> Sign out of an event. Date will be set for the first upcoming day in the week.",
+                        + "\n -> Sign out of an event. Date will be set for the first upcoming day in the week.",
                 "N/A",
                 CommandAuthority.MEMBER);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
         User user = discordEvent.getAuthor();
 
         // validate passed arguments
-        if(!eventSignupValidator.validateNumberOfArguments(arguments, 2)){
+        if(!eventSignupValidator.validateNumberOfArguments(arguments, 2)) {
             messageChannel.sendMessage(CommandResponses.DROPOUT_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(!eventSignupValidator.validateIfDay(arguments.get(0))){
+        if(!eventSignupValidator.validateIfDay(arguments.get(0))) {
             messageChannel.sendMessage(CommandResponses.DROPOUT_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(!eventSignupValidator.validateIfTime(arguments.get(1))){
+        if(!eventSignupValidator.validateIfTime(arguments.get(1))) {
             messageChannel.sendMessage(CommandResponses.DROPOUT_INVALID_ARGUMENTS).queue();
             return;
         }
 
         // get player
         Player player = playerService.findByDiscordId(user.getAsMention());
-        if(player == null){
+        if(player == null) {
             messageChannel.sendMessage(CommandResponses.DROPOUT_INVALID_PLAYER).queue();
             return;
         }
@@ -99,14 +99,14 @@ public class DropoutCommand extends AbstractCommand{
         // get event
         String eventName = commandUtil.createEventName(arguments.get(0), arguments.get(1));
         Event event = eventService.findByName(eventName);
-        if(event == null){
+        if(event == null) {
             messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
             return;
         }
         this.eventId = event.getId();
 
         // check if player is already signed up for this event
-        if(eventSignupValidator.validateIfUniqueSignup(eventId, playerId)){
+        if(eventSignupValidator.validateIfUniqueSignup(eventId, playerId)) {
             messageChannel.sendMessage(CommandResponses.SIGNUP_NOT_FOUND).queue();
             return;
         }
@@ -121,7 +121,7 @@ public class DropoutCommand extends AbstractCommand{
         messageChannel.sendMessage(CommandResponses.DROPOUT_SUCCESS).queue();
 
         // if event is full and user dropping out wasn't backup - notify first backup a spot opened up
-        if(!eventSignup.isBackup()){
+        if(!eventSignup.isBackup()) {
             EventSignup backupEventSignup = null;
             EventSignup backupMemberSignup = eventSignupService.findFirstByRankAndBackup(eventId, DiscordBotApp.getMemberRole(), true);
             EventSignup backupTrialSignup = eventSignupService.findFirstByRankAndBackup(eventId, DiscordBotApp.getTrialRole(), true);
@@ -129,24 +129,24 @@ public class DropoutCommand extends AbstractCommand{
             Integer memberSignups = eventSignupService.getNumOfSignupsByRank(eventId, DiscordBotApp.getMemberRole(), false);
             Integer trialSignups = eventSignupService.getNumOfSignupsByRank(eventId, DiscordBotApp.getTrialRole(), false);
 
-            if(backupMemberSignup != null && memberSignups < event.getMemberLimit()){
+            if(backupMemberSignup != null && memberSignups < event.getMemberLimit()) {
                 backupEventSignup = backupMemberSignup;
             }
-            if(backupTrialSignup != null && trialSignups < event.getTrialLimit()){
-                if(backupMemberSignup != null){
-                    if(backupTrialSignup.getSignupTime().getMillis() < backupMemberSignup.getSignupTime().getMillis()){
+            if(backupTrialSignup != null && trialSignups < event.getTrialLimit()) {
+                if(backupMemberSignup != null) {
+                    if(backupTrialSignup.getSignupTime().getMillis() < backupMemberSignup.getSignupTime().getMillis()) {
                         backupEventSignup = backupTrialSignup;
                     }
-                }else{
+                }else {
                     backupEventSignup = backupTrialSignup;
                 }
             }
 
             // check if there are candidates
-            if(backupEventSignup != null){
+            if(backupEventSignup != null) {
                 Player backupPlayer = playerService.findById(backupEventSignup.getPlayerId());
 
-                if(backupPlayer.getDiscordId() != null){
+                if(backupPlayer.getDiscordId() != null) {
                     eventSignupService.updateBackup(eventId, backupPlayer.getId(), false);
 
                     DateTimeZone timeZone = event.getEventTime().getZone();
@@ -158,7 +158,7 @@ public class DropoutCommand extends AbstractCommand{
                     User backupUser = DiscordBotApp.getJdaBot().getUserById(commandUtil.convertDiscordMentionToId(backupPlayer.getDiscordId()));
                     backupUser.openPrivateChannel().queue((channel) -> channel.sendMessage(message).queue());
                 }
-            }else if(eventSignupService.getNumOfSignups(eventId, false) == event.getPlayerLimit()){
+            }else if(eventSignupService.getNumOfSignups(eventId, false) == event.getPlayerLimit()) {
                 // get roles for Member and Trial
                 Role memberRole = commandUtil.getRoleByName(user, DiscordBotApp.getMemberRole());
                 Role trialRole = commandUtil.getRoleByName(user, DiscordBotApp.getTrialRole());
@@ -179,8 +179,8 @@ public class DropoutCommand extends AbstractCommand{
 
                 List<Guild> guilds = user.getMutualGuilds();
                 Guild guild = null;
-                for(Guild g : guilds){
-                    if(g.getId().equals(DiscordBotApp.getServerId())){
+                for(Guild g : guilds) {
+                    if(g.getId().equals(DiscordBotApp.getServerId())) {
                         guild = g;
                         break;
                     }

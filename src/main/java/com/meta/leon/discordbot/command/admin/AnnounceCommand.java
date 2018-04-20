@@ -25,11 +25,11 @@ import java.util.ArrayList;
  * [HH:mm] is optional, only needed in combination with <day>
  * Command for announcing an event
  * Event name will be determined and set automatically for first upcoming day if only day was specified
- *
+ * <p>
  * Created by Leon on 02/04/2018
  */
 @Component
-public class AnnounceCommand extends AbstractCommand{
+public class AnnounceCommand extends AbstractCommand {
 
     private Long eventId;
 
@@ -43,27 +43,27 @@ public class AnnounceCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public AnnounceCommand(){
+    public AnnounceCommand() {
         super("announce",
                 "**!announce <id or event_name or day> [HH:mm]**"
-                + "\n -> Make an announcement for a specific event.",
+                        + "\n -> Make an announcement for a specific event.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
         User user = discordEvent.getAuthor();
 
         // validate passed arguments
-        if(!globalValidator.validateMinNumberOfArguments(arguments, 1)){
+        if(!globalValidator.validateMinNumberOfArguments(arguments, 1)) {
             messageChannel.sendMessage(CommandResponses.SIGNUP_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(arguments.size() == 2){
-            if(!globalValidator.validateIfTime(arguments.get(1))){
+        if(arguments.size() == 2) {
+            if(!globalValidator.validateIfTime(arguments.get(1))) {
                 messageChannel.sendMessage(CommandResponses.SIGNUP_INVALID_ARGUMENTS).queue();
                 return;
             }
@@ -71,27 +71,27 @@ public class AnnounceCommand extends AbstractCommand{
 
         Event event;
         // check if event exists
-        if(globalValidator.validateIfNumeric(arguments.get(0))){
+        if(globalValidator.validateIfNumeric(arguments.get(0))) {
             this.eventId = Long.valueOf(arguments.get(0));
 
             event = eventService.findById(eventId);
-            if(event == null){
+            if(event == null) {
                 messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
                 return;
             }
-        }else if(globalValidator.validateIfDay(arguments.get(0)) && arguments.size() == 2){
+        }else if(globalValidator.validateIfDay(arguments.get(0)) && arguments.size() == 2) {
             String eventName = commandUtil.createEventName(arguments.get(0), arguments.get(1));
 
             event = eventService.findByName(eventName);
-            if(event == null){
+            if(event == null) {
                 messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
                 return;
             }
             this.eventId = event.getId();
 
-        }else{
+        }else {
             event = eventService.findByName(arguments.get(0));
-            if(event == null){
+            if(event == null) {
                 messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
                 return;
             }
@@ -111,20 +111,20 @@ public class AnnounceCommand extends AbstractCommand{
 
         // build announcement message
         String announcement = memberRole.getAsMention() + ", " + trialRole.getAsMention()
-                            + "\n**" + day + "**, **"
-                            + eventTime.toString("dd/MM/yyyy - HH:mm") + " " + zone + "**."
-                            + "\n*Description:* **" + event.getDescription()
-                            + "**\n*Player limit:* **" + event.getPlayerLimit() + "**";
+                + "\n**" + day + "**, **"
+                + eventTime.toString("dd/MM/yyyy - HH:mm") + " " + zone + "**."
+                + "\n*Description:* **" + event.getDescription()
+                + "**\n*Player limit:* **" + event.getPlayerLimit() + "**";
 
-        if(event.getMemberLimit() < event.getPlayerLimit()){
+        if(event.getMemberLimit() < event.getPlayerLimit()) {
             announcement += "\n*Member limit:* **" + event.getMemberLimit() + "**";
         }
-        if(event.getTrialLimit() < event.getPlayerLimit()){
+        if(event.getTrialLimit() < event.getPlayerLimit()) {
             announcement += "\n*Trial limit:* **" + event.getTrialLimit() + "**";
         }
         announcement += "\n*Event leader:* " + event.getEventLeader()
-                    + "\n--------------------------\nTo sign-up, please use: "
-                    + "```!signup " + day + " " + eventTime.toString("HH:mm") + "```";
+                + "\n--------------------------\nTo sign-up, please use: "
+                + "```!signup " + day + " " + eventTime.toString("HH:mm") + "```";
 
         messageChannel.sendMessage(announcement).queue();
     }

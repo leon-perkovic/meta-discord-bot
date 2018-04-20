@@ -8,13 +8,13 @@ import java.io.Serializable;
 
 /**
  * Entity class for database table "player_role"
- *
+ * <p>
  * Created by Leon on 19/03/2018
  */
 @Entity
 @IdClass(PlayerRoleKey.class)
 @Table(name = "player_role")
-public class PlayerRole implements Serializable{
+public class PlayerRole implements Serializable {
 
     @Id
     @Column(name = "player_id")
@@ -25,18 +25,18 @@ public class PlayerRole implements Serializable{
     private Long roleId;
 
 
-    public PlayerRole(){
+    public PlayerRole() {
         // default constructor
     }
 
-    public PlayerRole(Long playerId, Long roleId){
+    public PlayerRole(Long playerId, Long roleId) {
         this.playerId = playerId;
         this.roleId = roleId;
 
     }
 
     @Override
-    public String toString(){
+    public String toString() {
 
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
@@ -48,19 +48,19 @@ public class PlayerRole implements Serializable{
 
     // -- getters and setters -------------------------------------------------
 
-    public Long getPlayerId(){
+    public Long getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(Long playerId){
+    public void setPlayerId(Long playerId) {
         this.playerId = playerId;
     }
 
-    public Long getRoleId(){
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Long roleId){
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 

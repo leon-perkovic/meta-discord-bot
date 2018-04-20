@@ -13,17 +13,17 @@ import java.util.ArrayList;
 
 /**
  * !gg
- *
+ * <p>
  * Created by Leon on 11/04/2018
  */
 @Component
-public class GgCommand extends AbstractCommand{
+public class GgCommand extends AbstractCommand {
 
     @Autowired
     GlobalValidator globalValidator;
 
 
-    public GgCommand(){
+    public GgCommand() {
         super("gg",
                 "**!gg**"
                         + "\n -> Can someone GG please?",
@@ -32,11 +32,11 @@ public class GgCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!globalValidator.validateNumberOfArguments(arguments, 0)){
+        if(!globalValidator.validateNumberOfArguments(arguments, 0)) {
             messageChannel.sendMessage(CommandResponses.GG_INVALID_ARGUMENTS).queue();
             return;
         }

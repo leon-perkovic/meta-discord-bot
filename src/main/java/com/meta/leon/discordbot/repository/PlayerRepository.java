@@ -7,10 +7,10 @@ import java.util.List;
 
 /**
  * Player repository - used to manage Player entries in a database
- *
+ * <p>
  * Created by Leon on 17/03/2018
  */
-public interface PlayerRepository extends JpaRepository<Player, Long>{
+public interface PlayerRepository extends JpaRepository<Player, Long> {
 
     List<Player> findAllByOrderByNickname();
 

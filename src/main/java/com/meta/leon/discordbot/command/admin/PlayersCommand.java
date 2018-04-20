@@ -19,11 +19,11 @@ import java.util.List;
 /**
  * !players
  * Command for getting all player entries from a database
- *
+ * <p>
  * Created by Leon on 18/03/2018
  */
 @Component
-public class PlayersCommand extends AbstractCommand{
+public class PlayersCommand extends AbstractCommand {
 
     @Autowired
     PlayerService playerService;
@@ -32,26 +32,26 @@ public class PlayersCommand extends AbstractCommand{
     PlayerValidator playerValidator;
 
 
-    public PlayersCommand(){
+    public PlayersCommand() {
         super("players",
                 "**!players**"
-                + "\n -> Get information about all players.",
+                        + "\n -> Get information about all players.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
     }
 
     @Override
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!playerValidator.validateNumberOfArguments(arguments, 0)){
+        if(!playerValidator.validateNumberOfArguments(arguments, 0)) {
             messageChannel.sendMessage(CommandResponses.PLAYERS_INVALID_ARGUMENTS).queue();
             return;
         }
 
         List<Player> players = playerService.findAll();
-        if(players.isEmpty()){
+        if(players.isEmpty()) {
             messageChannel.sendMessage(CommandResponses.PLAYERS_NONE_FOUND).queue();
             return;
         }
@@ -63,7 +63,7 @@ public class PlayersCommand extends AbstractCommand{
         String playerInfo;
         StringBuilder playersBuilder = new StringBuilder();
 
-        for(Player player : players){
+        for(Player player : players) {
             playerInfo = "\n**" + player.getNickname()
                     + "**, " + player.getAccountName()
                     + ", " + "*id:* " + player.getId()
@@ -72,12 +72,12 @@ public class PlayersCommand extends AbstractCommand{
 
             playersBuilder.append(playerInfo).append("\n");
 
-            if(playersBuilder.length() > 750){
+            if(playersBuilder.length() > 750) {
                 embedBuilder.addField("", playersBuilder.toString(), false);
                 playersBuilder.setLength(0);
             }
         }
-        if(playersBuilder.length() > 0){
+        if(playersBuilder.length() > 0) {
             embedBuilder.addField("", playersBuilder.toString(), false);
         }
         messageChannel.sendMessage(embedBuilder.build()).queue();

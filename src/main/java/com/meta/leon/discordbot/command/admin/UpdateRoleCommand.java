@@ -17,11 +17,11 @@ import java.util.ArrayList;
 /**
  * !updateRole <id> <role_name> <short_name>
  * Command for updating role entries in a database
- *
+ * <p>
  * Created by Leon on 19/03/2018
  */
 @Component
-public class UpdateRoleCommand extends AbstractCommand{
+public class UpdateRoleCommand extends AbstractCommand {
 
     private Long id;
     private String roleName;
@@ -34,36 +34,36 @@ public class UpdateRoleCommand extends AbstractCommand{
     RoleValidator roleValidator;
 
 
-    public UpdateRoleCommand(){
+    public UpdateRoleCommand() {
         super("updaterole",
                 "**!updateRole <id> <role_name> <short_name>**"
-                + "\n -> Update information about a specific role.",
+                        + "\n -> Update information about a specific role.",
                 "N/A",
                 CommandAuthority.ADMIN);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!roleValidator.validateNumberOfArguments(arguments, 3)){
+        if(!roleValidator.validateNumberOfArguments(arguments, 3)) {
             messageChannel.sendMessage(CommandResponses.UPDATE_ROLE_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(roleValidator.validateIfNumeric(arguments.get(0))){
+        if(roleValidator.validateIfNumeric(arguments.get(0))) {
             this.id = Long.valueOf(arguments.get(0));
             this.roleName = arguments.get(1);
             this.shortName = arguments.get(2);
 
             Role role = roleService.findById(id);
-            if(role == null){
+            if(role == null) {
                 messageChannel.sendMessage(CommandResponses.ROLE_NOT_FOUND).queue();
                 return;
             }
 
-            if(!roleValidator.validateIfUniqueRoleUpdate(id, roleName, shortName)){
+            if(!roleValidator.validateIfUniqueRoleUpdate(id, roleName, shortName)) {
                 messageChannel.sendMessage(CommandResponses.UPDATE_ROLE_ALREADY_TAKEN).queue();
                 return;
             }

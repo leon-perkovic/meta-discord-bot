@@ -19,11 +19,11 @@ import java.util.ArrayList;
 /**
  * !player <id or nickname or @username>
  * Command for getting a player entry from a database
- *
+ * <p>
  * Created by Leon on 18/03/2018
  */
 @Component
-public class PlayerCommand extends AbstractCommand{
+public class PlayerCommand extends AbstractCommand {
 
     @Autowired
     PlayerService playerService;
@@ -35,33 +35,34 @@ public class PlayerCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public PlayerCommand(){
+    public PlayerCommand() {
         super("player",
                 "**!player <id or nickname or @username>**"
-                + "\n -> Get information about a specific player.",
+                        + "\n -> Get information about a specific player.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
     }
 
     @Override
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!playerValidator.validateNumberOfArguments(arguments, 1)){
+        if(!playerValidator.validateNumberOfArguments(arguments, 1)) {
             messageChannel.sendMessage(CommandResponses.PLAYER_INVALID_ARGUMENTS).queue();
             return;
         }
 
         Player player = commandUtil.findPlayerByAnyReference(arguments.get(0));
-        if(player != null){
+        if(player != null) {
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.setTitle("__Player info:__");
             embedBuilder.setDescription("**" + player.getNickname()
-                            + "**, " + player.getAccountName()
-                            + ", " + "*id:* " + player.getId()
-                            + ", " + player.getDiscordId() + "\n"
-                            + player.rolesToString());
+                    + "**, " + player.getAccountName()
+                    + ", " + "*id:* " + player.getId()
+                    + ", " + player.getDiscordId() + "\n"
+                    + player.rolesToString() + "\n"
+                    + player.groupsToString());
             embedBuilder.setColor(Color.decode("#D02F00"));
 
             messageChannel.sendMessage(embedBuilder.build()).queue();

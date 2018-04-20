@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command;
 /**
  * Created by Leon on 17/03/2018
  */
-public enum CommandAuthority{
+public enum CommandAuthority {
 
     PUBLIC(1),
     TRIAL(2),
@@ -14,11 +14,11 @@ public enum CommandAuthority{
     private final int level;
 
 
-    CommandAuthority(int level){
+    CommandAuthority(int level) {
         this.level = level;
     }
 
-    public int getLevel(){
+    public int getLevel() {
         return level;
     }
 

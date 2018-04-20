@@ -10,10 +10,10 @@ import java.util.List;
 
 /**
  * Event repository - used to manage Event entries in a database
- *
+ * <p>
  * Created by Leon on 21/03/2018
  */
-public interface EventRepository extends JpaRepository<Event, Long>{
+public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e WHERE e.eventTime > :currentTime ORDER BY e.eventTime")
     List<Event> findUpcomingEvents(@Param("currentTime") DateTime currentTime);

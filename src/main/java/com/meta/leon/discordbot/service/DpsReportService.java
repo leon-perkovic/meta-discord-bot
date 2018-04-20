@@ -6,10 +6,10 @@ import java.util.List;
 
 /**
  * Interface for DpsReport service
- *
+ * <p>
  * Created by Leon on 02/04/2018
  */
-public interface DpsReportService{
+public interface DpsReportService {
 
     DpsReport saveDpsReport(DpsReport dpsReport);
 

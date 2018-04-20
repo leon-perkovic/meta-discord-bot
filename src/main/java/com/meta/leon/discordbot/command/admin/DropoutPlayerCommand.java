@@ -24,11 +24,11 @@ import java.util.ArrayList;
  * [HH:mm] is optional - only expected in combination with day
  * Command for dropping player out of an event
  * Event name will be determined and set automatically for first upcoming day if only day was specified
- *
+ * <p>
  * Created by Leon on 11/04/2018
  */
 @Component
-public class DropoutPlayerCommand extends AbstractCommand{
+public class DropoutPlayerCommand extends AbstractCommand {
 
     private Long eventId;
     private Long playerId;
@@ -52,7 +52,7 @@ public class DropoutPlayerCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public DropoutPlayerCommand(){
+    public DropoutPlayerCommand() {
         super("dropoutplayer",
                 "**!dropoutPlayer <player_id or nickname or @username> <event_id or name or day> [HH:mm]**"
                         + "\n -> Drop player out of specific event. Date will be set for the first upcoming day in the week.",
@@ -62,16 +62,16 @@ public class DropoutPlayerCommand extends AbstractCommand{
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!eventSignupValidator.validateMinNumberOfArguments(arguments, 2)){
+        if(!eventSignupValidator.validateMinNumberOfArguments(arguments, 2)) {
             messageChannel.sendMessage(CommandResponses.DROPOUT_PLAYER_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(arguments.size() == 3){
-            if(!eventSignupValidator.validateIfTime(arguments.get(2))){
+        if(arguments.size() == 3) {
+            if(!eventSignupValidator.validateIfTime(arguments.get(2))) {
                 messageChannel.sendMessage(CommandResponses.SIGNUP_PLAYER_INVALID_ARGUMENTS).queue();
                 return;
             }
@@ -79,7 +79,7 @@ public class DropoutPlayerCommand extends AbstractCommand{
 
         // get player
         Player player = commandUtil.findPlayerByAnyReference(arguments.get(0));
-        if(player == null){
+        if(player == null) {
             messageChannel.sendMessage(CommandResponses.DROPOUT_PLAYER_INVALID_PLAYER).queue();
             return;
         }
@@ -87,26 +87,26 @@ public class DropoutPlayerCommand extends AbstractCommand{
 
         // get event
         Event event;
-        if(eventSignupValidator.validateIfNumeric(arguments.get(1))){
+        if(eventSignupValidator.validateIfNumeric(arguments.get(1))) {
             this.eventId = Long.valueOf(arguments.get(1));
             event = eventService.findById(eventId);
 
-        }else if(eventSignupValidator.validateIfDay(arguments.get(1)) && arguments.size() == 3){
+        }else if(eventSignupValidator.validateIfDay(arguments.get(1)) && arguments.size() == 3) {
             String eventName = commandUtil.createEventName(arguments.get(1), arguments.get(2));
             event = eventService.findByName(eventName);
 
-        }else{
+        }else {
             event = eventService.findByName(arguments.get(1));
         }
 
-        if(event == null){
+        if(event == null) {
             messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
             return;
         }
         this.eventId = event.getId();
 
         // check if player is already signed up for this event
-        if(eventSignupValidator.validateIfUniqueSignup(eventId, playerId)){
+        if(eventSignupValidator.validateIfUniqueSignup(eventId, playerId)) {
             messageChannel.sendMessage(CommandResponses.PLAYER_SIGNUP_NOT_FOUND).queue();
             return;
         }

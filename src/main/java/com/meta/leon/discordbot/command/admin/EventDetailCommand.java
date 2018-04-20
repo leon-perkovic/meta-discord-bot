@@ -30,11 +30,11 @@ import java.util.List;
  * [HH:mm] is optional, only needed in combination with <day>
  * Command for getting detailed event entries from a database
  * Event name will be determined and set automatically for first upcoming day if only day was specified
- *
+ * <p>
  * Created by Leon on 02/04/2018
  */
 @Component
-public class EventDetailCommand extends AbstractCommand{
+public class EventDetailCommand extends AbstractCommand {
 
     @Autowired
     EventService eventService;
@@ -55,45 +55,45 @@ public class EventDetailCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public EventDetailCommand(){
+    public EventDetailCommand() {
         super("eventdetail",
                 "**!eventDetail <id or name or day> [HH:mm]**"
-                + "\n -> Get detailed information about a specific event. Date will be set for the first upcoming day in the week.",
+                        + "\n -> Get detailed information about a specific event. Date will be set for the first upcoming day in the week.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!eventValidator.validateMinNumberOfArguments(arguments, 1)){
+        if(!eventValidator.validateMinNumberOfArguments(arguments, 1)) {
             messageChannel.sendMessage(CommandResponses.EVENT_DETAIL_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(arguments.size() == 2){
-            if(!eventValidator.validateIfTime(arguments.get(1))){
+        if(arguments.size() == 2) {
+            if(!eventValidator.validateIfTime(arguments.get(1))) {
                 messageChannel.sendMessage(CommandResponses.EVENT_DETAIL_INVALID_ARGUMENTS).queue();
                 return;
             }
         }
 
         Event event;
-        if(eventValidator.validateIfNumeric(arguments.get(0))){
+        if(eventValidator.validateIfNumeric(arguments.get(0))) {
             event = eventService.findById(Long.valueOf(arguments.get(0)));
 
-        }else if(eventValidator.validateIfDay(arguments.get(0)) && arguments.size() == 2){
+        }else if(eventValidator.validateIfDay(arguments.get(0)) && arguments.size() == 2) {
             String name = commandUtil.createEventName(arguments.get(0), arguments.get(1));
 
             event = eventService.findByName(name);
 
-        }else{
+        }else {
             event = eventService.findByName(arguments.get(0));
         }
 
-        if(event != null){
+        if(event != null) {
             String signup;
             String dropout;
 
@@ -101,7 +101,7 @@ public class EventDetailCommand extends AbstractCommand{
             StringBuilder backups = new StringBuilder();
             StringBuilder dropouts = new StringBuilder();
 
-            for(Player player : event.getPlayers()){
+            for(Player player : event.getPlayers()) {
                 EventSignup eventSignup = eventSignupService.findEventSignup(event.getId(), player.getId());
                 String discordRank = eventSignup.getDiscordRank();
 
@@ -115,15 +115,15 @@ public class EventDetailCommand extends AbstractCommand{
                         + eventSignup.getSignupTime().toString("dd/MM/yyyy - HH:mm:ss")
                         + " " + zone + "**";
 
-                if(eventSignup.isBackup()){
+                if(eventSignup.isBackup()) {
                     backups.append(signup);
-                }else{
+                }else {
                     signups.append(signup);
                 }
             }
 
             List<EventDropout> eventDropouts = eventDropoutService.findAllByEventId(event.getId());
-            for(EventDropout eventDropout : eventDropouts){
+            for(EventDropout eventDropout : eventDropouts) {
                 DateTimeZone timeZone = event.getEventTime().getZone();
                 String zone = timeZone.getShortName(event.getEventTime().getMillis());
 
@@ -131,13 +131,13 @@ public class EventDetailCommand extends AbstractCommand{
                         + "** (" + eventDropout.getDiscordRank()
                         + ")";
 
-                if(eventDropout.isBackup()){
+                if(eventDropout.isBackup()) {
                     dropout += " [*backup*]";
                 }
                 dropout += "\n- *Signup time:* **"
                         + eventDropout.getSignupTime().toString("dd/MM/yyyy - HH:mm:ss")
                         + " " + zone + "**"
-                        +"\n- *Dropout time:* **"
+                        + "\n- *Dropout time:* **"
                         + eventDropout.getDropoutTime().toString("dd/MM/yyyy - HH:mm:ss")
                         + " " + zone + "**";
 
@@ -153,17 +153,17 @@ public class EventDetailCommand extends AbstractCommand{
             embedBuilder.setDescription(fieldValue);
             messageChannel.sendMessage(embedBuilder.build()).queue();
 
-            if(signups.length() > 0){
+            if(signups.length() > 0) {
                 embedBuilder.setTitle("Signups:");
                 embedBuilder.setDescription(signups.toString());
                 messageChannel.sendMessage(embedBuilder.build()).queue();
             }
-            if(backups.length() > 0){
+            if(backups.length() > 0) {
                 embedBuilder.setTitle("Backups:");
                 embedBuilder.setDescription(backups.toString());
                 messageChannel.sendMessage(embedBuilder.build()).queue();
             }
-            if(dropouts.length() > 0){
+            if(dropouts.length() > 0) {
                 embedBuilder.setTitle("Dropouts:");
                 embedBuilder.setDescription(dropouts.toString());
                 messageChannel.sendMessage(embedBuilder.build()).queue();

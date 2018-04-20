@@ -18,11 +18,11 @@ import java.util.ArrayList;
 /**
  * !role <id or role_name or short_name>
  * Command for getting a role entry from a database
- *
+ * <p>
  * Created by Leon on 19/03/2018
  */
 @Component
-public class RoleCommand extends AbstractCommand{
+public class RoleCommand extends AbstractCommand {
 
     @Autowired
     RoleService roleService;
@@ -31,38 +31,38 @@ public class RoleCommand extends AbstractCommand{
     RoleValidator roleValidator;
 
 
-    public RoleCommand(){
+    public RoleCommand() {
         super("role",
                 "**!role <id or role_name or short_name>**"
-                + "\n -> Get information about a specific role.",
+                        + "\n -> Get information about a specific role.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
     }
 
     @Override
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!roleValidator.validateNumberOfArguments(arguments, 1)){
+        if(!roleValidator.validateNumberOfArguments(arguments, 1)) {
             messageChannel.sendMessage(CommandResponses.ROLE_INVALID_ARGUMENTS).queue();
             return;
         }
 
         Role role;
-        if(roleValidator.validateIfNumeric(arguments.get(0))){
+        if(roleValidator.validateIfNumeric(arguments.get(0))) {
             Long id = Long.valueOf(arguments.get(0));
             role = roleService.findById(id);
 
-        }else{
+        }else {
             role = roleService.findByRoleName(arguments.get(0));
 
-            if(role == null){
+            if(role == null) {
                 role = roleService.findByShortName(arguments.get(0));
             }
         }
 
-        if(role != null){
+        if(role != null) {
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.setTitle("__Role info:__");
             embedBuilder.setDescription("**" + role.getRoleName() + "** (" + role.getShortName() + ", *id:* " + role.getId() + ")");

@@ -16,11 +16,11 @@ import java.util.ArrayList;
 /**
  * !removeRole <id or role_name or short_name>
  * Command for removing role entries from a database
- *
+ * <p>
  * Created by Leon on 19/03/2018
  */
 @Component
-public class RemoveRoleCommand extends AbstractCommand{
+public class RemoveRoleCommand extends AbstractCommand {
 
     @Autowired
     RoleService roleService;
@@ -29,39 +29,39 @@ public class RemoveRoleCommand extends AbstractCommand{
     RoleValidator roleValidator;
 
 
-    public RemoveRoleCommand(){
+    public RemoveRoleCommand() {
         super("removerole",
                 "**!removeRole <id or role_name or short_name>**"
-                + "\n -> Remove a specific role.",
+                        + "\n -> Remove a specific role.",
                 "N/A",
                 CommandAuthority.ADMIN);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!roleValidator.validateNumberOfArguments(arguments, 1)){
-        messageChannel.sendMessage(CommandResponses.REMOVE_ROLE_INVALID_ARGUMENTS).queue();
-        return;
+        if(!roleValidator.validateNumberOfArguments(arguments, 1)) {
+            messageChannel.sendMessage(CommandResponses.REMOVE_ROLE_INVALID_ARGUMENTS).queue();
+            return;
         }
 
         int numOfRemoved;
-        if(roleValidator.validateIfNumeric(arguments.get(0))){
+        if(roleValidator.validateIfNumeric(arguments.get(0))) {
             Long id = Long.valueOf(arguments.get(0));
             numOfRemoved = roleService.removeById(id);
 
-        }else{
+        }else {
             numOfRemoved = roleService.removeByRoleName(arguments.get(0));
 
-            if(numOfRemoved == 0){
+            if(numOfRemoved == 0) {
                 numOfRemoved = roleService.removeByShortName(arguments.get(0));
             }
         }
 
-        if(numOfRemoved > 0){
+        if(numOfRemoved > 0) {
             messageChannel.sendMessage(CommandResponses.REMOVE_ROLE_SUCCESS).queue();
             return;
         }

@@ -23,11 +23,11 @@ import java.util.ArrayList;
  * !addPR <id or nickname or @username> <role_name or short_name ...>
  * Multiple <role_name or short_name> arguments can be passed
  * Command for connecting a role to a player
- *
+ * <p>
  * Created by Leon on 19/03/2018
  */
 @Component
-public class AddPrCommand extends AbstractCommand{
+public class AddPrCommand extends AbstractCommand {
 
     @Autowired
     PlayerRoleService playerRoleService;
@@ -45,27 +45,27 @@ public class AddPrCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public AddPrCommand(){
+    public AddPrCommand() {
         super("addpr",
                 "**!addPR <id or nickname or @username> <role_name or short_name ...>**"
-                + "\n -> Add roles for a specific player.",
+                        + "\n -> Add roles for a specific player.",
                 "N/A",
                 CommandAuthority.ADMIN);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!globalValidator.validateMinNumberOfArguments(arguments, 2)){
+        if(!globalValidator.validateMinNumberOfArguments(arguments, 2)) {
             messageChannel.sendMessage(CommandResponses.ADD_PR_INVALID_ARGUMENTS).queue();
             return;
         }
 
         Player player = commandUtil.findPlayerByAnyReference(arguments.get(0));
-        if(player == null){
+        if(player == null) {
             messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
             return;
         }
@@ -78,20 +78,20 @@ public class AddPrCommand extends AbstractCommand{
         ArrayList<Long> roleIds = new ArrayList<>();
 
         // check if all passed roles exist and get their IDs
-        for(String roleName : arguments){
+        for(String roleName : arguments) {
             Role role = roleService.findByRoleName(roleName);
-            if(role == null){
+            if(role == null) {
                 role = roleService.findByShortName(roleName);
             }
 
-            if(role == null){
+            if(role == null) {
                 messageChannel.sendMessage(CommandResponses.ROLE_NOT_FOUND).queue();
                 return;
             }
             roleIds.add(role.getId());
         }
 
-        for(Long roleId : roleIds){
+        for(Long roleId : roleIds) {
             PlayerRole playerRole = new PlayerRole(playerId, roleId);
             playerRoleService.savePlayerRole(playerRole);
         }

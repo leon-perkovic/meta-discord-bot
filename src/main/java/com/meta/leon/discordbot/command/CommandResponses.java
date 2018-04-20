@@ -2,10 +2,10 @@ package com.meta.leon.discordbot.command;
 
 /**
  * Class containing various response messages
- *
+ * <p>
  * Created by Leon on 18/03/2018
  */
-public class CommandResponses{
+public class CommandResponses {
 
     public static final String INVALID_COMMAND = "I don't know that command :cry:";
     public static final String NOT_AUTHORIZED = "Sorry, you don't have the rights to use that command :no_entry_sign:";
@@ -15,6 +15,9 @@ public class CommandResponses{
     public static final String ROLE_ALREADY_EXISTS = "That role already exists :no_entry_sign:";
     public static final String EVENT_NOT_FOUND = "That event doesn't exist :no_entry_sign:";
     public static final String EVENT_ALREADY_EXISTS = "That event already exists :no_entry_sign:";
+    public static final String GROUP_NOT_FOUND = "That group doesn't exist :no_entry_sign:";
+    public static final String GROUP_ALREADY_EXISTS = "That group already exists :no_entry_sign:";
+
 
     // -- Me ------------------------------------------------------------------
 
@@ -77,6 +80,10 @@ public class CommandResponses{
 
     public static final String ADD_PR_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!addPR <id or nickname or @username> <role_name or short_name ...>```";
 
+    // -- RemovePr ------------------------------------------------------------
+
+    public static final String REMOVE_PR_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!removePR <id or nickname or @username> <role_name or short_name ...>```";
+
     // -- AddEvent ------------------------------------------------------------
 
     public static final String ADD_EVENT_INVALID_ARGUMENTS = "Expected at least 3 arguments :no_entry_sign: Try: ```!addEvent <day> <HH:mm> <player_limit> <member_limit> <trial_limit> [event_leader] [description]```";
@@ -99,7 +106,7 @@ public class CommandResponses{
 
     public static final String PAST_EVENTS_INVALID_ARGUMENT = "Invalid argument :no_entry_sign: Try: ```!pastEvents [page_number]```";
 
-    // -- EventDetail ------------------------------------------------------------
+    // -- EventDetail ---------------------------------------------------------
 
     public static final String EVENT_DETAIL_INVALID_ARGUMENTS = "Expected at least 1 argument :no_entry_sign: Try: ```!eventDetail <id or name or day> [HH:mm]```";
 
@@ -126,7 +133,7 @@ public class CommandResponses{
     public static final String PLAYER_SIGNUP_ALREADY_EXISTS = "Player is already signed up for this event :wink:";
     public static final String SIGNUP_PLAYER_SUCCESS = "Player signed up successfully :white_check_mark:";
 
-    // -- DropoutPlayer -------------------------------------------------------------
+    // -- DropoutPlayer -------------------------------------------------------
 
     public static final String DROPOUT_PLAYER_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!dropoutPlayer <player_id or nickname or @username> <event_id or name or day> [HH:mm]```";
     public static final String DROPOUT_PLAYER_INVALID_PLAYER = "Player can't drop out, sorry. Discord ID isn't connected :cry:";
@@ -155,5 +162,41 @@ public class CommandResponses{
     // -- GG ------------------------------------------------------------------
 
     public static final String GG_INVALID_ARGUMENTS = "Unexpected arguments :no_entry_sign: Try: ```!gg```";
+
+    // -- AddGroup ------------------------------------------------------------
+
+    public static final String ADD_GROUP_INVALID_ARGUMENTS = "Expected 1 argument :no_entry_sign: Try: ```!addGroup <name>```";
+
+    // -- RemoveGroup ---------------------------------------------------------
+
+    public static final String REMOVE_GROUP_INVALID_ARGUMENTS = "Expected 1 argument :no_entry_sign: Try: ```!removeGroup <id or name>```";
+    public static final String REMOVE_GROUP_SUCCESS = "Group removed successfully :white_check_mark:";
+
+    // -- Group ---------------------------------------------------------------
+
+    public static final String GROUP_INVALID_ARGUMENTS = "Expected 1 argument :no_entry_sign: Try: ```!group <id or name>```";
+
+    // -- Groups --------------------------------------------------------------
+
+    public static final String GROUPS_INVALID_ARGUMENTS = "Unexpected arguments :no_entry_sign: Try: ```!groups```";
+    public static final String GROUPS_NONE_FOUND = "I couldn't find any groups :cry:";
+
+    // -- AddPr ---------------------------------------------------------------
+
+    public static final String ADD_PG_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!addPG <group_id or group_name> <player_id or player_nickname or @username>```";
+
+    // -- RemovePr ------------------------------------------------------------
+
+    public static final String REMOVE_PG_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!removePG <group_id or group_name> <player_id or player_nickname or @username>```";
+
+    // -- SignupGroup ---------------------------------------------------------
+
+    public static final String SIGNUP_GROUP_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!signupGroup <group_id or group_name> <event_id or event_name or day> [HH:mm]```";
+    public static final String SIGNUP_GROUP_SUCCESS = "Group signed up successfully :white_check_mark:";
+
+    // -- DropoutGroup --------------------------------------------------------
+
+    public static final String DROPOUT_GROUP_INVALID_ARGUMENTS = "Expected at least 2 arguments :no_entry_sign: Try: ```!dropoutGroup <group_id or group_name> <event_id or event_name or day> [HH:mm]```";
+    public static final String DROPOUT_GROUP_SUCCESS = "Group dropped out of the event successfully :white_check_mark:";
 
 }

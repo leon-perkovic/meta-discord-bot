@@ -7,10 +7,10 @@ import java.util.List;
 
 /**
  * Interface for Event service
- *
+ * <p>
  * Created by Leon on 21/03/2018
  */
-public interface EventService{
+public interface EventService {
 
     List<Event> findUpcoming(DateTime currentTime);
 

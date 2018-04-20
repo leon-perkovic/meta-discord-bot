@@ -12,11 +12,11 @@ import java.util.LinkedHashMap;
 
 /**
  * Container for all autowired commands
- *
+ * <p>
  * Created by Leon on 17/03/2018
  */
 @Component
-public class CommandContainer{
+public class CommandContainer {
 
     private LinkedHashMap<String, AbstractCommand> commands;
 
@@ -82,10 +82,26 @@ public class CommandContainer{
     private DropoutPlayerCommand dropoutPlayerCommand;
     @Autowired
     private MeCommand meCommand;
+    @Autowired
+    private AddGroupCommand addGroupCommand;
+    @Autowired
+    private RemoveGroupCommand removeGroupCommand;
+    @Autowired
+    private AddPgCommand addPgCommand;
+    @Autowired
+    private RemovePgCommand removePgCommand;
+    @Autowired
+    private GroupCommand groupCommand;
+    @Autowired
+    private GroupsCommand groupsCommand;
+    @Autowired
+    private SignupGroupCommand signupGroupCommand;
+    @Autowired
+    private DropoutGroupCommand dropoutGroupCommand;
 
 
     // Used to map all autowired commands to their key values
-    public void mapCommands(){
+    public void mapCommands() {
 
         commands = new LinkedHashMap<>();
 
@@ -102,6 +118,12 @@ public class CommandContainer{
         commands.put("roles", rolesCommand);
         commands.put("addpr", addPrCommand);
         commands.put("removepr", removePrCommand);
+        commands.put("addgroup", addGroupCommand);
+        commands.put("removegroup", removeGroupCommand);
+        commands.put("group", groupCommand);
+        commands.put("groups", groupsCommand);
+        commands.put("addpg", addPgCommand);
+        commands.put("removepg", removePgCommand);
         commands.put("addevent", addEventCommand);
         commands.put("removeevent", removeEventCommand);
         commands.put("event", eventCommand);
@@ -116,6 +138,8 @@ public class CommandContainer{
         commands.put("dropout", dropoutCommand);
         commands.put("signupplayer", signupPlayerCommand);
         commands.put("dropoutplayer", dropoutPlayerCommand);
+        commands.put("signupgroup", signupGroupCommand);
+        commands.put("dropoutgroup", dropoutGroupCommand);
         commands.put("help", helpCommand);
         commands.put("kata", kataCommand);
         commands.put("roll", rollCommand);
@@ -124,7 +148,7 @@ public class CommandContainer{
 
     // -- getters and setters -------------------------------------------------
 
-    public LinkedHashMap<String, AbstractCommand> getCommands(){
+    public LinkedHashMap<String, AbstractCommand> getCommands() {
         return commands;
     }
 

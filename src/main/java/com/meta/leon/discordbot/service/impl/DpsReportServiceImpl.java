@@ -10,30 +10,30 @@ import java.util.List;
 
 /**
  * DpsReport service - uses DpsReport repository to manage DpsReport entries in a database
- *
+ * <p>
  * Created by Leon on 02/04/2018
  */
 @Service
-public class DpsReportServiceImpl implements DpsReportService{
+public class DpsReportServiceImpl implements DpsReportService {
 
     @Autowired
     DpsReportRepository dpsReportRepository;
 
 
     @Override
-    public DpsReport saveDpsReport(DpsReport dpsReport){
+    public DpsReport saveDpsReport(DpsReport dpsReport) {
 
         return dpsReportRepository.save(dpsReport);
     }
 
     @Override
-    public List<DpsReport> findAllByEventId(Long eventId){
+    public List<DpsReport> findAllByEventId(Long eventId) {
 
         return dpsReportRepository.findAllByEventId(eventId);
     }
 
     @Override
-    public Integer removeAllByEventId(Long eventId){
+    public Integer removeAllByEventId(Long eventId) {
 
         return dpsReportRepository.deleteAllByEventId(eventId);
     }

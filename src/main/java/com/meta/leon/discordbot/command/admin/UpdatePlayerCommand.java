@@ -18,11 +18,11 @@ import java.util.ArrayList;
  * !updatePlayer <id> <nickname> <account_name> [@username]
  * [@username] is optional
  * Command for updating player entries in a database
- *
+ * <p>
  * Created by Leon on 18/03/2018
  */
 @Component
-public class UpdatePlayerCommand extends AbstractCommand{
+public class UpdatePlayerCommand extends AbstractCommand {
 
     private Long id;
     private String nickname;
@@ -36,52 +36,52 @@ public class UpdatePlayerCommand extends AbstractCommand{
     PlayerValidator playerValidator;
 
 
-    public UpdatePlayerCommand(){
+    public UpdatePlayerCommand() {
         super("updateplayer",
                 "**!updatePlayer <id> <nickname> <account_name> [@username]**"
-                + "\n -> Update information about a specific player.",
+                        + "\n -> Update information about a specific player.",
                 "N/A",
                 CommandAuthority.ADMIN);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // if @username wasn't specified - add it as null
-        if(arguments.size() == 3){
+        if(arguments.size() == 3) {
             arguments.add(null);
         }
 
         // validate passed arguments
-        if(!playerValidator.validateNumberOfArguments(arguments, 4)){
+        if(!playerValidator.validateNumberOfArguments(arguments, 4)) {
             messageChannel.sendMessage(CommandResponses.UPDATE_PLAYER_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(arguments.get(3) != null){
-            if(!playerValidator.validateIfDiscordId(arguments.get(3))){
+        if(arguments.get(3) != null) {
+            if(!playerValidator.validateIfDiscordId(arguments.get(3))) {
                 messageChannel.sendMessage(CommandResponses.UPDATE_PLAYER_INVALID_DISCORD_ID).queue();
                 return;
             }
         }
 
-        if(playerValidator.validateIfNumeric(arguments.get(0))){
+        if(playerValidator.validateIfNumeric(arguments.get(0))) {
             this.id = Long.valueOf(arguments.get(0));
             this.nickname = arguments.get(1);
             this.accountName = arguments.get(2);
             this.discordId = arguments.get(3);
-            if(discordId != null){
+            if(discordId != null) {
                 discordId = discordId.replace("!", "");
             }
 
             Player player = playerService.findById(id);
-            if(player == null){
+            if(player == null) {
                 messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
                 return;
             }
 
-            if(!playerValidator.validateIfUniquePlayerUpdate(id, nickname, accountName, discordId)){
+            if(!playerValidator.validateIfUniquePlayerUpdate(id, nickname, accountName, discordId)) {
                 messageChannel.sendMessage(CommandResponses.UPDATE_PLAYER_ALREADY_TAKEN).queue();
                 return;
             }

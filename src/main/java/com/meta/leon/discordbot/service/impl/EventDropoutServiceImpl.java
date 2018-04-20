@@ -10,24 +10,24 @@ import java.util.List;
 
 /**
  * EventDropout service - uses EventDropout repository to manage EventDropout entries in a database
- *
+ * <p>
  * Created by Leon on 02/04/2018
  */
 @Service
-public class EventDropoutServiceImpl implements EventDropoutService{
+public class EventDropoutServiceImpl implements EventDropoutService {
 
     @Autowired
     EventDropoutRepository eventDropoutRepository;
 
 
     @Override
-    public List<EventDropout> findAllByEventId(Long eventId){
+    public List<EventDropout> findAllByEventId(Long eventId) {
 
         return eventDropoutRepository.findAllByEventIdOrderByDropoutTime(eventId);
     }
 
     @Override
-    public EventDropout saveEventDropout(EventDropout eventDropout){
+    public EventDropout saveEventDropout(EventDropout eventDropout) {
 
         return eventDropoutRepository.save(eventDropout);
     }

@@ -11,54 +11,54 @@ import java.util.List;
 
 /**
  * Event service - uses Event repository to manage Event entries in a database
- *
+ * <p>
  * Created by Leon on 21/03/2018
  */
 @Service
-public class EventServiceImpl implements EventService{
+public class EventServiceImpl implements EventService {
 
     @Autowired
     EventRepository eventRepository;
 
 
     @Override
-    public List<Event> findUpcoming(DateTime currentTime){
+    public List<Event> findUpcoming(DateTime currentTime) {
 
         return eventRepository.findUpcomingEvents(currentTime);
     }
 
     @Override
-    public List<Event> findPast(DateTime currentTime){
+    public List<Event> findPast(DateTime currentTime) {
 
         return eventRepository.findPastEvents(currentTime);
     }
 
     @Override
-    public Event findById(Long id){
+    public Event findById(Long id) {
 
         return eventRepository.findById(id);
     }
 
     @Override
-    public Event findByName(String name){
+    public Event findByName(String name) {
 
         return eventRepository.findByNameIgnoreCase(name);
     }
 
     @Override
-    public Event saveEvent(Event event){
+    public Event saveEvent(Event event) {
 
         return eventRepository.save(event);
     }
 
     @Override
-    public Integer removeById(Long id){
+    public Integer removeById(Long id) {
 
         return eventRepository.deleteById(id);
     }
 
     @Override
-    public Integer removeByName(String name){
+    public Integer removeByName(String name) {
 
         return eventRepository.deleteByName(name);
     }
