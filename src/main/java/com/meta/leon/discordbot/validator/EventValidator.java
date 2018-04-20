@@ -6,18 +6,18 @@ import org.springframework.stereotype.Component;
 
 /**
  * Validator for passed arguments
- *
+ * <p>
  * Created by Leon on 21/03/2018
  */
 @Component
-public class EventValidator extends GlobalValidator{
+public class EventValidator extends GlobalValidator {
 
     @Autowired
     EventService eventService;
 
 
-    public boolean validateIfUniqueEvent(String name){
-        if(eventService.findByName(name) == null){
+    public boolean validateIfUniqueEvent(String name) {
+        if(eventService.findByName(name) == null) {
             return true;
         }
         return false;

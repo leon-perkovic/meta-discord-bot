@@ -7,10 +7,10 @@ import java.util.List;
 
 /**
  * DpsReport repository - used to manage DpsReport entries in a database
- *
+ * <p>
  * Created by Leon on 02/04/2018
  */
-public interface DpsReportRepository extends JpaRepository<DpsReport, Long>{
+public interface DpsReportRepository extends JpaRepository<DpsReport, Long> {
 
     List<DpsReport> findAllByEventId(Long eventId);
 

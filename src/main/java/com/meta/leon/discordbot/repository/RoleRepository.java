@@ -7,10 +7,10 @@ import java.util.List;
 
 /**
  * Role repository - used to manage Role entries in a database
- *
+ * <p>
  * Created by Leon on 18/03/2018
  */
-public interface RoleRepository extends JpaRepository<Role, Long>{
+public interface RoleRepository extends JpaRepository<Role, Long> {
 
     List<Role> findAllByOrderByRoleName();
 

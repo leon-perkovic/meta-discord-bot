@@ -18,11 +18,11 @@ import java.util.ArrayList;
  * !addPlayer <nickname> <account_name> [@username]
  * [@username] is optional
  * Command for adding new player entries to a database
- *
+ * <p>
  * Created by Leon on 17/03/2018
  */
 @Component
-public class AddPlayerCommand extends AbstractCommand{
+public class AddPlayerCommand extends AbstractCommand {
 
     private String nickname;
     private String accountName;
@@ -35,31 +35,31 @@ public class AddPlayerCommand extends AbstractCommand{
     PlayerValidator playerValidator;
 
 
-    public AddPlayerCommand(){
+    public AddPlayerCommand() {
         super("addplayer",
                 "**!addPlayer <nickname> <account_name> [@username]**"
-                + "\n -> Add a new player to the roster.",
+                        + "\n -> Add a new player to the roster.",
                 "N/A",
                 CommandAuthority.ADMIN);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // if @username wasn't specified - add it as null
-        if(arguments.size() == 2){
+        if(arguments.size() == 2) {
             arguments.add(null);
         }
 
         // validate passed arguments
-        if(!playerValidator.validateNumberOfArguments(arguments, 3)){
+        if(!playerValidator.validateNumberOfArguments(arguments, 3)) {
             messageChannel.sendMessage(CommandResponses.ADD_PLAYER_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(arguments.get(2) != null){
-            if(!playerValidator.validateIfDiscordId(arguments.get(2))){
+        if(arguments.get(2) != null) {
+            if(!playerValidator.validateIfDiscordId(arguments.get(2))) {
                 messageChannel.sendMessage(CommandResponses.ADD_PLAYER_INVALID_DISCORD_ID).queue();
                 return;
             }
@@ -68,11 +68,11 @@ public class AddPlayerCommand extends AbstractCommand{
         this.nickname = arguments.get(0);
         this.accountName = arguments.get(1);
         this.discordId = arguments.get(2);
-        if(discordId != null){
+        if(discordId != null) {
             discordId = discordId.replace("!", "");
         }
 
-        if(!playerValidator.validateIfUniquePlayer(nickname, accountName, discordId)){
+        if(!playerValidator.validateIfUniquePlayer(nickname, accountName, discordId)) {
             messageChannel.sendMessage(CommandResponses.PLAYER_ALREADY_EXISTS).queue();
             return;
         }

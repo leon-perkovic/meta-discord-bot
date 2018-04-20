@@ -17,7 +17,7 @@ import java.util.Properties;
  * Created by Leon on 12/03/2018
  */
 @SpringBootApplication
-public class DiscordBotApp implements CommandLineRunner{
+public class DiscordBotApp implements CommandLineRunner {
 
     @Autowired
     private BotListener botListener;
@@ -37,14 +37,14 @@ public class DiscordBotApp implements CommandLineRunner{
     public static int spamCounter = 0;
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         // run with spring-boot
         SpringApplication.run(DiscordBotApp.class, args);
     }
 
     @Override
-    public void run(String... args) throws Exception{
+    public void run(String... args) throws Exception {
 
         // set default time zone
         DateTimeZone.setDefault(DateTimeZone.forID("Europe/Amsterdam"));
@@ -77,35 +77,35 @@ public class DiscordBotApp implements CommandLineRunner{
 
     // -- getters and setters -------------------------------------------------
 
-    public static JDA getJdaBot(){
+    public static JDA getJdaBot() {
         return jdaBot;
     }
 
-    public static String getServerId(){
+    public static String getServerId() {
         return serverId;
     }
 
-    public static String getAnnouncementChannel(){
+    public static String getAnnouncementChannel() {
         return announcementChannel;
     }
 
-    public static String getAdminRole(){
+    public static String getAdminRole() {
         return adminRole;
     }
 
-    public static String getEventLeaderRole(){
+    public static String getEventLeaderRole() {
         return eventLeaderRole;
     }
 
-    public static String getMemberRole(){
+    public static String getMemberRole() {
         return memberRole;
     }
 
-    public static String getTrialRole(){
+    public static String getTrialRole() {
         return trialRole;
     }
 
-    public static String getPublicRole(){
+    public static String getPublicRole() {
         return publicRole;
     }
 

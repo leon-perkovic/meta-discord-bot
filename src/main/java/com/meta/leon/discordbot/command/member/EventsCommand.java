@@ -22,11 +22,11 @@ import java.util.List;
 /**
  * !events
  * Command for getting upcoming event entries from a database
- *
+ * <p>
  * Created by Leon on 22/03/2018
  */
 @Component
-public class EventsCommand extends AbstractCommand{
+public class EventsCommand extends AbstractCommand {
 
     @Autowired
     EventService eventService;
@@ -38,32 +38,32 @@ public class EventsCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public EventsCommand(){
+    public EventsCommand() {
         super("events",
                 "**!events**"
-                + "\n -> Get information about all upcoming events.",
+                        + "\n -> Get information about all upcoming events.",
                 "N/A",
                 CommandAuthority.MEMBER);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!eventValidator.validateNumberOfArguments(arguments, 0)){
+        if(!eventValidator.validateNumberOfArguments(arguments, 0)) {
             messageChannel.sendMessage(CommandResponses.EVENTS_INVALID_ARGUMENTS).queue();
             return;
         }
 
         List<Event> events = eventService.findUpcoming(new DateTime());
-        if(!events.isEmpty()){
+        if(!events.isEmpty()) {
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.setTitle("__Upcoming events (" + events.size() + "):__");
             embedBuilder.setColor(Color.decode("#D02F00"));
 
-            for(Event event : events){
+            for(Event event : events) {
                 String fieldValue = commandUtil.createEventBody(event);
                 fieldValue += "\n------------------------------";
 

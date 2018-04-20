@@ -14,12 +14,12 @@ import java.util.Set;
 
 /**
  * Entity class for database table "event"
- *
+ * <p>
  * Created by Leon on 16/03/2018
  */
 @Entity
 @Table(name = "event")
-public class Event implements Serializable{
+public class Event implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -50,7 +50,7 @@ public class Event implements Serializable{
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "event_signup",
-            joinColumns = { @JoinColumn(name = "event_id", referencedColumnName = "id") },
+            joinColumns = {@JoinColumn(name = "event_id", referencedColumnName = "id")},
             inverseJoinColumns = {
                     @JoinColumn(name = "player_id", referencedColumnName = "id")
             })
@@ -58,11 +58,11 @@ public class Event implements Serializable{
     private Set<Player> players = new HashSet<>();
 
 
-    public Event(){
+    public Event() {
         // default constructor
     }
 
-    public Event(String name, DateTime eventTime, String description, Integer playerLimit, Integer memberLimit, Integer trialLimit, String eventLeader){
+    public Event(String name, DateTime eventTime, String description, Integer playerLimit, Integer memberLimit, Integer trialLimit, String eventLeader) {
         this.name = name;
         this.eventTime = eventTime;
         this.description = description;
@@ -73,7 +73,7 @@ public class Event implements Serializable{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
 
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
@@ -91,75 +91,75 @@ public class Event implements Serializable{
 
     // -- getters and setters -------------------------------------------------
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id){
-        this.id=id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
-    public DateTime getEventTime(){
+    public DateTime getEventTime() {
         return eventTime;
     }
 
-    public void setEventTime(DateTime eventTime){
-        this.eventTime=eventTime;
+    public void setEventTime(DateTime eventTime) {
+        this.eventTime = eventTime;
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description){
-        this.description=description;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Integer getPlayerLimit(){
+    public Integer getPlayerLimit() {
         return playerLimit;
     }
 
-    public void setPlayerLimit(Integer playerLimit){
+    public void setPlayerLimit(Integer playerLimit) {
         this.playerLimit = playerLimit;
     }
 
-    public Integer getMemberLimit(){
+    public Integer getMemberLimit() {
         return memberLimit;
     }
 
-    public void setMemberLimit(Integer memberLimit){
+    public void setMemberLimit(Integer memberLimit) {
         this.memberLimit = memberLimit;
     }
 
-    public Integer getTrialLimit(){
+    public Integer getTrialLimit() {
         return trialLimit;
     }
 
-    public void setTrialLimit(Integer trialLimit){
+    public void setTrialLimit(Integer trialLimit) {
         this.trialLimit = trialLimit;
     }
 
-    public String getEventLeader(){
+    public String getEventLeader() {
         return eventLeader;
     }
 
-    public void setEventLeader(String eventLeader){
+    public void setEventLeader(String eventLeader) {
         this.eventLeader = eventLeader;
     }
 
-    public Set<Player> getPlayers(){
+    public Set<Player> getPlayers() {
         return players;
     }
 
-    public void setPlayers(Set<Player> players){
+    public void setPlayers(Set<Player> players) {
         this.players = players;
     }
 }

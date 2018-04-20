@@ -6,10 +6,10 @@ import java.util.List;
 
 /**
  * Interface for EventSignup service
- *
+ * <p>
  * Created by Leon on 01/04/2018
  */
-public interface EventSignupService{
+public interface EventSignupService {
 
     EventSignup findEventSignup(Long eventId, Long playerId);
 

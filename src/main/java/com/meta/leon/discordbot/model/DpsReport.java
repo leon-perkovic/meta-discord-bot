@@ -8,12 +8,12 @@ import java.io.Serializable;
 
 /**
  * Entity class for database table "dps_report"
- *
+ * <p>
  * Created by Leon on 16/03/2018
  */
 @Entity
 @Table(name = "dps_report")
-public class DpsReport implements Serializable{
+public class DpsReport implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -27,17 +27,17 @@ public class DpsReport implements Serializable{
     private Long eventId;
 
 
-    public DpsReport(){
+    public DpsReport() {
         // default constructor
     }
 
-    public DpsReport(String link, Long eventId){
+    public DpsReport(String link, Long eventId) {
         this.link = link;
         this.eventId = eventId;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
 
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
@@ -50,28 +50,28 @@ public class DpsReport implements Serializable{
 
     // -- getters and setters -------------------------------------------------
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id){
-        this.id=id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getLink(){
+    public String getLink() {
         return link;
     }
 
-    public void setLink(String link){
-        this.link=link;
+    public void setLink(String link) {
+        this.link = link;
     }
 
-    public Long getEventId(){
+    public Long getEventId() {
         return eventId;
     }
 
-    public void setEventId(Long eventId){
-        this.eventId=eventId;
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 
 }

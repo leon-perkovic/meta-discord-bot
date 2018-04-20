@@ -16,4 +16,7 @@
     <include file="/META-INF/database/changelogs/postgresql/columns-000600-event-signup.xml" />
     <include file="/META-INF/database/changelogs/postgresql/columns-000700-event-dropout.xml" />
 
+    <include file="/META-INF/database/changelogs/postgresql/columns-000800-group.xml" />
+    <include file="/META-INF/database/changelogs/postgresql/columns-000900-player-group.xml" />
+
 </databaseChangeLog>

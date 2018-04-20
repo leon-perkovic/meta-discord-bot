@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="00001-20180419" author="leon" dbms="postgresql">
+        <createTable tableName="player_group">
+            <column name="player_id" type="BIGINT" />
+            <column name="group_id" type="BIGINT" />
+        </createTable>
+
+        <addPrimaryKey tableName="player_group" columnNames="player_id, group_id" />
+
+        <addForeignKeyConstraint baseTableName="player_group" baseColumnNames="player_id" constraintName="fk_player_id"
+                                 referencedTableName="player"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE" />
+
+        <addForeignKeyConstraint baseTableName="player_group" baseColumnNames="group_id" constraintName="fk_group_id"
+                                 referencedTableName="groups"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE" />
+    </changeSet>
+
+</databaseChangeLog>

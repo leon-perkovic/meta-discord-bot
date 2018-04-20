@@ -6,10 +6,10 @@ import java.util.ArrayList;
 
 /**
  * Abstract class for Commands - contains all basic command properties and methods
- *
+ * <p>
  * Created by Leon on 17/03/2018
  */
-public abstract class AbstractCommand{
+public abstract class AbstractCommand {
 
     private String name;
 
@@ -20,11 +20,11 @@ public abstract class AbstractCommand{
     private CommandAuthority authority;
 
 
-    public AbstractCommand(){
+    public AbstractCommand() {
         // default constructor
     }
 
-    public AbstractCommand(String name, String description, String help, CommandAuthority authority){
+    public AbstractCommand(String name, String description, String help, CommandAuthority authority) {
 
         this.name = name;
         this.description = description;
@@ -32,41 +32,41 @@ public abstract class AbstractCommand{
         this.authority = authority;
     }
 
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
 
     }
 
     // -- getters and setters -------------------------------------------------
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description){
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getHelp(){
+    public String getHelp() {
         return help;
     }
 
-    public void setHelp(String help){
+    public void setHelp(String help) {
         this.help = help;
     }
 
-    public CommandAuthority getAuthority(){
+    public CommandAuthority getAuthority() {
         return authority;
     }
 
-    public void setAuthority(CommandAuthority authority){
+    public void setAuthority(CommandAuthority authority) {
         this.authority = authority;
     }
 

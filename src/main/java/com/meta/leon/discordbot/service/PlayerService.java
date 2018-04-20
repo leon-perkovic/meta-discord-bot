@@ -6,10 +6,10 @@ import java.util.List;
 
 /**
  * Interface for Player service
- *
+ * <p>
  * Created by Leon on 17/03/2018
  */
-public interface PlayerService{
+public interface PlayerService {
 
     List<Player> findAll();
 

@@ -10,10 +10,10 @@ import java.util.List;
 
 /**
  * EventSignup repository - used to manage EventSignup entries in a database
- *
+ * <p>
  * Created by Leon on 01/04/2018
  */
-public interface EventSignupRepository extends JpaRepository<EventSignup, Long>{
+public interface EventSignupRepository extends JpaRepository<EventSignup, Long> {
 
     EventSignup findByEventIdAndPlayerId(Long eventId, Long playerId);
 

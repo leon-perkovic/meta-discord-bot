@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 /**
  * Container class for PlayerRole's composite primary key
- *
+ * <p>
  * Created by Leon on 19/03/2018
  */
-public class PlayerRoleKey implements Serializable{
+public class PlayerRoleKey implements Serializable {
 
     private Long playerId;
 
@@ -16,19 +16,19 @@ public class PlayerRoleKey implements Serializable{
 
     // -- getters and setters -------------------------------------------------
 
-    public Long getPlayerId(){
+    public Long getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(Long playerId){
+    public void setPlayerId(Long playerId) {
         this.playerId = playerId;
     }
 
-    public Long getRoleId(){
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Long roleId){
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 

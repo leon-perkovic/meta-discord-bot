@@ -22,11 +22,11 @@ import java.util.regex.Pattern;
 
 /**
  * Utility class for common command operations
- *
+ * <p>
  * Created by Leon on 20/03/2018
  */
 @Component
-public class CommandUtil{
+public class CommandUtil {
 
     private HashMap<String, Integer> days;
 
@@ -42,7 +42,7 @@ public class CommandUtil{
     GlobalValidator globalValidator;
 
 
-    public CommandUtil(){
+    public CommandUtil() {
         days = new HashMap<>();
 
         days.put("monday", 1);
@@ -54,26 +54,26 @@ public class CommandUtil{
         days.put("sunday", 7);
     }
 
-    public Player findPlayerByAnyReference(String argument){
+    public Player findPlayerByAnyReference(String argument) {
 
         Player player;
 
         // determine which reference was used for a player and get their ID
-        if(globalValidator.validateIfNumeric(argument)){
+        if(globalValidator.validateIfNumeric(argument)) {
             Long id = Long.valueOf(argument);
             player = playerService.findById(id);
 
-        }else if(globalValidator.validateIfDiscordId(argument)){
+        }else if(globalValidator.validateIfDiscordId(argument)) {
             player = playerService.findByDiscordId(argument.replace("!", ""));
 
-        }else{
+        }else {
             player = playerService.findByNickname(argument);
         }
 
         return player;
     }
 
-    public DateTime getEventDateTime(String day, String time){
+    public DateTime getEventDateTime(String day, String time) {
 
         DateTime now = new DateTime();
         int today = now.getDayOfWeek();
@@ -84,28 +84,28 @@ public class CommandUtil{
         int hours = 0;
         int minutes = 0;
 
-        if(time.contains(":")){
+        if(time.contains(":")) {
             hours = Integer.valueOf(time.split(":")[0]);
             minutes = Integer.valueOf(time.split(":")[1]);
-        }else{
+        }else {
             hours = Integer.valueOf(time);
         }
 
-        if(eventDay < today){
+        if(eventDay < today) {
             eventDay += 7;
-        }else if(eventDay == today && (nowHours*60+nowMinutes) > (hours*60+minutes)){
+        }else if(eventDay == today && (nowHours * 60 + nowMinutes) > (hours * 60 + minutes)) {
             eventDay += 7;
         }
-        eventDay = now.getDayOfMonth() + (eventDay-today);
+        eventDay = now.getDayOfMonth() + (eventDay - today);
 
         int eventMonth = now.getMonthOfYear();
         int eventYear = now.getYear();
 
         int endOfMonth = now.withDayOfMonth(1).plusMonths(1).minusDays(1).getDayOfMonth();
-        if(eventDay > endOfMonth){
+        if(eventDay > endOfMonth) {
             eventMonth++;
         }
-        if(eventMonth < now.getMonthOfYear()){
+        if(eventMonth < now.getMonthOfYear()) {
             eventYear++;
         }
 
@@ -114,7 +114,7 @@ public class CommandUtil{
         return eventTime;
     }
 
-    public String createEventName(String day, String time){
+    public String createEventName(String day, String time) {
 
         DateTime eventTime = getEventDateTime(day, time);
 
@@ -128,7 +128,7 @@ public class CommandUtil{
         return eventName;
     }
 
-    public String createEventBody(Event event){
+    public String createEventBody(Event event) {
         DateTimeZone timeZone = event.getEventTime().getZone();
         String zone = timeZone.getShortName(event.getEventTime().getMillis());
 
@@ -139,19 +139,19 @@ public class CommandUtil{
                 + "/" + event.getPlayerLimit() + "**\n";
 
         fieldValue += "*Members:*  **"
-                    + eventSignupService.getNumOfSignupsByRank(event.getId(), DiscordBotApp.getMemberRole(), false)
-                    + "/" + event.getMemberLimit() + "**\n";
+                + eventSignupService.getNumOfSignupsByRank(event.getId(), DiscordBotApp.getMemberRole(), false)
+                + "/" + event.getMemberLimit() + "**\n";
 
         fieldValue += "*Trials:*  **"
-                    + eventSignupService.getNumOfSignupsByRank(event.getId(), DiscordBotApp.getTrialRole(), false)
-                    + "/" + event.getTrialLimit() + "**\n";
+                + eventSignupService.getNumOfSignupsByRank(event.getId(), DiscordBotApp.getTrialRole(), false)
+                + "/" + event.getTrialLimit() + "**\n";
 
         fieldValue += "*Event leader:*  **" + event.getEventLeader() + "**";
 
         return fieldValue;
     }
 
-    public String convertDiscordMentionToId(String mention){
+    public String convertDiscordMentionToId(String mention) {
         mention = mention.replace("<", "");
         mention = mention.replace(">", "");
         mention = mention.replace("@", "");
@@ -159,33 +159,33 @@ public class CommandUtil{
         return mention;
     }
 
-    public ArrayList<String> extractDpsReports(String argument){
+    public ArrayList<String> extractDpsReports(String argument) {
         Pattern pattern = Pattern.compile(DPS_REPORT_PATTERN);
         Matcher matcher = pattern.matcher(argument);
 
         ArrayList<String> dpsReports = new ArrayList<>();
 
-        while(matcher.find()){
+        while(matcher.find()) {
             dpsReports.add(matcher.group());
             System.out.println(matcher.group());
         }
         return dpsReports;
     }
 
-    public Role getRoleByName(User user, String roleName){
+    public Role getRoleByName(User user, String roleName) {
         List<Guild> guilds = user.getMutualGuilds();
         Guild guild = null;
 
-        for(Guild g : guilds){
-            if(g.getId().equals(DiscordBotApp.getServerId())){
+        for(Guild g : guilds) {
+            if(g.getId().equals(DiscordBotApp.getServerId())) {
                 guild = g;
                 break;
             }
         }
 
         Role role = null;
-        for(Role r : guild.getRoles()){
-            if(r.getName().equals(roleName)){
+        for(Role r : guild.getRoles()) {
+            if(r.getName().equals(roleName)) {
                 role = r;
                 break;
             }
@@ -195,7 +195,7 @@ public class CommandUtil{
 
     // -- getters and setters -------------------------------------------------
 
-    public HashMap<String, Integer> getDays(){
+    public HashMap<String, Integer> getDays() {
         return days;
     }
 }

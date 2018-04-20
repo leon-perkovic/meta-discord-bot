@@ -10,13 +10,13 @@ import java.io.Serializable;
 
 /**
  * Entity class for database table "event_dropout"
- *
+ * <p>
  * Created by Leon on 02/04/2018
  */
 @Entity
 @IdClass(EventDropoutKey.class)
 @Table(name = "event_dropout")
-public class EventDropout implements Serializable{
+public class EventDropout implements Serializable {
 
     @Id
     @Column(name = "event_id")
@@ -44,11 +44,11 @@ public class EventDropout implements Serializable{
     private DateTime dropoutTime;
 
 
-    public EventDropout(){
+    public EventDropout() {
         // default constructor
     }
 
-    public EventDropout(Long eventId, Long playerId, String nickname, String discordRank, boolean isBackup, DateTime signupTime, DateTime dropoutTime){
+    public EventDropout(Long eventId, Long playerId, String nickname, String discordRank, boolean isBackup, DateTime signupTime, DateTime dropoutTime) {
         this.eventId = eventId;
         this.playerId = playerId;
         this.nickname = nickname;
@@ -59,7 +59,7 @@ public class EventDropout implements Serializable{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
 
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
@@ -76,59 +76,59 @@ public class EventDropout implements Serializable{
 
     // -- getters and setters -------------------------------------------------
 
-    public Long getEventId(){
+    public Long getEventId() {
         return eventId;
     }
 
-    public void setEventId(Long eventId){
-        this.eventId=eventId;
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 
-    public Long getPlayerId(){
+    public Long getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(Long playerId){
-        this.playerId=playerId;
+    public void setPlayerId(Long playerId) {
+        this.playerId = playerId;
     }
 
-    public String getNickname(){
+    public String getNickname() {
         return nickname;
     }
 
-    public void setNickname(String nickname){
+    public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
-    public String getDiscordRank(){
+    public String getDiscordRank() {
         return discordRank;
     }
 
-    public void setDiscordRank(String discordRank){
-        this.discordRank=discordRank;
+    public void setDiscordRank(String discordRank) {
+        this.discordRank = discordRank;
     }
 
-    public boolean isBackup(){
+    public boolean isBackup() {
         return isBackup;
     }
 
-    public void setBackup(boolean backup){
+    public void setBackup(boolean backup) {
         isBackup = backup;
     }
 
-    public DateTime getSignupTime(){
+    public DateTime getSignupTime() {
         return signupTime;
     }
 
-    public void setSignupTime(DateTime signupTime){
-        this.signupTime=signupTime;
+    public void setSignupTime(DateTime signupTime) {
+        this.signupTime = signupTime;
     }
 
-    public DateTime getDropoutTime(){
+    public DateTime getDropoutTime() {
         return dropoutTime;
     }
 
-    public void setDropoutTime(DateTime dropoutTime){
+    public void setDropoutTime(DateTime dropoutTime) {
         this.dropoutTime = dropoutTime;
     }
 }

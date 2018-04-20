@@ -10,11 +10,11 @@ import java.util.regex.Pattern;
 
 /**
  * Global Validator for passed arguments
- *
+ * <p>
  * Created by Leon on 18/03/2018
  */
 @Component
-public class GlobalValidator{
+public class GlobalValidator {
 
     public static final String NUMBER_PATTERN = "^(0|[1-9][0-9]*)$";
 
@@ -26,28 +26,28 @@ public class GlobalValidator{
     CommandUtil commandUtil;
 
 
-    public boolean validateNumberOfArguments(ArrayList<String> arguments, int expectedArguments){
-        if(arguments.size() == expectedArguments){
+    public boolean validateNumberOfArguments(ArrayList<String> arguments, int expectedArguments) {
+        if(arguments.size() == expectedArguments) {
             return true;
         }
         return false;
     }
 
-    public boolean validateMinNumberOfArguments(ArrayList<String> arguments, int expectedMinArguments){
-        if(arguments.size() >= expectedMinArguments){
+    public boolean validateMinNumberOfArguments(ArrayList<String> arguments, int expectedMinArguments) {
+        if(arguments.size() >= expectedMinArguments) {
             return true;
         }
         return false;
     }
 
-    public boolean validateIfNumeric(String argument){
+    public boolean validateIfNumeric(String argument) {
         Pattern pattern = Pattern.compile(NUMBER_PATTERN);
         Matcher matcher = pattern.matcher(argument);
 
         return matcher.matches();
     }
 
-    public boolean validateIfDiscordId(String argument){
+    public boolean validateIfDiscordId(String argument) {
         argument = argument.replace("!", "");
 
         Pattern pattern = Pattern.compile(DISCORD_ID_PATTERN);
@@ -56,21 +56,21 @@ public class GlobalValidator{
         return matcher.matches();
     }
 
-    public boolean validateIfDay(String argument){
-        if(commandUtil.getDays().containsKey(argument.toLowerCase())){
+    public boolean validateIfDay(String argument) {
+        if(commandUtil.getDays().containsKey(argument.toLowerCase())) {
             return true;
         }
         return false;
     }
 
-    public boolean validateIfTime(String argument){
+    public boolean validateIfTime(String argument) {
         Pattern pattern = Pattern.compile(TIME_PATTERN);
         Matcher matcher = pattern.matcher(argument);
 
-        if(validateIfNumeric(argument)){
+        if(validateIfNumeric(argument)) {
             int time = Integer.valueOf(argument);
 
-            if(time >= 0 && time <= 23){
+            if(time >= 0 && time <= 23) {
                 return true;
             }
         }

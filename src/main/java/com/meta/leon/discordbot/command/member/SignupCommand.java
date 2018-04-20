@@ -28,11 +28,11 @@ import java.util.List;
  * !signup <day> <HH:mm>
  * Command for signing up for an event
  * Event name will be determined and set automatically for first upcoming day if only day was specified
- *
+ * <p>
  * Created by Leon on 01/04/2018
  */
 @Component
-public class SignupCommand extends AbstractCommand{
+public class SignupCommand extends AbstractCommand {
 
     private Long eventId;
     private Long playerId;
@@ -53,37 +53,37 @@ public class SignupCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public SignupCommand(){
+    public SignupCommand() {
         super("signup",
                 "**!signup <day> <HH:mm>**"
-                + "\n -> Sign up for a specific event. Date will be set for the first upcoming day in the week.",
+                        + "\n -> Sign up for a specific event. Date will be set for the first upcoming day in the week.",
                 "N/A",
                 CommandAuthority.MEMBER);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
         User user = discordEvent.getAuthor();
 
         // validate passed arguments
-        if(!eventSignupValidator.validateNumberOfArguments(arguments, 2)){
+        if(!eventSignupValidator.validateNumberOfArguments(arguments, 2)) {
             messageChannel.sendMessage(CommandResponses.SIGNUP_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(!eventSignupValidator.validateIfDay(arguments.get(0))){
+        if(!eventSignupValidator.validateIfDay(arguments.get(0))) {
             messageChannel.sendMessage(CommandResponses.SIGNUP_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(!eventSignupValidator.validateIfTime(arguments.get(1))){
+        if(!eventSignupValidator.validateIfTime(arguments.get(1))) {
             messageChannel.sendMessage(CommandResponses.SIGNUP_INVALID_ARGUMENTS).queue();
             return;
         }
 
         // get player
         Player player = playerService.findByDiscordId(user.getAsMention());
-        if(player == null){
+        if(player == null) {
             messageChannel.sendMessage(CommandResponses.SIGNUP_INVALID_PLAYER).queue();
             return;
         }
@@ -92,14 +92,14 @@ public class SignupCommand extends AbstractCommand{
         // get event
         String eventName = commandUtil.createEventName(arguments.get(0), arguments.get(1));
         Event event = eventService.findByName(eventName);
-        if(event == null){
+        if(event == null) {
             messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
             return;
         }
         this.eventId = event.getId();
 
         // check if player is already signed up for this event
-        if(!eventSignupValidator.validateIfUniqueSignup(eventId, playerId)){
+        if(!eventSignupValidator.validateIfUniqueSignup(eventId, playerId)) {
             messageChannel.sendMessage(CommandResponses.SIGNUP_ALREADY_EXISTS).queue();
             return;
         }
@@ -107,10 +107,10 @@ public class SignupCommand extends AbstractCommand{
         // determine if user is member or trial
         List<String> roleNames = BotListener.getUserRoles(user);
         String userRole = "";
-        if(roleNames.contains(DiscordBotApp.getMemberRole())){
+        if(roleNames.contains(DiscordBotApp.getMemberRole())) {
             userRole = DiscordBotApp.getMemberRole();
 
-        }else if(roleNames.contains(DiscordBotApp.getTrialRole())){
+        }else if(roleNames.contains(DiscordBotApp.getTrialRole())) {
             userRole = DiscordBotApp.getTrialRole();
         }
 
@@ -119,20 +119,20 @@ public class SignupCommand extends AbstractCommand{
         Integer totalSignups = eventSignupService.getNumOfSignups(eventId, false);
         Integer totalSignupsForRank = eventSignupService.getNumOfSignupsByRank(eventId, userRole, false);
 
-        if(totalSignups >= event.getPlayerLimit()){
+        if(totalSignups >= event.getPlayerLimit()) {
             isBackup = true;
 
-        }else if(DiscordBotApp.getMemberRole().equals(userRole) && totalSignupsForRank >= event.getMemberLimit()){
+        }else if(DiscordBotApp.getMemberRole().equals(userRole) && totalSignupsForRank >= event.getMemberLimit()) {
             isBackup = true;
 
-        }else if(DiscordBotApp.getTrialRole().equals(userRole) && totalSignupsForRank >= event.getTrialLimit()){
+        }else if(DiscordBotApp.getTrialRole().equals(userRole) && totalSignupsForRank >= event.getTrialLimit()) {
             isBackup = true;
         }
 
         EventSignup eventSignup = new EventSignup(eventId, playerId, userRole, isBackup, new DateTime());
         eventSignupService.saveEventSignup(eventSignup);
 
-        if(isBackup){
+        if(isBackup) {
             messageChannel.sendMessage(CommandResponses.SIGNUP_FULL).queue();
             return;
         }

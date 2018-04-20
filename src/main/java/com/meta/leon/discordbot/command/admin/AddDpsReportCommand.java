@@ -20,11 +20,11 @@ import java.util.ArrayList;
 /**
  * !addDpsReport <id or event_name> <dps_report_links...>
  * Command for adding new dps report entries to a database
- *
+ * <p>
  * Created by Leon on 02/04/2018
  */
 @Component
-public class AddDpsReportCommand extends AbstractCommand{
+public class AddDpsReportCommand extends AbstractCommand {
 
     private Long eventId;
 
@@ -41,38 +41,38 @@ public class AddDpsReportCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public AddDpsReportCommand(){
+    public AddDpsReportCommand() {
         super("adddpsreport",
                 "**!addDpsReport <id or event_name> <dps_report_links...>**"
-                + "\n -> Add one or multiple dps reports for a specific event.",
+                        + "\n -> Add one or multiple dps reports for a specific event.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!globalValidator.validateMinNumberOfArguments(arguments, 2)){
+        if(!globalValidator.validateMinNumberOfArguments(arguments, 2)) {
             messageChannel.sendMessage(CommandResponses.ADD_DPS_REPORT_INVALID_ARGUMENTS).queue();
             return;
         }
 
         Event event;
         // check if event exists
-        if(globalValidator.validateIfNumeric(arguments.get(0))){
+        if(globalValidator.validateIfNumeric(arguments.get(0))) {
             this.eventId = Long.valueOf(arguments.get(0));
 
             event = eventService.findById(eventId);
-            if(event == null){
+            if(event == null) {
                 messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
                 return;
             }
-        }else{
+        }else {
             event = eventService.findByName(arguments.get(0));
-            if(event == null){
+            if(event == null) {
                 messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
                 return;
             }
@@ -82,7 +82,7 @@ public class AddDpsReportCommand extends AbstractCommand{
         // format arguments
         String dpsArguments = "";
 
-        for(int i=1; i<arguments.size(); i++){
+        for(int i = 1; i < arguments.size(); i++) {
             dpsArguments += arguments.get(i) + " ";
         }
         dpsArguments = dpsArguments.replaceAll("\n", " ");
@@ -91,12 +91,12 @@ public class AddDpsReportCommand extends AbstractCommand{
         // extract dps report links
         ArrayList<String> dpsReports = commandUtil.extractDpsReports(dpsArguments);
 
-        if(dpsReports.isEmpty()){
+        if(dpsReports.isEmpty()) {
             messageChannel.sendMessage(CommandResponses.ADD_DPS_REPORT_INVALID_ARGUMENTS).queue();
             return;
         }
 
-        for(String dpsReportLink : dpsReports){
+        for(String dpsReportLink : dpsReports) {
             DpsReport dpsReport = new DpsReport(dpsReportLink, eventId);
 
             dpsReportService.saveDpsReport(dpsReport);

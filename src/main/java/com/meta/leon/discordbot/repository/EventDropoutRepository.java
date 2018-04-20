@@ -7,10 +7,10 @@ import java.util.List;
 
 /**
  * EventDropout repository - used to manage EventDropout entries in a database
- *
+ * <p>
  * Created by Leon on 02/04/2018
  */
-public interface EventDropoutRepository extends JpaRepository<EventDropout, Long>{
+public interface EventDropoutRepository extends JpaRepository<EventDropout, Long> {
 
     List<EventDropout> findAllByEventIdOrderByDropoutTime(Long eventId);
 

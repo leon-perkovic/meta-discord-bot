@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 /**
  * Container class for EventDropout's composite primary key
- *
+ * <p>
  * Created by Leon on 02/04/2018
  */
-public class EventDropoutKey implements Serializable{
+public class EventDropoutKey implements Serializable {
 
     private Long eventId;
 
@@ -16,20 +16,20 @@ public class EventDropoutKey implements Serializable{
 
     // -- getters and setters -------------------------------------------------
 
-    public Long getEventId(){
+    public Long getEventId() {
         return eventId;
     }
 
-    public void setEventId(Long eventId){
-        this.eventId=eventId;
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 
-    public Long getPlayerId(){
+    public Long getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(Long playerId){
-        this.playerId=playerId;
+    public void setPlayerId(Long playerId) {
+        this.playerId = playerId;
     }
 
 }

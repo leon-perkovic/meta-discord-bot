@@ -16,17 +16,17 @@ import java.util.Random;
 /**
  * !roll
  * Command that rolls a number between 1 and 100
- *
+ * <p>
  * Created by Leon on 02/04/2018
  */
 @Component
-public class RollCommand extends AbstractCommand{
+public class RollCommand extends AbstractCommand {
 
     @Autowired
     GlobalValidator globalValidator;
 
 
-    public RollCommand(){
+    public RollCommand() {
         super("roll",
                 "**!roll**"
                         + "\n -> Roll a number between 1 and 100.",
@@ -35,12 +35,12 @@ public class RollCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
         User user = discordEvent.getAuthor();
 
         // validate passed arguments
-        if(!globalValidator.validateNumberOfArguments(arguments, 0)){
+        if(!globalValidator.validateNumberOfArguments(arguments, 0)) {
             messageChannel.sendMessage(CommandResponses.ROLL_INVALID_ARGUMENTS).queue();
             return;
         }

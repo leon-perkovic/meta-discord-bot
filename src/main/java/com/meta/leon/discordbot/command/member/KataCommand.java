@@ -21,11 +21,11 @@ import java.util.Random;
 /**
  * !kata
  * Command that likes to spam chat :)
- *
+ * <p>
  * Created by Leon on 02/04/2018
  */
 @Component
-public class KataCommand extends AbstractCommand{
+public class KataCommand extends AbstractCommand {
 
     @Autowired
     PlayerService playerService;
@@ -37,7 +37,7 @@ public class KataCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public KataCommand(){
+    public KataCommand() {
         super("kata",
                 "**!kata**"
                         + "\n -> Hmm, what could it do?",
@@ -46,7 +46,7 @@ public class KataCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
         User user = discordEvent.getAuthor();
 
@@ -55,7 +55,7 @@ public class KataCommand extends AbstractCommand{
         CommandAuthority authority = BotListener.getUserAuthority(roleNames);
 
         // validate passed arguments
-        if(!globalValidator.validateNumberOfArguments(arguments, 0)){
+        if(!globalValidator.validateNumberOfArguments(arguments, 0)) {
             messageChannel.sendMessage(CommandResponses.ROLL_INVALID_ARGUMENTS).queue();
             return;
         }
@@ -65,9 +65,9 @@ public class KataCommand extends AbstractCommand{
         StringBuilder spam = new StringBuilder("");
 
         Player player = playerService.findByDiscordId(user.getAsMention());
-        if(player != null){
-            if(player.getNickname().toLowerCase().equals("kata")){
-                for(int i=0; i<range; i++){
+        if(player != null) {
+            if(player.getNickname().toLowerCase().equals("kata")) {
+                for(int i = 0; i < range; i++) {
                     spam.append("**[Sun Spirit]**\n");
                 }
                 messageChannel.sendMessage(spam.toString()).queue();
@@ -76,11 +76,11 @@ public class KataCommand extends AbstractCommand{
         }
 
         player = playerService.findByNickname("kata");
-        if(player != null){
-            if(authority.getLevel() >= CommandAuthority.EVENT_LEADER.getLevel()){
-                for(int i=0; i<range; i++){
+        if(player != null) {
+            if(authority.getLevel() >= CommandAuthority.EVENT_LEADER.getLevel()) {
+                for(int i = 0; i < range; i++) {
                     spam.append(player.getDiscordId())
-                        .append("\n");
+                            .append("\n");
                 }
                 messageChannel.sendMessage(spam.toString()).queue();
                 return;

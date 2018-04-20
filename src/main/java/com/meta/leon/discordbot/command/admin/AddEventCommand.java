@@ -21,11 +21,11 @@ import java.util.ArrayList;
  * [event_leader] and [description] are optional
  * Command for adding new event entries to a database
  * Event date will be determined and set automatically for first upcoming day in the week
- *
+ * <p>
  * Created by Leon on 21/03/2018
  */
 @Component
-public class AddEventCommand extends AbstractCommand{
+public class AddEventCommand extends AbstractCommand {
 
     private String name;
     private DateTime eventTime;
@@ -45,72 +45,72 @@ public class AddEventCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public AddEventCommand(){
+    public AddEventCommand() {
         super("addevent",
                 "**!addEvent <day> <HH:mm> <player_limit> <member_limit> <trial_limit> [event_leader] [description]**"
-                + "\n -> Create new event. Date will be set for the first upcoming day in the week.",
+                        + "\n -> Create new event. Date will be set for the first upcoming day in the week.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         int descStart = 5;
         // if @username was passed as an argument, push start of description
-        if(arguments.size() > 5){
-            if(eventValidator.validateIfDiscordId(arguments.get(5))){
+        if(arguments.size() > 5) {
+            if(eventValidator.validateIfDiscordId(arguments.get(5))) {
                 this.eventLeader = arguments.get(5);
                 descStart = 6;
-            }else{
+            }else {
                 this.eventLeader = null;
             }
         }
 
         // if description wasn't specified - add it as null
-        if(arguments.size() == descStart){
+        if(arguments.size() == descStart) {
             arguments.add(null);
         }
 
         // validate passed arguments
-        if(!eventValidator.validateMinNumberOfArguments(arguments, descStart+1)){
+        if(!eventValidator.validateMinNumberOfArguments(arguments, descStart + 1)) {
             messageChannel.sendMessage(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(!eventValidator.validateIfDay(arguments.get(0))){
+        if(!eventValidator.validateIfDay(arguments.get(0))) {
             messageChannel.sendMessage(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(!eventValidator.validateIfTime(arguments.get(1))){
+        if(!eventValidator.validateIfTime(arguments.get(1))) {
             messageChannel.sendMessage(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(!eventValidator.validateIfNumeric(arguments.get(2))){
+        if(!eventValidator.validateIfNumeric(arguments.get(2))) {
             messageChannel.sendMessage(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(!eventValidator.validateIfNumeric(arguments.get(3))){
+        if(!eventValidator.validateIfNumeric(arguments.get(3))) {
             messageChannel.sendMessage(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(!eventValidator.validateIfNumeric(arguments.get(4))){
+        if(!eventValidator.validateIfNumeric(arguments.get(4))) {
             messageChannel.sendMessage(CommandResponses.ADD_EVENT_INVALID_ARGUMENTS).queue();
             return;
         }
 
         // if description was split as multiple arguments - combine them
-        if(arguments.size() > descStart+1){
+        if(arguments.size() > descStart + 1) {
             String combinedDesc = arguments.get(descStart);
-            for(int i = descStart+1; i < arguments.size(); i++){
+            for(int i = descStart + 1; i < arguments.size(); i++) {
                 combinedDesc += " " + arguments.get(i);
             }
             this.description = combinedDesc.trim();
 
-        }else{
+        }else {
             this.description = arguments.get(descStart);
-            if(description != null){
+            if(description != null) {
                 description = description.trim();
             }
         }
@@ -127,14 +127,14 @@ public class AddEventCommand extends AbstractCommand{
         this.memberLimit = Integer.valueOf(arguments.get(3));
         this.trialLimit = Integer.valueOf(arguments.get(4));
 
-        if(memberLimit > playerLimit){
+        if(memberLimit > playerLimit) {
             memberLimit = playerLimit;
         }
-        if(trialLimit > playerLimit){
+        if(trialLimit > playerLimit) {
             trialLimit = playerLimit;
         }
 
-        if(!eventValidator.validateIfUniqueEvent(name)){
+        if(!eventValidator.validateIfUniqueEvent(name)) {
             messageChannel.sendMessage(CommandResponses.EVENT_ALREADY_EXISTS).queue();
             return;
         }

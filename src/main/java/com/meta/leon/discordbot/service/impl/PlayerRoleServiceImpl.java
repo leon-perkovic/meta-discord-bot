@@ -8,30 +8,30 @@ import org.springframework.stereotype.Service;
 
 /**
  * PlayerRole service - uses PlayerRole repository to manage PlayerRole entries in a database
- *
+ * <p>
  * Created by Leon on 19/03/2018
  */
 @Service
-public class PlayerRoleServiceImpl implements PlayerRoleService{
+public class PlayerRoleServiceImpl implements PlayerRoleService {
 
     @Autowired
     PlayerRoleRepository playerRoleRepository;
 
 
     @Override
-    public PlayerRole findbyIds(Long playerId, Long roleId){
+    public PlayerRole findbyIds(Long playerId, Long roleId) {
 
         return playerRoleRepository.findByPlayerIdAndRoleId(playerId, roleId);
     }
 
     @Override
-    public PlayerRole savePlayerRole(PlayerRole playerRole){
+    public PlayerRole savePlayerRole(PlayerRole playerRole) {
 
         return playerRoleRepository.save(playerRole);
     }
 
     @Override
-    public Integer removePlayerRole(Long playerId, Long roleId){
+    public Integer removePlayerRole(Long playerId, Long roleId) {
 
         return playerRoleRepository.deleteByPlayerIdAndAndRoleId(playerId, roleId);
     }

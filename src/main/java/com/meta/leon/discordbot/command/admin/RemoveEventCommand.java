@@ -19,11 +19,11 @@ import java.util.ArrayList;
  * [HH:mm] is optional, only needed in combination with <day>
  * Command for removing event entries from a database
  * Event name will be determined and set automatically for first upcoming day if only day was specified
- *
+ * <p>
  * Created by Leon on 22/03/2018
  */
 @Component
-public class RemoveEventCommand extends AbstractCommand{
+public class RemoveEventCommand extends AbstractCommand {
 
     @Autowired
     EventService eventService;
@@ -35,44 +35,44 @@ public class RemoveEventCommand extends AbstractCommand{
     CommandUtil commandUtil;
 
 
-    public RemoveEventCommand(){
+    public RemoveEventCommand() {
         super("removeevent",
                 "**!removeEvent <id or name or day> [HH:mm]**"
-                + "\n -> Delete/cancel a specific event",
+                        + "\n -> Delete/cancel a specific event",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
     }
 
     @Override
     @Transactional
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!eventValidator.validateMinNumberOfArguments(arguments, 1)){
+        if(!eventValidator.validateMinNumberOfArguments(arguments, 1)) {
             messageChannel.sendMessage(CommandResponses.REMOVE_EVENT_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(arguments.size() == 2){
-            if(!eventValidator.validateIfTime(arguments.get(1))){
+        if(arguments.size() == 2) {
+            if(!eventValidator.validateIfTime(arguments.get(1))) {
                 messageChannel.sendMessage(CommandResponses.REMOVE_EVENT_INVALID_ARGUMENTS).queue();
                 return;
             }
         }
 
         int numOfRemoved;
-        if(eventValidator.validateIfNumeric(arguments.get(0))){
+        if(eventValidator.validateIfNumeric(arguments.get(0))) {
             numOfRemoved = eventService.removeById(Long.valueOf(arguments.get(0)));
 
-        }else if(eventValidator.validateIfDay(arguments.get(0)) && arguments.size() == 2){
+        }else if(eventValidator.validateIfDay(arguments.get(0)) && arguments.size() == 2) {
             String name = commandUtil.createEventName(arguments.get(0), arguments.get(1));
 
             numOfRemoved = eventService.removeByName(name);
-        }else{
+        }else {
             numOfRemoved = eventService.removeByName(arguments.get(0));
         }
 
-        if(numOfRemoved > 0){
+        if(numOfRemoved > 0) {
             messageChannel.sendMessage(CommandResponses.REMOVE_EVENT_SUCCESS).queue();
             return;
         }

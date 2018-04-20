@@ -6,10 +6,10 @@ import java.util.List;
 
 /**
  * Interface for EventDropout service
- *
+ * <p>
  * Created by Leon on 02/04/2018
  */
-public interface EventDropoutService{
+public interface EventDropoutService {
 
     List<EventDropout> findAllByEventId(Long eventId);
 

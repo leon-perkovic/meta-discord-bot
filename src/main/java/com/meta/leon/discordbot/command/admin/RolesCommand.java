@@ -19,11 +19,11 @@ import java.util.List;
 /**
  * !roles
  * Command for getting all role entries from a database
- *
+ * <p>
  * Created by Leon on 19/03/2018
  */
 @Component
-public class RolesCommand extends AbstractCommand{
+public class RolesCommand extends AbstractCommand {
 
     @Autowired
     RoleService roleService;
@@ -32,32 +32,32 @@ public class RolesCommand extends AbstractCommand{
     RoleValidator roleValidator;
 
 
-    public RolesCommand(){
+    public RolesCommand() {
         super("roles",
                 "**!roles**"
-                + "\n -> Get information about all roles.",
+                        + "\n -> Get information about all roles.",
                 "N/A",
                 CommandAuthority.EVENT_LEADER);
     }
 
     @Override
-    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments){
+    public void execute(MessageReceivedEvent discordEvent, ArrayList<String> arguments) {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         // validate passed arguments
-        if(!roleValidator.validateNumberOfArguments(arguments, 0)){
+        if(!roleValidator.validateNumberOfArguments(arguments, 0)) {
             messageChannel.sendMessage(CommandResponses.ROLES_INVALID_ARGUMENTS).queue();
             return;
         }
 
         List<Role> roles = roleService.findAll();
-        if(roles.isEmpty()){
+        if(roles.isEmpty()) {
             messageChannel.sendMessage(CommandResponses.ROLES_NONE_FOUND).queue();
             return;
         }
 
         StringBuilder rolesInfo = new StringBuilder("");
-        for(Role role : roles){
+        for(Role role : roles) {
             rolesInfo.append("**")
                     .append(role.getRoleName())
                     .append("** (")

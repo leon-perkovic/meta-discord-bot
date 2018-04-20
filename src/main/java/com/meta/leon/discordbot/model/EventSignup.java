@@ -10,13 +10,13 @@ import java.io.Serializable;
 
 /**
  * Entity class for database table "event_signup"
- *
+ * <p>
  * Created by Leon on 16/03/2018
  */
 @Entity
 @IdClass(EventSignupKey.class)
 @Table(name = "event_signup")
-public class EventSignup implements Serializable{
+public class EventSignup implements Serializable {
 
     @Id
     @Column(name = "event_id")
@@ -37,11 +37,11 @@ public class EventSignup implements Serializable{
     private DateTime signupTime;
 
 
-    public EventSignup(){
+    public EventSignup() {
         // default constructor
     }
 
-    public EventSignup(Long eventId, Long playerId, String discordRank, boolean isBackup, DateTime signupTime){
+    public EventSignup(Long eventId, Long playerId, String discordRank, boolean isBackup, DateTime signupTime) {
         this.eventId = eventId;
         this.playerId = playerId;
         this.discordRank = discordRank;
@@ -50,7 +50,7 @@ public class EventSignup implements Serializable{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
 
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
@@ -65,44 +65,44 @@ public class EventSignup implements Serializable{
 
     // -- getters and setters -------------------------------------------------
 
-    public Long getEventId(){
+    public Long getEventId() {
         return eventId;
     }
 
-    public void setEventId(Long eventId){
-        this.eventId=eventId;
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 
-    public Long getPlayerId(){
+    public Long getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(Long playerId){
-        this.playerId=playerId;
+    public void setPlayerId(Long playerId) {
+        this.playerId = playerId;
     }
 
-    public String getDiscordRank(){
+    public String getDiscordRank() {
         return discordRank;
     }
 
-    public void setDiscordRank(String discordRank){
-        this.discordRank=discordRank;
+    public void setDiscordRank(String discordRank) {
+        this.discordRank = discordRank;
     }
 
-    public boolean isBackup(){
+    public boolean isBackup() {
         return isBackup;
     }
 
-    public void setBackup(boolean backup){
+    public void setBackup(boolean backup) {
         isBackup = backup;
     }
 
-    public DateTime getSignupTime(){
+    public DateTime getSignupTime() {
         return signupTime;
     }
 
-    public void setSignupTime(DateTime signupTime){
-        this.signupTime=signupTime;
+    public void setSignupTime(DateTime signupTime) {
+        this.signupTime = signupTime;
     }
 
 }

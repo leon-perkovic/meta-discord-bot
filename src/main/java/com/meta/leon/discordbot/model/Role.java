@@ -8,12 +8,12 @@ import java.io.Serializable;
 
 /**
  * Entity class for database table "role"
- *
+ * <p>
  * Created by Leon on 16/03/2018
  */
 @Entity
 @Table(name = "role")
-public class Role implements Serializable{
+public class Role implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -27,17 +27,17 @@ public class Role implements Serializable{
     private String shortName;
 
 
-    public Role(){
+    public Role() {
         // default constructor
     }
 
-    public Role(String roleName, String shortName){
+    public Role(String roleName, String shortName) {
         this.roleName = roleName;
         this.shortName = shortName;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
 
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
@@ -50,28 +50,28 @@ public class Role implements Serializable{
 
     // -- getters and setters -------------------------------------------------
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id){
-        this.id=id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getRoleName(){
+    public String getRoleName() {
         return roleName;
     }
 
-    public void setRoleName(String roleName){
-        this.roleName=roleName;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
-    public String getShortName(){
+    public String getShortName() {
         return shortName;
     }
 
-    public void setShortName(String shortName){
-        this.shortName=shortName;
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
 }
