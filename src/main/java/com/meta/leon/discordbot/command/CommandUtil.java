@@ -104,6 +104,7 @@ public class CommandUtil {
         int endOfMonth = now.withDayOfMonth(1).plusMonths(1).minusDays(1).getDayOfMonth();
         if(eventDay > endOfMonth) {
             eventMonth++;
+            eventDay = eventDay - endOfMonth;
         }
         if(eventMonth < now.getMonthOfYear()) {
             eventYear++;

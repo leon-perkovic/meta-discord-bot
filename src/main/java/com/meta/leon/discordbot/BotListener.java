@@ -72,6 +72,7 @@ public class BotListener extends ListenerAdapter {
                     command.execute(event, arguments);
                 }catch(Exception ex) {
                     messageChannel.sendMessage("Oops, something went wrong :cry:").queue();
+                    ex.printStackTrace();
                 }
             }else {
                 // if user isn't authorized - send corresponding response
