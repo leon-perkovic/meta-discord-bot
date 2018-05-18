@@ -4,7 +4,10 @@ import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
 import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.command.member.DropoutCommand;
 import com.meta.leon.discordbot.model.Event;
+import com.meta.leon.discordbot.model.EventDropout;
+import com.meta.leon.discordbot.model.EventSignup;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.EventDropoutService;
 import com.meta.leon.discordbot.service.EventService;
@@ -13,6 +16,7 @@ import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.EventSignupValidator;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +55,8 @@ public class DropoutPlayerCommand extends AbstractCommand {
     @Autowired
     CommandUtil commandUtil;
 
+    @Autowired
+    DropoutCommand dropoutCommand;
 
     public DropoutPlayerCommand() {
         super("dropoutplayer",
@@ -111,9 +117,25 @@ public class DropoutPlayerCommand extends AbstractCommand {
             return;
         }
 
-        eventSignupService.removeEventSignup(eventId, playerId);
+        EventSignup eventSignup = eventSignupService.findEventSignup(eventId, playerId);
 
+        EventDropout eventDropout = new EventDropout(eventId, playerId, player.getNickname(),
+                eventSignup.getDiscordRank(), eventSignup.isBackup(), eventSignup.getSignupTime(), new DateTime());
+        eventDropoutService.saveEventDropout(eventDropout);
+
+        eventSignupService.removeEventSignup(eventId, playerId);
         messageChannel.sendMessage(CommandResponses.DROPOUT_PLAYER_SUCCESS).queue();
+
+        // if event is full and user dropping out wasn't backup - notify first backup about a spot opening up
+        if(!eventSignup.isBackup() && !event.getEventTime().isBeforeNow()) {
+            // find backup candidates
+            EventSignup backupEventSignup = dropoutCommand.findBackupCandidate(event);
+
+            if(backupEventSignup != null) {
+                // if there's a candidate, promote and notify them
+                dropoutCommand.promoteAndNotifyBackup(event, backupEventSignup);
+            }
+        }
     }
 
 }
