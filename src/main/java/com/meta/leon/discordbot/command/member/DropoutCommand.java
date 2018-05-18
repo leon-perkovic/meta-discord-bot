@@ -59,7 +59,6 @@ public class DropoutCommand extends AbstractCommand {
     @Autowired
     CommandUtil commandUtil;
 
-
     public DropoutCommand() {
         super("dropout",
                 "**!dropout <day> <HH:mm>**"
@@ -117,48 +116,19 @@ public class DropoutCommand extends AbstractCommand {
                 eventSignup.getDiscordRank(), eventSignup.isBackup(), eventSignup.getSignupTime(), new DateTime());
         eventDropoutService.saveEventDropout(eventDropout);
 
+        int numOfSignupsBeforeDropout = eventSignupService.getNumOfSignups(eventId, false);
         eventSignupService.removeEventSignup(eventId, playerId);
         messageChannel.sendMessage(CommandResponses.DROPOUT_SUCCESS).queue();
 
-        // if event is full and user dropping out wasn't backup - notify first backup a spot opened up
+        // if event is full and user dropping out wasn't backup - notify first backup about a spot opening up
         if(!eventSignup.isBackup()) {
-            EventSignup backupEventSignup = null;
-            EventSignup backupMemberSignup = eventSignupService.findFirstByRankAndBackup(eventId, DiscordBotApp.getMemberRole(), true);
-            EventSignup backupTrialSignup = eventSignupService.findFirstByRankAndBackup(eventId, DiscordBotApp.getTrialRole(), true);
+            // find backup candidates
+            EventSignup backupEventSignup = findBackupCandidate(event);
 
-            Integer memberSignups = eventSignupService.getNumOfSignupsByRank(eventId, DiscordBotApp.getMemberRole(), false);
-            Integer trialSignups = eventSignupService.getNumOfSignupsByRank(eventId, DiscordBotApp.getTrialRole(), false);
-
-            if(backupMemberSignup != null && memberSignups < event.getMemberLimit()) {
-                backupEventSignup = backupMemberSignup;
-            }
-            if(backupTrialSignup != null && trialSignups < event.getTrialLimit()) {
-                if(backupMemberSignup != null) {
-                    if(backupTrialSignup.getSignupTime().getMillis() < backupMemberSignup.getSignupTime().getMillis()) {
-                        backupEventSignup = backupTrialSignup;
-                    }
-                }else {
-                    backupEventSignup = backupTrialSignup;
-                }
-            }
-
-            // check if there are candidates
             if(backupEventSignup != null) {
-                Player backupPlayer = playerService.findById(backupEventSignup.getPlayerId());
-
-                if(backupPlayer.getDiscordId() != null) {
-                    eventSignupService.updateBackup(eventId, backupPlayer.getId(), false);
-
-                    DateTimeZone timeZone = event.getEventTime().getZone();
-                    String zone = timeZone.getShortName(event.getEventTime().getMillis());
-                    String message = "Hey! Spot opened up for the event on **"
-                            + event.getEventTime().toString("dd/MM/yyyy - HH:mm") + " " + zone
-                            + "**, so you've been moved from backup to main signup :slight_smile:";
-
-                    User backupUser = DiscordBotApp.getJdaBot().getUserById(commandUtil.convertDiscordMentionToId(backupPlayer.getDiscordId()));
-                    backupUser.openPrivateChannel().queue((channel) -> channel.sendMessage(message).queue());
-                }
-            }else if(eventSignupService.getNumOfSignups(eventId, false) == event.getPlayerLimit()) {
+                // if there's a candidate, promote and notify them
+                promoteAndNotifyBackup(event, backupEventSignup);
+            }else if(numOfSignupsBeforeDropout == event.getPlayerLimit()) {
                 // get roles for Member and Trial
                 Role memberRole = commandUtil.getRoleByName(user, DiscordBotApp.getMemberRole());
                 Role trialRole = commandUtil.getRoleByName(user, DiscordBotApp.getTrialRole());
@@ -188,6 +158,46 @@ public class DropoutCommand extends AbstractCommand {
                 MessageChannel announcementChannel = guild.getTextChannelsByName(DiscordBotApp.getAnnouncementChannel(), false).get(0);
                 announcementChannel.sendMessage(announcement).queue();
             }
+        }
+    }
+
+    public EventSignup findBackupCandidate(Event event) {
+        EventSignup backupEventSignup = null;
+        EventSignup backupMemberSignup = eventSignupService.findFirstByRankAndBackup(eventId, DiscordBotApp.getMemberRole(), true);
+        EventSignup backupTrialSignup = eventSignupService.findFirstByRankAndBackup(eventId, DiscordBotApp.getTrialRole(), true);
+
+        Integer memberSignups = eventSignupService.getNumOfSignupsByRank(eventId, DiscordBotApp.getMemberRole(), false);
+        Integer trialSignups = eventSignupService.getNumOfSignupsByRank(eventId, DiscordBotApp.getTrialRole(), false);
+
+        if(backupMemberSignup != null && memberSignups < event.getMemberLimit()) {
+            backupEventSignup = backupMemberSignup;
+        }
+        if(backupTrialSignup != null && trialSignups < event.getTrialLimit()) {
+            if(backupMemberSignup != null) {
+                if(backupTrialSignup.getSignupTime().getMillis() < backupMemberSignup.getSignupTime().getMillis()) {
+                    backupEventSignup = backupTrialSignup;
+                }
+            }else {
+                backupEventSignup = backupTrialSignup;
+            }
+        }
+        return backupEventSignup;
+    }
+
+    public void promoteAndNotifyBackup(Event event, EventSignup backupEventSignup) {
+        Player backupPlayer = playerService.findById(backupEventSignup.getPlayerId());
+
+        if(backupPlayer.getDiscordId() != null) {
+            eventSignupService.updateBackup(eventId, backupPlayer.getId(), false);
+
+            DateTimeZone timeZone = event.getEventTime().getZone();
+            String zone = timeZone.getShortName(event.getEventTime().getMillis());
+            String message = "Hey! Spot opened up for the event on **"
+                    + event.getEventTime().toString("dd/MM/yyyy - HH:mm") + " " + zone
+                    + "**, so you've been moved from backup to main signup :slight_smile:";
+
+            User backupUser = DiscordBotApp.getJdaBot().getUserById(commandUtil.convertDiscordMentionToId(backupPlayer.getDiscordId()));
+            backupUser.openPrivateChannel().queue((channel) -> channel.sendMessage(message).queue());
         }
     }
 

@@ -7,6 +7,9 @@ import com.meta.leon.discordbot.command.CommandResponses;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,17 +25,21 @@ import java.util.List;
 @Component
 public class BotListener extends ListenerAdapter {
 
+    private static final Logger LOG = LoggerFactory.getLogger(BotListener.class);
+
     @Autowired
     private CommandContainer commandContainer;
 
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-
         // get received message, channel and raw content
         Message message = event.getMessage();
         MessageChannel messageChannel = event.getChannel();
         String messageContent = message.getContentRaw();
+        LOG.info(">>> User: " + event.getAuthor().getName() +
+                ", Channel: " + messageChannel.getName() +
+                ", Content: " + messageContent);
 
         // check if passed message is a command
         if(!isCommand(messageContent)) {
@@ -69,10 +76,13 @@ public class BotListener extends ListenerAdapter {
                 }
                 // call corresponding command and get its response
                 try {
+                    LOG.info(">>> Executing command: !" + command.getName());
                     command.execute(event, arguments);
+                    LOG.info(">>> Command !" + command.getName() + " executed successfully");
                 }catch(Exception ex) {
-                    messageChannel.sendMessage("Oops, something went wrong :cry:").queue();
                     ex.printStackTrace();
+                    LOG.info(">>> Exception " + ex.getClass() + "in command: !" + command.getName());
+                    messageChannel.sendMessage("Oops, something went wrong :cry:").queue();
                 }
             }else {
                 // if user isn't authorized - send corresponding response
