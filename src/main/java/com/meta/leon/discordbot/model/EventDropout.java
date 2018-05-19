@@ -43,7 +43,6 @@ public class EventDropout implements Serializable {
     @Column(name = "dropout_time")
     private DateTime dropoutTime;
 
-
     public EventDropout() {
         // default constructor
     }
@@ -60,7 +59,6 @@ public class EventDropout implements Serializable {
 
     @Override
     public String toString() {
-
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
         stringBuilder.append("eventId", eventId);

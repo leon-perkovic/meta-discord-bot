@@ -58,41 +58,41 @@ public class GroupCommand extends AbstractCommand {
             group = groupService.findByName(arguments.get(0));
         }
 
-        if(group != null) {
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setTitle(group.getName() + " (id: " + group.getId() + ")");
-            embedBuilder.setDescription("------------------------------");
-            embedBuilder.setColor(Color.decode("#D02F00"));
-
-            String playerInfo;
-            StringBuilder playersBuilder = new StringBuilder();
-
-            boolean playersLabel = true;
-            for(Player player : group.getPlayers()) {
-                playerInfo = "\n**" + player.getNickname()
-                        + "**, " + player.getAccountName()
-                        + ", " + "*id:* " + player.getId()
-                        + ", " + player.getDiscordId() + "\n"
-                        + player.rolesToString();
-
-                playersBuilder.append(playerInfo).append("\n");
-
-                if(playersBuilder.length() > 750) {
-                    embedBuilder.addField((playersLabel ? ("Players (" + group.getPlayers().size() + "):") : ""),
-                            playersBuilder.toString(), false);
-                    playersLabel = false;
-                    playersBuilder.setLength(0);
-                }
-            }
-            if(playersBuilder.length() > 0) {
-                embedBuilder.addField((playersLabel ? ("Players (" + group.getPlayers().size() + "):") : ""),
-                        playersBuilder.toString(), false);
-            }
-
-            messageChannel.sendMessage(embedBuilder.build()).queue();
+        if(group == null) {
+            messageChannel.sendMessage(CommandResponses.GROUP_NOT_FOUND).queue();
             return;
         }
-        messageChannel.sendMessage(CommandResponses.GROUP_NOT_FOUND).queue();
+
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTitle(group.getName() + " (id: " + group.getId() + ")");
+        embedBuilder.setDescription("------------------------------");
+        embedBuilder.setColor(Color.decode("#D02F00"));
+
+        String playerInfo;
+        StringBuilder playersBuilder = new StringBuilder();
+
+        boolean playersLabel = true;
+        for(Player player : group.getPlayers()) {
+            playerInfo = "\n**" + player.getNickname()
+                    + "**, " + player.getAccountName()
+                    + ", " + "*id:* " + player.getId()
+                    + ", " + player.getDiscordId()
+                    + "\n- *Roles:* " + player.rolesToString();
+
+            playersBuilder.append(playerInfo).append("\n");
+
+            if(playersBuilder.length() > 750) {
+                embedBuilder.addField((playersLabel ? ("Players (" + group.getPlayers().size() + "):") : ""),
+                        playersBuilder.toString(), false);
+                playersLabel = false;
+                playersBuilder.setLength(0);
+            }
+        }
+        if(playersBuilder.length() > 0) {
+            embedBuilder.addField((playersLabel ? ("Players (" + group.getPlayers().size() + "):") : ""),
+                    playersBuilder.toString(), false);
+        }
+        messageChannel.sendMessage(embedBuilder.build()).queue();
     }
 
 }

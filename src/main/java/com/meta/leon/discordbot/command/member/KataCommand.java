@@ -4,7 +4,7 @@ import com.meta.leon.discordbot.BotListener;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.GlobalValidator;
@@ -35,7 +35,6 @@ public class KataCommand extends AbstractCommand {
 
     @Autowired
     CommandUtil commandUtil;
-
 
     public KataCommand() {
         super("kata",
@@ -86,7 +85,6 @@ public class KataCommand extends AbstractCommand {
                 return;
             }
         }
-
         messageChannel.sendMessage("Sorry, you're not the spam-queen :wink:").queue();
     }
 

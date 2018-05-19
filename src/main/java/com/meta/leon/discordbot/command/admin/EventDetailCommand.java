@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.model.EventDropout;
 import com.meta.leon.discordbot.model.EventSignup;
@@ -53,7 +53,6 @@ public class EventDetailCommand extends AbstractCommand {
 
     @Autowired
     CommandUtil commandUtil;
-
 
     public EventDetailCommand() {
         super("eventdetail",
@@ -110,8 +109,9 @@ public class EventDetailCommand extends AbstractCommand {
 
                 signup = "\n**" + player.getNickname() + "** ("
                         + discordRank + "), "
-                        + player.getDiscordId() + "\n"
-                        + player.rolesToString() + "\n- *Signup time:* **"
+                        + player.getDiscordId()
+                        + "\n- *Roles:* " + player.rolesToString()
+                        + "\n- *Signup time:* **"
                         + eventSignup.getSignupTime().toString("dd/MM/yyyy - HH:mm:ss")
                         + " " + zone + "**";
 

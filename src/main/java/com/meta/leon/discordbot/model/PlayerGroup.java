@@ -24,7 +24,6 @@ public class PlayerGroup implements Serializable {
     @Column(name = "group_id")
     private Long groupId;
 
-
     public PlayerGroup() {
         // default constructor
     }
@@ -37,7 +36,6 @@ public class PlayerGroup implements Serializable {
 
     @Override
     public String toString() {
-
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
         stringBuilder.append("playerId", playerId);

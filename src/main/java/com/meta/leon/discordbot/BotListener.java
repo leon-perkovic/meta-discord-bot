@@ -30,7 +30,6 @@ public class BotListener extends ListenerAdapter {
     @Autowired
     private CommandContainer commandContainer;
 
-
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         // get received message, channel and raw content

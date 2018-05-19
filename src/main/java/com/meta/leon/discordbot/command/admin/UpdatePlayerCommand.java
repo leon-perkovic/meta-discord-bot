@@ -24,17 +24,11 @@ import java.util.ArrayList;
 @Component
 public class UpdatePlayerCommand extends AbstractCommand {
 
-    private Long id;
-    private String nickname;
-    private String accountName;
-    private String discordId;
-
     @Autowired
     PlayerService playerService;
 
     @Autowired
     PlayerValidator playerValidator;
-
 
     public UpdatePlayerCommand() {
         super("updateplayer",
@@ -65,36 +59,36 @@ public class UpdatePlayerCommand extends AbstractCommand {
                 return;
             }
         }
-
-        if(playerValidator.validateIfNumeric(arguments.get(0))) {
-            this.id = Long.valueOf(arguments.get(0));
-            this.nickname = arguments.get(1);
-            this.accountName = arguments.get(2);
-            this.discordId = arguments.get(3);
-            if(discordId != null) {
-                discordId = discordId.replace("!", "");
-            }
-
-            Player player = playerService.findById(id);
-            if(player == null) {
-                messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
-                return;
-            }
-
-            if(!playerValidator.validateIfUniquePlayerUpdate(id, nickname, accountName, discordId)) {
-                messageChannel.sendMessage(CommandResponses.UPDATE_PLAYER_ALREADY_TAKEN).queue();
-                return;
-            }
-
-            player.setNickname(nickname);
-            player.setAccountName(accountName);
-            player.setDiscordId(discordId);
-
-            playerService.savePlayer(player);
-
-            messageChannel.sendMessage("Successfully updated player with *id:* **" + id + "** :white_check_mark:").queue();
+        if(!playerValidator.validateIfNumeric(arguments.get(0))) {
+            messageChannel.sendMessage(CommandResponses.UPDATE_PLAYER_INVALID_ID).queue();
             return;
         }
-        messageChannel.sendMessage(CommandResponses.UPDATE_PLAYER_INVALID_ID).queue();
+
+        Long id = Long.valueOf(arguments.get(0));
+        String nickname = arguments.get(1);
+        String accountName = arguments.get(2);
+        String discordId = arguments.get(3);
+
+        if(discordId != null) {
+            discordId = discordId.replace("!", "");
+        }
+
+        Player player = playerService.findById(id);
+        if(player == null) {
+            messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
+            return;
+        }
+
+        if(!playerValidator.validateIfUniquePlayerUpdate(id, nickname, accountName, discordId)) {
+            messageChannel.sendMessage(CommandResponses.UPDATE_PLAYER_ALREADY_TAKEN).queue();
+            return;
+        }
+
+        player.setNickname(nickname);
+        player.setAccountName(accountName);
+        player.setDiscordId(discordId);
+
+        playerService.savePlayer(player);
+        messageChannel.sendMessage("Successfully updated player with *id:* **" + id + "** :white_check_mark:").queue();
     }
 }

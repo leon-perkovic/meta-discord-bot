@@ -12,13 +12,9 @@ import java.util.ArrayList;
 public abstract class AbstractCommand {
 
     private String name;
-
     private String description;
-
     private String help;
-
     private CommandAuthority authority;
-
 
     public AbstractCommand() {
         // default constructor

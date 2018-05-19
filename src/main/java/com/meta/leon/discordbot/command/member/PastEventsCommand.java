@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.member;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.EventValidator;
@@ -40,7 +40,6 @@ public class PastEventsCommand extends AbstractCommand {
 
     @Autowired
     CommandUtil commandUtil;
-
 
     public PastEventsCommand() {
         super("pastevents",
@@ -83,32 +82,33 @@ public class PastEventsCommand extends AbstractCommand {
             page = maxPage;
         }
 
-        if(!events.isEmpty()) {
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setTitle("__Past events - page " + page + "/" + maxPage + ":__");
-            embedBuilder.setColor(Color.decode("#D02F00"));
-
-            List<Event> eventsPage;
-            if(events.size() >= page * PAGE_SIZE) {
-                eventsPage = events.subList((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-            }else {
-                eventsPage = events.subList((page - 1) * PAGE_SIZE, events.size());
-            }
-
-            // reverse events list
-            Collections.reverse(eventsPage);
-
-            for(Event event : eventsPage) {
-                String fieldValue = commandUtil.createEventBody(event);
-                fieldValue += "\n------------------------------";
-
-                embedBuilder.addField(event.getName() + " (id: " + event.getId() + ")", fieldValue, false);
-            }
-
-            messageChannel.sendMessage(embedBuilder.build()).queue();
+        if(events.isEmpty()) {
+            messageChannel.sendMessage(CommandResponses.EVENTS_NONE_FOUND).queue();
             return;
         }
-        messageChannel.sendMessage(CommandResponses.EVENTS_NONE_FOUND).queue();
+
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTitle("__Past events - page " + page + "/" + maxPage + ":__");
+        embedBuilder.setColor(Color.decode("#D02F00"));
+
+        List<Event> eventsPage;
+        if(events.size() >= page * PAGE_SIZE) {
+            eventsPage = events.subList((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+        }else {
+            eventsPage = events.subList((page - 1) * PAGE_SIZE, events.size());
+        }
+
+        // reverse events list
+        Collections.reverse(eventsPage);
+
+        for(Event event : eventsPage) {
+            String fieldValue = commandUtil.createEventBody(event);
+            fieldValue += "\n------------------------------";
+
+            embedBuilder.addField(event.getName() + " (id: " + event.getId() + ")", fieldValue, false);
+        }
+        messageChannel.sendMessage(embedBuilder.build()).queue();
+
     }
 
 }

@@ -16,7 +16,6 @@ import java.util.TimeZone;
 public class JodaModuleConfigurator {
 
     public static JodaModule jacksonJodaModule() {
-
         JodaModule jodaModule = new JodaModule();
 
         DateTimeFormatterFactory formatterFactory = new DateTimeFormatterFactory();

@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.member;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.DpsReport;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.service.DpsReportService;
@@ -29,8 +29,6 @@ import java.util.List;
 @Component
 public class DpsReportCommand extends AbstractCommand {
 
-    private Long eventId;
-
     @Autowired
     DpsReportService dpsReportService;
 
@@ -42,7 +40,6 @@ public class DpsReportCommand extends AbstractCommand {
 
     @Autowired
     CommandUtil commandUtil;
-
 
     public DpsReportCommand() {
         super("dpsreport",
@@ -64,9 +61,10 @@ public class DpsReportCommand extends AbstractCommand {
         }
 
         Event event;
+        Long eventId;
         // check if event exists
         if(globalValidator.validateIfNumeric(arguments.get(0))) {
-            this.eventId = Long.valueOf(arguments.get(0));
+            eventId = Long.valueOf(arguments.get(0));
 
             event = eventService.findById(eventId);
             if(event == null) {
@@ -80,7 +78,7 @@ public class DpsReportCommand extends AbstractCommand {
                 messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
                 return;
             }
-            this.eventId = event.getId();
+            eventId = event.getId();
         }
 
         List<DpsReport> dpsReports = dpsReportService.findAllByEventId(eventId);
@@ -102,7 +100,6 @@ public class DpsReportCommand extends AbstractCommand {
             reports.append("\n")
                     .append(dpsReport.getLink());
         }
-
         embedBuilder.addField(event.getName() + " (id: " + event.getId() + ")", fieldValue + reports, false);
 
         messageChannel.sendMessage(embedBuilder.build()).queue();

@@ -13,7 +13,6 @@ public class EventDropoutKey implements Serializable {
 
     private Long playerId;
 
-
     // -- getters and setters -------------------------------------------------
 
     public Long getEventId() {

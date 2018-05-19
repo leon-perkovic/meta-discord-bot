@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.member;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.model.EventSignup;
 import com.meta.leon.discordbot.model.Player;
@@ -43,7 +43,6 @@ public class EventCommand extends AbstractCommand {
     @Autowired
     CommandUtil commandUtil;
 
-
     public EventCommand() {
         super("event",
                 "**!event <id or name or day> [HH:mm]**"
@@ -81,51 +80,50 @@ public class EventCommand extends AbstractCommand {
             event = eventService.findByName(arguments.get(0));
         }
 
-        if(event != null) {
-            String signup;
-
-            StringBuilder signups = new StringBuilder();
-            StringBuilder backups = new StringBuilder();
-
-            for(Player player : event.getPlayers()) {
-                EventSignup eventSignup = eventSignupService.findEventSignup(event.getId(), player.getId());
-                String discordRank = eventSignup.getDiscordRank();
-
-                signup = "\n**" + player.getNickname() + "** ("
-                        + discordRank + "), "
-                        + player.getDiscordId() + "\n"
-                        + player.rolesToString();
-
-                if(eventSignup.isBackup()) {
-                    backups.append(signup);
-                }else {
-                    signups.append(signup);
-                }
-            }
-
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setTitle(event.getName() + " (id: " + event.getId() + ")");
-            embedBuilder.setColor(Color.decode("#D02F00"));
-
-            String fieldValue = commandUtil.createEventBody(event);
-
-            embedBuilder.setDescription(fieldValue);
-            messageChannel.sendMessage(embedBuilder.build()).queue();
-
-            if(signups.length() > 0) {
-                embedBuilder.setTitle("Signups:");
-                embedBuilder.setDescription(signups.toString());
-                messageChannel.sendMessage(embedBuilder.build()).queue();
-            }
-            if(backups.length() > 0) {
-                embedBuilder.setTitle("Backups:");
-                embedBuilder.setDescription(backups.toString());
-                messageChannel.sendMessage(embedBuilder.build()).queue();
-            }
-
+        if(event == null) {
+            messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
             return;
         }
-        messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
+
+        String signup;
+        StringBuilder signups = new StringBuilder();
+        StringBuilder backups = new StringBuilder();
+
+        for(Player player : event.getPlayers()) {
+            EventSignup eventSignup = eventSignupService.findEventSignup(event.getId(), player.getId());
+            String discordRank = eventSignup.getDiscordRank();
+
+            signup = "\n**" + player.getNickname() + "** ("
+                    + discordRank + "), "
+                    + player.getDiscordId()
+                    + "\n- *Roles:* " + player.rolesToString();
+
+            if(eventSignup.isBackup()) {
+                backups.append(signup);
+            }else {
+                signups.append(signup);
+            }
+        }
+
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTitle(event.getName() + " (id: " + event.getId() + ")");
+        embedBuilder.setColor(Color.decode("#D02F00"));
+
+        String fieldValue = commandUtil.createEventBody(event);
+
+        embedBuilder.setDescription(fieldValue);
+        messageChannel.sendMessage(embedBuilder.build()).queue();
+
+        if(signups.length() > 0) {
+            embedBuilder.setTitle("Signups:");
+            embedBuilder.setDescription(signups.toString());
+            messageChannel.sendMessage(embedBuilder.build()).queue();
+        }
+        if(backups.length() > 0) {
+            embedBuilder.setTitle("Backups:");
+            embedBuilder.setDescription(backups.toString());
+            messageChannel.sendMessage(embedBuilder.build()).queue();
+        }
     }
 
 }

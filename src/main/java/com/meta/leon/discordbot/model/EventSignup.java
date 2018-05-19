@@ -36,7 +36,6 @@ public class EventSignup implements Serializable {
     @Column(name = "signup_time")
     private DateTime signupTime;
 
-
     public EventSignup() {
         // default constructor
     }
@@ -51,7 +50,6 @@ public class EventSignup implements Serializable {
 
     @Override
     public String toString() {
-
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
         stringBuilder.append("eventId", eventId);

@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Group;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.model.PlayerGroup;
@@ -81,7 +81,6 @@ public class AddPgCommand extends AbstractCommand {
 
         for(String playerReference : arguments) {
             Player player = commandUtil.findPlayerByAnyReference(playerReference);
-
             if(player == null) {
                 messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
                 return;
@@ -93,7 +92,6 @@ public class AddPgCommand extends AbstractCommand {
             PlayerGroup playerGroup = new PlayerGroup(playerId, groupId);
             playerGroupService.savePlayerGroup(playerGroup);
         }
-
         messageChannel.sendMessage("Successfully added players to group: **" + group.getName() + "** :white_check_mark:").queue();
     }
 

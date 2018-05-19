@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.EventValidator;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -33,7 +33,6 @@ public class RemoveEventCommand extends AbstractCommand {
 
     @Autowired
     CommandUtil commandUtil;
-
 
     public RemoveEventCommand() {
         super("removeevent",

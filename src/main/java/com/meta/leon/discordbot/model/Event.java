@@ -57,7 +57,6 @@ public class Event implements Serializable {
     @Fetch(FetchMode.JOIN)
     private Set<Player> players = new HashSet<>();
 
-
     public Event() {
         // default constructor
     }
@@ -74,7 +73,6 @@ public class Event implements Serializable {
 
     @Override
     public String toString() {
-
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
         stringBuilder.append("id", id);

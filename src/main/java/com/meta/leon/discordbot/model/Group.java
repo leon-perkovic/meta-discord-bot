@@ -36,7 +36,6 @@ public class Group implements Serializable {
     @Fetch(FetchMode.JOIN)
     private Set<Player> players = new HashSet<>();
 
-
     public Group() {
         // default constructor
     }
@@ -47,7 +46,6 @@ public class Group implements Serializable {
 
     @Override
     public String toString() {
-
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
         stringBuilder.append("id", id);

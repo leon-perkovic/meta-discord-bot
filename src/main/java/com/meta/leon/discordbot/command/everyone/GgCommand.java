@@ -22,7 +22,6 @@ public class GgCommand extends AbstractCommand {
     @Autowired
     GlobalValidator globalValidator;
 
-
     public GgCommand() {
         super("gg",
                 "**!gg**"
@@ -40,7 +39,6 @@ public class GgCommand extends AbstractCommand {
             messageChannel.sendMessage(CommandResponses.GG_INVALID_ARGUMENTS).queue();
             return;
         }
-
         messageChannel.sendMessage("***Cuddles you on the floor***  **<(^_^ <)**").queue();
     }
 

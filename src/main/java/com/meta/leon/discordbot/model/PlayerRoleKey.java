@@ -13,7 +13,6 @@ public class PlayerRoleKey implements Serializable {
 
     private Long roleId;
 
-
     // -- getters and setters -------------------------------------------------
 
     public Long getPlayerId() {

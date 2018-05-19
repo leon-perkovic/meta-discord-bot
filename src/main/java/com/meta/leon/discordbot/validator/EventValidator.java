@@ -15,12 +15,8 @@ public class EventValidator extends GlobalValidator {
     @Autowired
     EventService eventService;
 
-
     public boolean validateIfUniqueEvent(String name) {
-        if(eventService.findByName(name) == null) {
-            return true;
-        }
-        return false;
+        return eventService.findByName(name) == null;
     }
 
 }

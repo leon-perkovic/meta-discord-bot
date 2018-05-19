@@ -24,16 +24,11 @@ import java.util.ArrayList;
 @Component
 public class AddPlayerCommand extends AbstractCommand {
 
-    private String nickname;
-    private String accountName;
-    private String discordId;
-
     @Autowired
     PlayerService playerService;
 
     @Autowired
     PlayerValidator playerValidator;
-
 
     public AddPlayerCommand() {
         super("addplayer",
@@ -65,9 +60,9 @@ public class AddPlayerCommand extends AbstractCommand {
             }
         }
 
-        this.nickname = arguments.get(0);
-        this.accountName = arguments.get(1);
-        this.discordId = arguments.get(2);
+        String nickname = arguments.get(0);
+        String accountName = arguments.get(1);
+        String discordId = arguments.get(2);
         if(discordId != null) {
             discordId = discordId.replace("!", "");
         }

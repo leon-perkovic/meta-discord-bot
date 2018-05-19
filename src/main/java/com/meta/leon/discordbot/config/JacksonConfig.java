@@ -12,7 +12,6 @@ public class JacksonConfig {
 
     @Bean
     public JodaModule jacksonJodaModule() {
-
         return JodaModuleConfigurator.jacksonJodaModule();
     }
 

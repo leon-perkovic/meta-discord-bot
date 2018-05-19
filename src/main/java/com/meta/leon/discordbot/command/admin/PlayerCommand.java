@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
 import com.meta.leon.discordbot.validator.PlayerValidator;
@@ -34,7 +34,6 @@ public class PlayerCommand extends AbstractCommand {
     @Autowired
     CommandUtil commandUtil;
 
-
     public PlayerCommand() {
         super("player",
                 "**!player <id or nickname or @username>**"
@@ -60,9 +59,9 @@ public class PlayerCommand extends AbstractCommand {
             embedBuilder.setDescription("**" + player.getNickname()
                     + "**, " + player.getAccountName()
                     + ", " + "*id:* " + player.getId()
-                    + ", " + player.getDiscordId() + "\n"
-                    + player.rolesToString() + "\n"
-                    + player.groupsToString());
+                    + ", " + player.getDiscordId()
+                    + "\n- *Roles:* " + player.rolesToString()
+                    + "\n- *Groups:* " + player.groupsToString());
             embedBuilder.setColor(Color.decode("#D02F00"));
 
             messageChannel.sendMessage(embedBuilder.build()).queue();

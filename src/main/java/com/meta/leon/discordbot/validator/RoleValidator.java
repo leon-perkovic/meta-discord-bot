@@ -16,14 +16,8 @@ public class RoleValidator extends GlobalValidator {
     @Autowired
     RoleService roleService;
 
-
     public boolean validateIfUniqueRole(String roleName, String shortName) {
-
-        if(roleService.findByRoleName(roleName) == null &&
-                roleService.findByShortName(shortName) == null) {
-            return true;
-        }
-        return false;
+        return roleService.findByRoleName(roleName) == null && roleService.findByShortName(shortName) == null;
     }
 
     public boolean validateIfUniqueRoleUpdate(Long id, String roleName, String shortName) {

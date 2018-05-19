@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.model.PlayerRole;
 import com.meta.leon.discordbot.model.Role;
@@ -43,7 +43,6 @@ public class AddPrCommand extends AbstractCommand {
 
     @Autowired
     CommandUtil commandUtil;
-
 
     public AddPrCommand() {
         super("addpr",

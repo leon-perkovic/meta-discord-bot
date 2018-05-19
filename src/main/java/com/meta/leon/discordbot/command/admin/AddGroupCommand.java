@@ -23,8 +23,6 @@ import java.util.ArrayList;
 @Component
 public class AddGroupCommand extends AbstractCommand {
 
-    private String name;
-
     @Autowired
     GroupService groupService;
 
@@ -49,7 +47,7 @@ public class AddGroupCommand extends AbstractCommand {
             messageChannel.sendMessage(CommandResponses.ADD_GROUP_INVALID_ARGUMENTS).queue();
             return;
         }
-        this.name = arguments.get(0);
+        String name = arguments.get(0);
 
         if(!groupValidator.validateIfUniqueGroup(name)) {
             messageChannel.sendMessage(CommandResponses.GROUP_ALREADY_EXISTS).queue();

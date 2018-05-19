@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.command.member.DropoutCommand;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.model.EventDropout;
@@ -33,9 +33,6 @@ import java.util.ArrayList;
  */
 @Component
 public class DropoutPlayerCommand extends AbstractCommand {
-
-    private Long eventId;
-    private Long playerId;
 
     @Autowired
     EventSignupService eventSignupService;
@@ -89,12 +86,13 @@ public class DropoutPlayerCommand extends AbstractCommand {
             messageChannel.sendMessage(CommandResponses.DROPOUT_PLAYER_INVALID_PLAYER).queue();
             return;
         }
-        this.playerId = player.getId();
+        Long playerId = player.getId();
 
         // get event
         Event event;
+        Long eventId;
         if(eventSignupValidator.validateIfNumeric(arguments.get(1))) {
-            this.eventId = Long.valueOf(arguments.get(1));
+            eventId = Long.valueOf(arguments.get(1));
             event = eventService.findById(eventId);
 
         }else if(eventSignupValidator.validateIfDay(arguments.get(1)) && arguments.size() == 3) {
@@ -109,7 +107,7 @@ public class DropoutPlayerCommand extends AbstractCommand {
             messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
             return;
         }
-        this.eventId = event.getId();
+        eventId = event.getId();
 
         // check if player is already signed up for this event
         if(eventSignupValidator.validateIfUniqueSignup(eventId, playerId)) {

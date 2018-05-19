@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.model.Group;
 import com.meta.leon.discordbot.model.Player;
@@ -30,8 +30,6 @@ import java.util.ArrayList;
 @Component
 public class DropoutGroupCommand extends AbstractCommand{
 
-    private Long eventId;
-
     @Autowired
     EventSignupService eventSignupService;
 
@@ -46,7 +44,6 @@ public class DropoutGroupCommand extends AbstractCommand{
 
     @Autowired
     CommandUtil commandUtil;
-
 
     public DropoutGroupCommand(){
         super("dropoutgroup",
@@ -88,8 +85,9 @@ public class DropoutGroupCommand extends AbstractCommand{
 
         // get event
         Event event;
+        Long eventId;
         if(eventSignupValidator.validateIfNumeric(arguments.get(1))){
-            this.eventId = Long.valueOf(arguments.get(1));
+            eventId = Long.valueOf(arguments.get(1));
             event = eventService.findById(eventId);
 
         }else if(eventSignupValidator.validateIfDay(arguments.get(1)) && arguments.size() == 3){
@@ -104,12 +102,11 @@ public class DropoutGroupCommand extends AbstractCommand{
             messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
             return;
         }
-        this.eventId = event.getId();
+        eventId = event.getId();
 
         for(Player player : group.getPlayers()){
             eventSignupService.removeEventSignup(eventId, player.getId());
         }
-
         messageChannel.sendMessage(CommandResponses.DROPOUT_GROUP_SUCCESS).queue();
     }
 
