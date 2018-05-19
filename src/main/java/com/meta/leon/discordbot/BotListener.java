@@ -79,8 +79,8 @@ public class BotListener extends ListenerAdapter {
                     command.execute(event, arguments);
                     LOG.info(">>> Command !" + command.getName() + " executed successfully");
                 }catch(Exception ex) {
-                    ex.printStackTrace();
-                    LOG.info(">>> Exception " + ex.getClass() + "in command: !" + command.getName());
+                    LOG.error(">>> Exception: " + ex.getClass() + " in command: !" + command.getName());
+                    LOG.error(ex.getMessage(), ex);
                     messageChannel.sendMessage("Oops, something went wrong :cry:").queue();
                 }
             }else {

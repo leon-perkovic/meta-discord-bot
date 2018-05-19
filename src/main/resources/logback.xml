@@ -24,11 +24,6 @@
         </encoder>
     </appender>
 
-    <logger name="com.meta.leon.discordbot" level="INFO" additivity="false">
-        <appender-ref ref="FILE-AUDIT"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
     <root level="INFO">
         <appender-ref ref="FILE-AUDIT"/>
         <appender-ref ref="STDOUT"/>
