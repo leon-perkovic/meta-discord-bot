@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.DpsReport;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.service.DpsReportService;
@@ -26,8 +26,6 @@ import java.util.ArrayList;
 @Component
 public class AddDpsReportCommand extends AbstractCommand {
 
-    private Long eventId;
-
     @Autowired
     DpsReportService dpsReportService;
 
@@ -39,7 +37,6 @@ public class AddDpsReportCommand extends AbstractCommand {
 
     @Autowired
     CommandUtil commandUtil;
-
 
     public AddDpsReportCommand() {
         super("adddpsreport",
@@ -61,10 +58,10 @@ public class AddDpsReportCommand extends AbstractCommand {
         }
 
         Event event;
+        Long eventId;
         // check if event exists
         if(globalValidator.validateIfNumeric(arguments.get(0))) {
-            this.eventId = Long.valueOf(arguments.get(0));
-
+            eventId = Long.valueOf(arguments.get(0));
             event = eventService.findById(eventId);
             if(event == null) {
                 messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
@@ -76,21 +73,18 @@ public class AddDpsReportCommand extends AbstractCommand {
                 messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
                 return;
             }
-            this.eventId = event.getId();
+            eventId = event.getId();
         }
 
         // format arguments
-        String dpsArguments = "";
-
+        StringBuilder dpsArguments = new StringBuilder();
         for(int i = 1; i < arguments.size(); i++) {
-            dpsArguments += arguments.get(i) + " ";
+            dpsArguments.append(arguments.get(i)).append(" ");
         }
-        dpsArguments = dpsArguments.replaceAll("\n", " ");
-        System.out.println(dpsArguments);
+        String formattedArgs = dpsArguments.toString().replaceAll("\n", " ");
 
         // extract dps report links
-        ArrayList<String> dpsReports = commandUtil.extractDpsReports(dpsArguments);
-
+        ArrayList<String> dpsReports = commandUtil.extractDpsReports(formattedArgs);
         if(dpsReports.isEmpty()) {
             messageChannel.sendMessage(CommandResponses.ADD_DPS_REPORT_INVALID_ARGUMENTS).queue();
             return;
@@ -101,7 +95,6 @@ public class AddDpsReportCommand extends AbstractCommand {
 
             dpsReportService.saveDpsReport(dpsReport);
         }
-
         messageChannel.sendMessage(CommandResponses.ADD_DPS_REPORT_SUCCESS).queue();
     }
 

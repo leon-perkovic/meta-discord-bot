@@ -26,7 +26,6 @@ public class DpsReport implements Serializable {
     @JoinColumn(name = "event_id")
     private Long eventId;
 
-
     public DpsReport() {
         // default constructor
     }
@@ -38,7 +37,6 @@ public class DpsReport implements Serializable {
 
     @Override
     public String toString() {
-
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
         stringBuilder.append("id", id);

@@ -26,7 +26,6 @@ public class Role implements Serializable {
     @Column(name = "short_name")
     private String shortName;
 
-
     public Role() {
         // default constructor
     }
@@ -38,7 +37,6 @@ public class Role implements Serializable {
 
     @Override
     public String toString() {
-
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
         stringBuilder.append("id", id);

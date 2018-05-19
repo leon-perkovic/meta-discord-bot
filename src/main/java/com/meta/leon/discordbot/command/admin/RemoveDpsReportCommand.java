@@ -24,8 +24,6 @@ import java.util.ArrayList;
 @Component
 public class RemoveDpsReportCommand extends AbstractCommand {
 
-    private Long eventId;
-
     @Autowired
     DpsReportService dpsReportService;
 
@@ -34,7 +32,6 @@ public class RemoveDpsReportCommand extends AbstractCommand {
 
     @Autowired
     GlobalValidator globalValidator;
-
 
     public RemoveDpsReportCommand() {
         super("removedpsreport",
@@ -56,27 +53,25 @@ public class RemoveDpsReportCommand extends AbstractCommand {
         }
 
         Event event;
+        Long eventId;
         // check if event exists
         if(globalValidator.validateIfNumeric(arguments.get(0))) {
-            this.eventId = Long.valueOf(arguments.get(0));
-
+            eventId = Long.valueOf(arguments.get(0));
             event = eventService.findById(eventId);
             if(event == null) {
                 messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
                 return;
             }
-
         }else {
             event = eventService.findByName(arguments.get(0));
             if(event == null) {
                 messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
                 return;
             }
-            this.eventId = event.getId();
+            eventId = event.getId();
         }
 
         dpsReportService.removeAllByEventId(eventId);
-
         messageChannel.sendMessage(CommandResponses.REMOVE_DPS_REPORT_SUCCESS).queue();
     }
 

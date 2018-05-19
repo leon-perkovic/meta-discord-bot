@@ -4,7 +4,7 @@ import com.meta.leon.discordbot.DiscordBotApp;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.GlobalValidator;
@@ -31,8 +31,6 @@ import java.util.ArrayList;
 @Component
 public class AnnounceCommand extends AbstractCommand {
 
-    private Long eventId;
-
     @Autowired
     EventService eventService;
 
@@ -41,7 +39,6 @@ public class AnnounceCommand extends AbstractCommand {
 
     @Autowired
     CommandUtil commandUtil;
-
 
     public AnnounceCommand() {
         super("announce",
@@ -72,7 +69,7 @@ public class AnnounceCommand extends AbstractCommand {
         Event event;
         // check if event exists
         if(globalValidator.validateIfNumeric(arguments.get(0))) {
-            this.eventId = Long.valueOf(arguments.get(0));
+            Long eventId = Long.valueOf(arguments.get(0));
 
             event = eventService.findById(eventId);
             if(event == null) {
@@ -87,15 +84,12 @@ public class AnnounceCommand extends AbstractCommand {
                 messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
                 return;
             }
-            this.eventId = event.getId();
-
         }else {
             event = eventService.findByName(arguments.get(0));
             if(event == null) {
                 messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
                 return;
             }
-            this.eventId = event.getId();
         }
 
         // get roles for Member and Trial

@@ -25,7 +25,6 @@ public class RollCommand extends AbstractCommand {
     @Autowired
     GlobalValidator globalValidator;
 
-
     public RollCommand() {
         super("roll",
                 "**!roll**"
@@ -46,7 +45,6 @@ public class RollCommand extends AbstractCommand {
         }
 
         Random rng = new Random();
-
         messageChannel.sendMessage(user.getName() + " rolls: **" + (rng.nextInt(100) + 1) + "**").queue();
     }
 

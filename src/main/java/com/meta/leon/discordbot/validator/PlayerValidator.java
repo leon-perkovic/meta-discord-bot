@@ -16,13 +16,10 @@ public class PlayerValidator extends GlobalValidator {
     @Autowired
     PlayerService playerService;
 
-
     public boolean validateIfUniquePlayer(String nickname, String accountName, String discordId) {
-
         if(playerService.findByNickname(nickname) == null && playerService.findByAccountName(accountName) == null) {
             if(discordId == null) {
                 return true;
-
             }else if(playerService.findByDiscordId(discordId) == null) {
                 return true;
             }

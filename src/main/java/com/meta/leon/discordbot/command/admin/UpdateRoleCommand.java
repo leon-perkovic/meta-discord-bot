@@ -23,16 +23,11 @@ import java.util.ArrayList;
 @Component
 public class UpdateRoleCommand extends AbstractCommand {
 
-    private Long id;
-    private String roleName;
-    private String shortName;
-
     @Autowired
     RoleService roleService;
 
     @Autowired
     RoleValidator roleValidator;
-
 
     public UpdateRoleCommand() {
         super("updaterole",
@@ -52,30 +47,30 @@ public class UpdateRoleCommand extends AbstractCommand {
             messageChannel.sendMessage(CommandResponses.UPDATE_ROLE_INVALID_ARGUMENTS).queue();
             return;
         }
-        if(roleValidator.validateIfNumeric(arguments.get(0))) {
-            this.id = Long.valueOf(arguments.get(0));
-            this.roleName = arguments.get(1);
-            this.shortName = arguments.get(2);
-
-            Role role = roleService.findById(id);
-            if(role == null) {
-                messageChannel.sendMessage(CommandResponses.ROLE_NOT_FOUND).queue();
-                return;
-            }
-
-            if(!roleValidator.validateIfUniqueRoleUpdate(id, roleName, shortName)) {
-                messageChannel.sendMessage(CommandResponses.UPDATE_ROLE_ALREADY_TAKEN).queue();
-                return;
-            }
-
-            role.setRoleName(roleName);
-            role.setShortName(shortName);
-
-            roleService.saveRole(role);
-
-            messageChannel.sendMessage("Successfully updated role with *id:* **" + id + "** :white_check_mark:").queue();
+        if(!roleValidator.validateIfNumeric(arguments.get(0))) {
+            messageChannel.sendMessage(CommandResponses.UPDATE_ROLE_INVALID_ID).queue();
             return;
         }
-        messageChannel.sendMessage(CommandResponses.UPDATE_ROLE_INVALID_ID).queue();
+
+        Long id = Long.valueOf(arguments.get(0));
+        String roleName = arguments.get(1);
+        String shortName = arguments.get(2);
+
+        Role role = roleService.findById(id);
+        if(role == null) {
+            messageChannel.sendMessage(CommandResponses.ROLE_NOT_FOUND).queue();
+            return;
+        }
+
+        if(!roleValidator.validateIfUniqueRoleUpdate(id, roleName, shortName)) {
+            messageChannel.sendMessage(CommandResponses.UPDATE_ROLE_ALREADY_TAKEN).queue();
+            return;
+        }
+
+        role.setRoleName(roleName);
+        role.setShortName(shortName);
+
+        roleService.saveRole(role);
+        messageChannel.sendMessage("Successfully updated role with *id:* **" + id + "** :white_check_mark:").queue();
     }
 }

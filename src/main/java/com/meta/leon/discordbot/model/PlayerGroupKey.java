@@ -13,7 +13,6 @@ public class PlayerGroupKey implements Serializable {
 
     private Long groupId;
 
-
     // -- getters and setters -------------------------------------------------
 
     public Long getPlayerId() {

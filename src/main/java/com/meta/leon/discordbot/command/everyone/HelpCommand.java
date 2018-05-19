@@ -62,7 +62,6 @@ public class HelpCommand extends AbstractCommand {
                 if(authority.getLevel() >= command.getAuthority().getLevel()) {
                     messageChannel.sendMessage(command.getDescription()).queue();
                     return;
-
                 }else {
                     messageChannel.sendMessage(CommandResponses.NOT_AUTHORIZED).queue();
                     return;
@@ -78,7 +77,6 @@ public class HelpCommand extends AbstractCommand {
         embedBuilder.setColor(Color.decode("#D02F00"));
 
         StringBuilder commandDesc = new StringBuilder();
-
         for(String key : commands.keySet()) {
             if(authority.getLevel() >= commands.get(key).getAuthority().getLevel()) {
                 commandDesc.append(commands.get(key).getDescription()).append("\n");

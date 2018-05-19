@@ -31,7 +31,6 @@ public class GroupsCommand extends AbstractCommand {
     @Autowired
     GroupValidator groupValidator;
 
-
     public GroupsCommand() {
         super("groups",
                 "**!groups**"

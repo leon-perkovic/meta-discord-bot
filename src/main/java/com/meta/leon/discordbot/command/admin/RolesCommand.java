@@ -31,7 +31,6 @@ public class RolesCommand extends AbstractCommand {
     @Autowired
     RoleValidator roleValidator;
 
-
     public RolesCommand() {
         super("roles",
                 "**!roles**"

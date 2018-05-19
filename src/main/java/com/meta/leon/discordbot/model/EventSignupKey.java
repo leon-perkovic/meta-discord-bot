@@ -13,7 +13,6 @@ public class EventSignupKey implements Serializable {
 
     private Long playerId;
 
-
     // -- getters and setters -------------------------------------------------
 
     public Long getEventId() {

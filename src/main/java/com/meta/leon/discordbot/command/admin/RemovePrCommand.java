@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.model.Role;
 import com.meta.leon.discordbot.service.PlayerRoleService;
@@ -43,7 +43,6 @@ public class RemovePrCommand extends AbstractCommand {
     @Autowired
     CommandUtil commandUtil;
 
-
     public RemovePrCommand() {
         super("removepr",
                 "**!removePR <id or nickname or @username> <role_name or short_name ...>**"
@@ -82,7 +81,6 @@ public class RemovePrCommand extends AbstractCommand {
             if(role == null) {
                 role = roleService.findByShortName(roleName);
             }
-
             if(role == null) {
                 messageChannel.sendMessage(CommandResponses.ROLE_NOT_FOUND).queue();
                 return;

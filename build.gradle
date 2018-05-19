@@ -63,7 +63,6 @@ dependencies {
     compile 'net.dv8tion:JDA:3.5.1_348'
 
     compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
-    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'org.jadira.usertype:usertype.core:5.0.0.GA'
 

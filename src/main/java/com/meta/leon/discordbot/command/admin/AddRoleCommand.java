@@ -23,15 +23,11 @@ import java.util.ArrayList;
 @Component
 public class AddRoleCommand extends AbstractCommand {
 
-    private String roleName;
-    private String shortName;
-
     @Autowired
     RoleService roleService;
 
     @Autowired
     RoleValidator roleValidator;
-
 
     public AddRoleCommand() {
         super("addrole",
@@ -52,8 +48,8 @@ public class AddRoleCommand extends AbstractCommand {
             return;
         }
 
-        this.roleName = arguments.get(0);
-        this.shortName = arguments.get(1);
+        String roleName = arguments.get(0);
+        String shortName = arguments.get(1);
 
         if(!roleValidator.validateIfUniqueRole(roleName, shortName)) {
             messageChannel.sendMessage(CommandResponses.ROLE_ALREADY_EXISTS).queue();

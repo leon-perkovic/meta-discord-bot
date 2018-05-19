@@ -4,7 +4,7 @@ import com.meta.leon.discordbot.DiscordBotApp;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.model.EventDropout;
 import com.meta.leon.discordbot.model.EventSignup;
@@ -37,9 +37,6 @@ import java.util.List;
  */
 @Component
 public class DropoutCommand extends AbstractCommand {
-
-    private Long eventId;
-    private Long playerId;
 
     @Autowired
     EventSignupService eventSignupService;
@@ -93,7 +90,7 @@ public class DropoutCommand extends AbstractCommand {
             messageChannel.sendMessage(CommandResponses.DROPOUT_INVALID_PLAYER).queue();
             return;
         }
-        this.playerId = player.getId();
+        Long playerId = player.getId();
 
         // get event
         String eventName = commandUtil.createEventName(arguments.get(0), arguments.get(1));
@@ -102,7 +99,7 @@ public class DropoutCommand extends AbstractCommand {
             messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
             return;
         }
-        this.eventId = event.getId();
+        Long eventId = event.getId();
 
         // check if player is already signed up for this event
         if(eventSignupValidator.validateIfUniqueSignup(eventId, playerId)) {
@@ -124,7 +121,6 @@ public class DropoutCommand extends AbstractCommand {
         if(!eventSignup.isBackup()) {
             // find backup candidates
             EventSignup backupEventSignup = findBackupCandidate(event);
-
             if(backupEventSignup != null) {
                 // if there's a candidate, promote and notify them
                 promoteAndNotifyBackup(event, backupEventSignup);
@@ -137,7 +133,6 @@ public class DropoutCommand extends AbstractCommand {
                 day = day.substring(0, 1).toUpperCase() + day.substring(1);
 
                 DateTime eventTime = event.getEventTime();
-
                 DateTimeZone timeZone = event.getEventTime().getZone();
                 String zone = timeZone.getShortName(event.getEventTime().getMillis());
 
@@ -155,13 +150,16 @@ public class DropoutCommand extends AbstractCommand {
                         break;
                     }
                 }
-                MessageChannel announcementChannel = guild.getTextChannelsByName(DiscordBotApp.getAnnouncementChannel(), false).get(0);
+                MessageChannel announcementChannel =
+                        guild.getTextChannelsByName(DiscordBotApp.getAnnouncementChannel(), false).get(0);
                 announcementChannel.sendMessage(announcement).queue();
             }
         }
     }
 
     public EventSignup findBackupCandidate(Event event) {
+        Long eventId = event.getId();
+
         EventSignup backupEventSignup = null;
         EventSignup backupMemberSignup = eventSignupService.findFirstByRankAndBackup(eventId, DiscordBotApp.getMemberRole(), true);
         EventSignup backupTrialSignup = eventSignupService.findFirstByRankAndBackup(eventId, DiscordBotApp.getTrialRole(), true);
@@ -186,6 +184,7 @@ public class DropoutCommand extends AbstractCommand {
 
     public void promoteAndNotifyBackup(Event event, EventSignup backupEventSignup) {
         Player backupPlayer = playerService.findById(backupEventSignup.getPlayerId());
+        Long eventId = event.getId();
 
         if(backupPlayer.getDiscordId() != null) {
             eventSignupService.updateBackup(eventId, backupPlayer.getId(), false);

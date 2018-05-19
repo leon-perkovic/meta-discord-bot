@@ -1,4 +1,4 @@
-package com.meta.leon.discordbot.command;
+package com.meta.leon.discordbot.util;
 
 import com.meta.leon.discordbot.DiscordBotApp;
 import com.meta.leon.discordbot.model.Event;
@@ -30,7 +30,7 @@ public class CommandUtil {
 
     private HashMap<String, Integer> days;
 
-    public static final String DPS_REPORT_PATTERN = "(https?)://dps.report[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+    private static final String DPS_REPORT_PATTERN = "(https?)://dps.report[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 
     @Autowired
     PlayerService playerService;
@@ -40,7 +40,6 @@ public class CommandUtil {
 
     @Autowired
     GlobalValidator globalValidator;
-
 
     public CommandUtil() {
         days = new HashMap<>();
@@ -55,7 +54,6 @@ public class CommandUtil {
     }
 
     public Player findPlayerByAnyReference(String argument) {
-
         Player player;
 
         // determine which reference was used for a player and get their ID
@@ -74,7 +72,6 @@ public class CommandUtil {
     }
 
     public DateTime getEventDateTime(String day, String time) {
-
         DateTime now = new DateTime();
         int today = now.getDayOfWeek();
         int nowHours = now.getHourOfDay();
@@ -110,13 +107,10 @@ public class CommandUtil {
             eventYear++;
         }
 
-        DateTime eventTime = new DateTime(eventYear, eventMonth, eventDay, hours, minutes, 0, 0);
-
-        return eventTime;
+        return new DateTime(eventYear, eventMonth, eventDay, hours, minutes, 0, 0);
     }
 
     public String createEventName(String day, String time) {
-
         DateTime eventTime = getEventDateTime(day, time);
 
         String eventName = day.toLowerCase()

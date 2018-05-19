@@ -33,8 +33,6 @@ import java.util.List;
 @Component
 public class MeCommand extends AbstractCommand {
 
-    private Long playerId;
-
     @Autowired
     PlayerService playerService;
 
@@ -46,7 +44,6 @@ public class MeCommand extends AbstractCommand {
 
     @Autowired
     EventSignupValidator eventSignupValidator;
-
 
     public MeCommand() {
         super("me",
@@ -74,48 +71,54 @@ public class MeCommand extends AbstractCommand {
             messageChannel.sendMessage(CommandResponses.ME_INVALID_PLAYER).queue();
             return;
         }
-        this.playerId = player.getId();
+        Long playerId = player.getId();
+
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTitle(player.getNickname());
+        embedBuilder.setColor(Color.decode("#D02F00"));
+        embedBuilder.setDescription(
+                "\n*Account name:* **" + player.getAccountName() + "**"
+                        + "\n*Discord:* " + player.getDiscordId()
+                        + "\n*Roles:* " + player.rolesToString()
+                        + "\n*Groups:* " + player.groupsToString()
+        );
 
         List<Event> events = eventService.findUpcoming(new DateTime());
-        if(!events.isEmpty()) {
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setTitle(player.getNickname());
-            embedBuilder.setDescription(
-                    "\n*Account name:* **" + player.getAccountName() + "**"
-                            + "\n*Discord:* " + player.getDiscordId()
-                            + "\n" + player.rolesToString()
-                            + "\n" + player.groupsToString()
-            );
-            embedBuilder.setColor(Color.decode("#D02F00"));
-
-            StringBuilder signups = new StringBuilder();
-            for(Event event : events) {
-                EventSignup eventSignup = eventSignupService.findEventSignup(event.getId(), playerId);
-                if(eventSignup != null) {
-                    String day = event.getName().split("-")[0];
-                    day = day.substring(0, 1).toUpperCase() + day.substring(1);
-
-                    DateTime eventTime = event.getEventTime();
-                    DateTimeZone timeZone = eventTime.getZone();
-                    String zone = timeZone.getShortName(eventTime.getMillis());
-
-                    signups.append("**")
-                            .append(day)
-                            .append("**");
-                    if(eventSignup.isBackup()) {
-                        signups.append(" (Backup)");
-                    }
-                    signups.append(" - ")
-                            .append(event.getDescription())
-                            .append("\n*")
-                            .append(eventTime.toString("dd/MM/yyyy - HH:mm"))
-                            .append(" ").append(zone).append("*\n\n");
-                }
-            }
-            embedBuilder.addField("Signups:", signups.toString(), false);
-
+        if(events.isEmpty()) {
             messageChannel.sendMessage(embedBuilder.build()).queue();
+            return;
         }
+
+        StringBuilder signups = new StringBuilder();
+        for(Event event : events) {
+            EventSignup eventSignup = eventSignupService.findEventSignup(event.getId(), playerId);
+            if(eventSignup != null) {
+                String day = event.getName().split("-")[0];
+                day = day.substring(0, 1).toUpperCase() + day.substring(1);
+
+                DateTime eventTime = event.getEventTime();
+                DateTimeZone timeZone = eventTime.getZone();
+                String zone = timeZone.getShortName(eventTime.getMillis());
+
+                signups.append("**")
+                        .append(day)
+                        .append("**");
+                if(eventSignup.isBackup()) {
+                    signups.append(" (Backup)");
+                }
+                signups.append(" - ")
+                        .append(event.getDescription())
+                        .append("\n*")
+                        .append(eventTime.toString("dd/MM/yyyy - HH:mm"))
+                        .append(" ").append(zone).append("*\n\n");
+            }
+        }
+        if(signups.length() == 0) {
+            signups.append("...");
+        }
+        embedBuilder.addField("Signups:", signups.toString(), false);
+
+        messageChannel.sendMessage(embedBuilder.build()).queue();
     }
 
 }

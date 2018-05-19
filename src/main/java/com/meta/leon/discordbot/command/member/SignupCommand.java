@@ -5,7 +5,7 @@ import com.meta.leon.discordbot.DiscordBotApp;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.model.EventSignup;
 import com.meta.leon.discordbot.model.Player;
@@ -34,9 +34,6 @@ import java.util.List;
 @Component
 public class SignupCommand extends AbstractCommand {
 
-    private Long eventId;
-    private Long playerId;
-
     @Autowired
     EventSignupService eventSignupService;
 
@@ -51,7 +48,6 @@ public class SignupCommand extends AbstractCommand {
 
     @Autowired
     CommandUtil commandUtil;
-
 
     public SignupCommand() {
         super("signup",
@@ -87,7 +83,7 @@ public class SignupCommand extends AbstractCommand {
             messageChannel.sendMessage(CommandResponses.SIGNUP_INVALID_PLAYER).queue();
             return;
         }
-        this.playerId = player.getId();
+        Long playerId = player.getId();
 
         // get event
         String eventName = commandUtil.createEventName(arguments.get(0), arguments.get(1));
@@ -96,7 +92,7 @@ public class SignupCommand extends AbstractCommand {
             messageChannel.sendMessage(CommandResponses.EVENT_NOT_FOUND).queue();
             return;
         }
-        this.eventId = event.getId();
+        Long eventId = event.getId();
 
         // check if player is already signed up for this event
         if(!eventSignupValidator.validateIfUniqueSignup(eventId, playerId)) {
@@ -109,7 +105,6 @@ public class SignupCommand extends AbstractCommand {
         String userRole = "";
         if(roleNames.contains(DiscordBotApp.getMemberRole())) {
             userRole = DiscordBotApp.getMemberRole();
-
         }else if(roleNames.contains(DiscordBotApp.getTrialRole())) {
             userRole = DiscordBotApp.getTrialRole();
         }
@@ -121,10 +116,8 @@ public class SignupCommand extends AbstractCommand {
 
         if(totalSignups >= event.getPlayerLimit()) {
             isBackup = true;
-
         }else if(DiscordBotApp.getMemberRole().equals(userRole) && totalSignupsForRank >= event.getMemberLimit()) {
             isBackup = true;
-
         }else if(DiscordBotApp.getTrialRole().equals(userRole) && totalSignupsForRank >= event.getTrialLimit()) {
             isBackup = true;
         }
@@ -136,7 +129,6 @@ public class SignupCommand extends AbstractCommand {
             messageChannel.sendMessage(CommandResponses.SIGNUP_FULL).queue();
             return;
         }
-
         messageChannel.sendMessage(CommandResponses.SIGNUP_SUCCESS).queue();
     }
 

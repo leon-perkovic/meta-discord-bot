@@ -28,7 +28,6 @@ public class RemoveRoleCommand extends AbstractCommand {
     @Autowired
     RoleValidator roleValidator;
 
-
     public RemoveRoleCommand() {
         super("removerole",
                 "**!removeRole <id or role_name or short_name>**"
@@ -52,10 +51,8 @@ public class RemoveRoleCommand extends AbstractCommand {
         if(roleValidator.validateIfNumeric(arguments.get(0))) {
             Long id = Long.valueOf(arguments.get(0));
             numOfRemoved = roleService.removeById(id);
-
         }else {
             numOfRemoved = roleService.removeByRoleName(arguments.get(0));
-
             if(numOfRemoved == 0) {
                 numOfRemoved = roleService.removeByShortName(arguments.get(0));
             }

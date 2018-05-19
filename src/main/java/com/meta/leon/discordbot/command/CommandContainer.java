@@ -99,10 +99,8 @@ public class CommandContainer {
     @Autowired
     private DropoutGroupCommand dropoutGroupCommand;
 
-
     // Used to map all autowired commands to their key values
     public void mapCommands() {
-
         commands = new LinkedHashMap<>();
 
         commands.put("me", meCommand);

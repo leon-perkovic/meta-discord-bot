@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Group;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.GroupService;
@@ -91,7 +91,6 @@ public class RemovePgCommand extends AbstractCommand {
         for(Long playerId : playerIds) {
             playerGroupService.removePlayerGroup(playerId, groupId);
         }
-
         messageChannel.sendMessage("Successfully removed players from group: **" + group.getName() + "** :white_check_mark:").queue();
     }
 

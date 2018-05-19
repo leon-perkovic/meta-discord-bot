@@ -30,7 +30,6 @@ public class RoleCommand extends AbstractCommand {
     @Autowired
     RoleValidator roleValidator;
 
-
     public RoleCommand() {
         super("role",
                 "**!role <id or role_name or short_name>**"
@@ -53,10 +52,8 @@ public class RoleCommand extends AbstractCommand {
         if(roleValidator.validateIfNumeric(arguments.get(0))) {
             Long id = Long.valueOf(arguments.get(0));
             role = roleService.findById(id);
-
         }else {
             role = roleService.findByRoleName(arguments.get(0));
-
             if(role == null) {
                 role = roleService.findByShortName(arguments.get(0));
             }

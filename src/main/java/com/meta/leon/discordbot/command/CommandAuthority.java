@@ -13,7 +13,6 @@ public enum CommandAuthority {
 
     private final int level;
 
-
     CommandAuthority(int level) {
         this.level = level;
     }

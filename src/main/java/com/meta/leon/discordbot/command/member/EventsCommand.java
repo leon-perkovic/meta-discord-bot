@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.member;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.EventValidator;
@@ -37,7 +37,6 @@ public class EventsCommand extends AbstractCommand {
     @Autowired
     CommandUtil commandUtil;
 
-
     public EventsCommand() {
         super("events",
                 "**!events**"
@@ -58,22 +57,22 @@ public class EventsCommand extends AbstractCommand {
         }
 
         List<Event> events = eventService.findUpcoming(new DateTime());
-        if(!events.isEmpty()) {
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setTitle("__Upcoming events (" + events.size() + "):__");
-            embedBuilder.setColor(Color.decode("#D02F00"));
-
-            for(Event event : events) {
-                String fieldValue = commandUtil.createEventBody(event);
-                fieldValue += "\n------------------------------";
-
-                embedBuilder.addField(event.getName() + " (id: " + event.getId() + ")", fieldValue, false);
-            }
-
-            messageChannel.sendMessage(embedBuilder.build()).queue();
+        if(events.isEmpty()) {
+            messageChannel.sendMessage(CommandResponses.EVENTS_NONE_FOUND).queue();
             return;
         }
-        messageChannel.sendMessage(CommandResponses.EVENTS_NONE_FOUND).queue();
+
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTitle("__Upcoming events (" + events.size() + "):__");
+        embedBuilder.setColor(Color.decode("#D02F00"));
+
+        for(Event event : events) {
+            String fieldValue = commandUtil.createEventBody(event);
+            fieldValue += "\n------------------------------";
+
+            embedBuilder.addField(event.getName() + " (id: " + event.getId() + ")", fieldValue, false);
+        }
+        messageChannel.sendMessage(embedBuilder.build()).queue();
     }
 
 }

@@ -1,6 +1,6 @@
 package com.meta.leon.discordbot.validator;
 
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,28 +16,21 @@ import java.util.regex.Pattern;
 @Component
 public class GlobalValidator {
 
-    public static final String NUMBER_PATTERN = "^(0|[1-9][0-9]*)$";
+    private static final String NUMBER_PATTERN = "^(0|[1-9][0-9]*)$";
 
-    public static final String TIME_PATTERN = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$";
+    private static final String TIME_PATTERN = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$";
 
-    public static final String DISCORD_ID_PATTERN = "^<@(0|[1-9][0-9]*)>$";
+    private static final String DISCORD_ID_PATTERN = "^<@(0|[1-9][0-9]*)>$";
 
     @Autowired
     CommandUtil commandUtil;
 
-
     public boolean validateNumberOfArguments(ArrayList<String> arguments, int expectedArguments) {
-        if(arguments.size() == expectedArguments) {
-            return true;
-        }
-        return false;
+        return arguments.size() == expectedArguments;
     }
 
     public boolean validateMinNumberOfArguments(ArrayList<String> arguments, int expectedMinArguments) {
-        if(arguments.size() >= expectedMinArguments) {
-            return true;
-        }
-        return false;
+        return arguments.size() >= expectedMinArguments;
     }
 
     public boolean validateIfNumeric(String argument) {
@@ -57,10 +50,7 @@ public class GlobalValidator {
     }
 
     public boolean validateIfDay(String argument) {
-        if(commandUtil.getDays().containsKey(argument.toLowerCase())) {
-            return true;
-        }
-        return false;
+        return commandUtil.getDays().containsKey(argument.toLowerCase());
     }
 
     public boolean validateIfTime(String argument) {

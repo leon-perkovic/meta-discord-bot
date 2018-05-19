@@ -15,7 +15,6 @@ public class EventSignupValidator extends GlobalValidator {
     @Autowired
     EventSignupService eventSignupService;
 
-
     public boolean validateIfUniqueSignup(Long eventId, Long playerId) {
         return eventSignupService.findEventSignup(eventId, playerId) == null;
     }

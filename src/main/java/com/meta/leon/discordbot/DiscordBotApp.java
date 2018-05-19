@@ -36,16 +36,13 @@ public class DiscordBotApp implements CommandLineRunner {
 
     public static int spamCounter = 0;
 
-
     public static void main(String[] args) {
-
         // run with spring-boot
         SpringApplication.run(DiscordBotApp.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-
         // set default time zone
         DateTimeZone.setDefault(DateTimeZone.forID("Europe/Amsterdam"));
 

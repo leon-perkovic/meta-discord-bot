@@ -18,7 +18,6 @@ public class CommandResponses {
     public static final String GROUP_NOT_FOUND = "That group doesn't exist :no_entry_sign:";
     public static final String GROUP_ALREADY_EXISTS = "That group already exists :no_entry_sign:";
 
-
     // -- Me ------------------------------------------------------------------
 
     public static final String ME_INVALID_ARGUMENTS = "Unexpected arguments :no_entry_sign: Try: ```!me```";

@@ -3,7 +3,7 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.command.CommandUtil;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Event;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.validator.EventValidator;
@@ -27,14 +27,6 @@ import java.util.ArrayList;
 @Component
 public class AddEventCommand extends AbstractCommand {
 
-    private String name;
-    private DateTime eventTime;
-    private Integer playerLimit;
-    private Integer memberLimit;
-    private Integer trialLimit;
-    private String eventLeader;
-    private String description;
-
     @Autowired
     EventService eventService;
 
@@ -43,7 +35,6 @@ public class AddEventCommand extends AbstractCommand {
 
     @Autowired
     CommandUtil commandUtil;
-
 
     public AddEventCommand() {
         super("addevent",
@@ -59,13 +50,12 @@ public class AddEventCommand extends AbstractCommand {
         MessageChannel messageChannel = discordEvent.getChannel();
 
         int descStart = 5;
+        String eventLeader = null;
         // if @username was passed as an argument, push start of description
         if(arguments.size() > 5) {
             if(eventValidator.validateIfDiscordId(arguments.get(5))) {
-                this.eventLeader = arguments.get(5);
+                eventLeader = arguments.get(5);
                 descStart = 6;
-            }else {
-                this.eventLeader = null;
             }
         }
 
@@ -101,31 +91,31 @@ public class AddEventCommand extends AbstractCommand {
         }
 
         // if description was split as multiple arguments - combine them
+        String description;
         if(arguments.size() > descStart + 1) {
-            String combinedDesc = arguments.get(descStart);
+            StringBuilder combinedDesc = new StringBuilder(arguments.get(descStart));
             for(int i = descStart + 1; i < arguments.size(); i++) {
-                combinedDesc += " " + arguments.get(i);
+                combinedDesc.append(" ").append(arguments.get(i));
             }
-            this.description = combinedDesc.trim();
-
+            description = combinedDesc.toString().trim();
         }else {
-            this.description = arguments.get(descStart);
+            description = arguments.get(descStart);
             if(description != null) {
                 description = description.trim();
             }
         }
 
-        this.eventTime = commandUtil.getEventDateTime(arguments.get(0), arguments.get(1));
-        this.name = arguments.get(0).toLowerCase()
+        DateTime eventTime = commandUtil.getEventDateTime(arguments.get(0), arguments.get(1));
+        String name = arguments.get(0).toLowerCase()
                 + "-" + eventTime.getYearOfCentury()
                 + "-" + eventTime.getMonthOfYear()
                 + "-" + eventTime.getDayOfMonth()
                 + "-" + eventTime.getHourOfDay()
                 + "-" + eventTime.getMinuteOfHour();
 
-        this.playerLimit = Integer.valueOf(arguments.get(2));
-        this.memberLimit = Integer.valueOf(arguments.get(3));
-        this.trialLimit = Integer.valueOf(arguments.get(4));
+        Integer playerLimit = Integer.valueOf(arguments.get(2));
+        Integer memberLimit = Integer.valueOf(arguments.get(3));
+        Integer trialLimit = Integer.valueOf(arguments.get(4));
 
         if(memberLimit > playerLimit) {
             memberLimit = playerLimit;

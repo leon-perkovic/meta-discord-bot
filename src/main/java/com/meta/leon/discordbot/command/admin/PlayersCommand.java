@@ -31,7 +31,6 @@ public class PlayersCommand extends AbstractCommand {
     @Autowired
     PlayerValidator playerValidator;
 
-
     public PlayersCommand() {
         super("players",
                 "**!players**"
@@ -67,8 +66,8 @@ public class PlayersCommand extends AbstractCommand {
             playerInfo = "\n**" + player.getNickname()
                     + "**, " + player.getAccountName()
                     + ", " + "*id:* " + player.getId()
-                    + ", " + player.getDiscordId() + "\n"
-                    + player.rolesToString();
+                    + ", " + player.getDiscordId()
+                    + "\n- *Roles:* " + player.rolesToString();
 
             playersBuilder.append(playerInfo).append("\n");
 

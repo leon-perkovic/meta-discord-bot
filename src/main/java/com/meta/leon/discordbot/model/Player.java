@@ -51,7 +51,6 @@ public class Player implements Serializable {
     @Fetch(FetchMode.JOIN)
     private Set<Group> groups = new HashSet<>();
 
-
     public Player() {
         // default constructor
     }
@@ -63,7 +62,7 @@ public class Player implements Serializable {
     }
 
     public String rolesToString() {
-        String rolesInfo = "- *Roles:* [";
+        String rolesInfo = "[";
 
         int i = 0;
         for(Role role : roles) {
@@ -80,7 +79,7 @@ public class Player implements Serializable {
     }
 
     public String groupsToString() {
-        String groupsInfo = "- *Groups:* [";
+        String groupsInfo = "[";
 
         int i = 0;
         for(Group group : groups) {
@@ -98,7 +97,6 @@ public class Player implements Serializable {
 
     @Override
     public String toString() {
-
         final ToStringBuilder stringBuilder = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE);
 
         stringBuilder.append("id", id);
