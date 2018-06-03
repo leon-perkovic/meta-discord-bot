@@ -22,13 +22,11 @@ public class EventDropoutServiceImpl implements EventDropoutService {
 
     @Override
     public List<EventDropout> findAllByEventId(Long eventId) {
-
         return eventDropoutRepository.findAllByEventIdOrderByDropoutTime(eventId);
     }
 
     @Override
     public EventDropout saveEventDropout(EventDropout eventDropout) {
-
         return eventDropoutRepository.save(eventDropout);
     }
 

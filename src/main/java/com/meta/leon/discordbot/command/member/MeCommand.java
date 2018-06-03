@@ -9,7 +9,7 @@ import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.EventService;
 import com.meta.leon.discordbot.service.EventSignupService;
 import com.meta.leon.discordbot.service.PlayerService;
-import com.meta.leon.discordbot.validator.EventSignupValidator;
+import com.meta.leon.discordbot.validator.GlobalValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
@@ -43,7 +43,7 @@ public class MeCommand extends AbstractCommand {
     EventSignupService eventSignupService;
 
     @Autowired
-    EventSignupValidator eventSignupValidator;
+    GlobalValidator globalValidator;
 
     public MeCommand() {
         super("me",
@@ -60,7 +60,7 @@ public class MeCommand extends AbstractCommand {
         User user = discordEvent.getAuthor();
 
         // validate passed arguments
-        if(!eventSignupValidator.validateNumberOfArguments(arguments, 0)) {
+        if(!globalValidator.validateNumberOfArguments(arguments, 0)) {
             messageChannel.sendMessage(CommandResponses.ME_INVALID_ARGUMENTS).queue();
             return;
         }
@@ -102,15 +102,16 @@ public class MeCommand extends AbstractCommand {
 
                 signups.append("**")
                         .append(day)
-                        .append("**");
+                        .append("**, *id:* ")
+                        .append(event.getId());
                 if(eventSignup.isBackup()) {
                     signups.append(" (Backup)");
                 }
                 signups.append(" - ")
                         .append(event.getDescription())
-                        .append("\n*")
+                        .append("\n- *")
                         .append(eventTime.toString("dd/MM/yyyy - HH:mm"))
-                        .append(" ").append(zone).append("*\n\n");
+                        .append(" ").append(zone).append("*\n");
             }
         }
         if(signups.length() == 0) {

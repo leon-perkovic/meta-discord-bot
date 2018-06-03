@@ -22,19 +22,16 @@ public class DpsReportServiceImpl implements DpsReportService {
 
     @Override
     public DpsReport saveDpsReport(DpsReport dpsReport) {
-
         return dpsReportRepository.save(dpsReport);
     }
 
     @Override
     public List<DpsReport> findAllByEventId(Long eventId) {
-
         return dpsReportRepository.findAllByEventId(eventId);
     }
 
     @Override
     public Integer removeAllByEventId(Long eventId) {
-
         return dpsReportRepository.deleteAllByEventId(eventId);
     }
 

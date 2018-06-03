@@ -22,55 +22,46 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public List<Player> findAll() {
-
         return playerRepository.findAllByOrderByNickname();
     }
 
     @Override
     public Player findById(Long id) {
-
         return playerRepository.findById(id);
     }
 
     @Override
     public Player findByNickname(String nickname) {
-
         return playerRepository.findByNicknameIgnoreCase(nickname);
     }
 
     @Override
     public Player findByAccountName(String accountName) {
-
         return playerRepository.findByAccountNameIgnoreCase(accountName);
     }
 
     @Override
     public Player findByDiscordId(String discordId) {
-
         return playerRepository.findByDiscordId(discordId);
     }
 
     @Override
     public Player savePlayer(Player player) {
-
         return playerRepository.save(player);
     }
 
     @Override
     public Integer removeById(Long id) {
-
         return playerRepository.deletePlayerById(id);
     }
 
     @Override
     public Integer removeByNickname(String nickname) {
-
         return playerRepository.deletePlayerByNicknameIgnoreCase(nickname);
     }
 
     @Override
     public Integer removeByDiscordId(String discordId) {
-
         return playerRepository.deletePlayerByDiscordId(discordId);
     }
 

@@ -27,6 +27,8 @@ public class CommandContainer {
     @Autowired
     private PlayerCommand playerCommand;
     @Autowired
+    private PlayerDetailCommand playerDetailCommand;
+    @Autowired
     private PlayersCommand playersCommand;
     @Autowired
     private UpdatePlayerCommand updatePlayerCommand;
@@ -108,6 +110,7 @@ public class CommandContainer {
         commands.put("updateplayer", updatePlayerCommand);
         commands.put("removeplayer", removePlayerCommand);
         commands.put("player", playerCommand);
+        commands.put("playerdetail", playerDetailCommand);
         commands.put("players", playersCommand);
         commands.put("addrole", addRoleCommand);
         commands.put("updaterole", updateRoleCommand);

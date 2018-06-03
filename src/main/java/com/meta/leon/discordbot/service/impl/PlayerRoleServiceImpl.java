@@ -20,19 +20,16 @@ public class PlayerRoleServiceImpl implements PlayerRoleService {
 
     @Override
     public PlayerRole findbyIds(Long playerId, Long roleId) {
-
         return playerRoleRepository.findByPlayerIdAndRoleId(playerId, roleId);
     }
 
     @Override
     public PlayerRole savePlayerRole(PlayerRole playerRole) {
-
         return playerRoleRepository.save(playerRole);
     }
 
     @Override
     public Integer removePlayerRole(Long playerId, Long roleId) {
-
         return playerRoleRepository.deleteByPlayerIdAndAndRoleId(playerId, roleId);
     }
 }

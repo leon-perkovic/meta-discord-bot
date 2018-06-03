@@ -37,6 +37,11 @@ public class CommandResponses {
 
     public static final String PLAYER_INVALID_ARGUMENTS = "Expected 1 argument :no_entry_sign: Try: ```!player <id or nickname or @username>```";
 
+    // -- PlayerDetail --------------------------------------------------------
+
+    public static final String PLAYER_DETAIL_INVALID_ARGUMENTS = "Expected 1 argument :no_entry_sign: Try: ```!playerDetail <id or nickname or @username>```";
+
+
     // -- Players -------------------------------------------------------------
 
     public static final String PLAYERS_INVALID_ARGUMENTS = "Unexpected arguments :no_entry_sign: Try: ```!players```";

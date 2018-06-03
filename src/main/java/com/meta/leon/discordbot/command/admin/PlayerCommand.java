@@ -3,9 +3,9 @@ package com.meta.leon.discordbot.command.admin;
 import com.meta.leon.discordbot.command.AbstractCommand;
 import com.meta.leon.discordbot.command.CommandAuthority;
 import com.meta.leon.discordbot.command.CommandResponses;
-import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.model.Player;
 import com.meta.leon.discordbot.service.PlayerService;
+import com.meta.leon.discordbot.util.CommandUtil;
 import com.meta.leon.discordbot.validator.PlayerValidator;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -53,21 +53,22 @@ public class PlayerCommand extends AbstractCommand {
         }
 
         Player player = commandUtil.findPlayerByAnyReference(arguments.get(0));
-        if(player != null) {
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setTitle("__Player info:__");
-            embedBuilder.setDescription("**" + player.getNickname()
-                    + "**, " + player.getAccountName()
-                    + ", " + "*id:* " + player.getId()
-                    + ", " + player.getDiscordId()
-                    + "\n- *Roles:* " + player.rolesToString()
-                    + "\n- *Groups:* " + player.groupsToString());
-            embedBuilder.setColor(Color.decode("#D02F00"));
-
-            messageChannel.sendMessage(embedBuilder.build()).queue();
+        if(player == null) {
+            messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
             return;
         }
-        messageChannel.sendMessage(CommandResponses.PLAYER_NOT_FOUND).queue();
+
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTitle("__Player info:__");
+        embedBuilder.setColor(Color.decode("#D02F00"));
+        embedBuilder.setDescription("**" + player.getNickname()
+                + "**, " + player.getAccountName()
+                + ", " + "*id:* " + player.getId()
+                + ", " + player.getDiscordId()
+                + "\n- *Roles:* " + player.rolesToString()
+                + "\n- *Groups:* " + player.groupsToString());
+
+        messageChannel.sendMessage(embedBuilder.build()).queue();
     }
 
 }
