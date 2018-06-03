@@ -123,12 +123,12 @@ public class PlayerDetailCommand extends AbstractCommand {
             }
         }
 
-        // reverse signups list
-        Collections.reverse(joinedEvents);
-
         if(joinedEvents.size() > PAGE_SIZE) {
             joinedEvents = new ArrayList<>(joinedEvents.subList(0, PAGE_SIZE));
         }
+
+        // reverse joined events list
+        Collections.reverse(joinedEvents);
 
         StringBuilder joined = new StringBuilder();
         for(Event event : joinedEvents) {
