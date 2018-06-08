@@ -122,6 +122,7 @@ public class PlayerDetailCommand extends AbstractCommand {
                 }
             }
         }
+        int numOfJoined = joinedEvents.size();
 
         if(joinedEvents.size() > PAGE_SIZE) {
             joinedEvents = new ArrayList<>(joinedEvents.subList(0, PAGE_SIZE));
@@ -162,7 +163,7 @@ public class PlayerDetailCommand extends AbstractCommand {
                 + "\n- *Groups:* " + player.groupsToString()
                 + "\n\n__**Events:**__"
                 + "\n*Signed up for:* **" + numOfSignups + "**"
-                + "\n*Joined:* **" + joinedEvents.size() + "**");
+                + "\n*Joined:* **" + numOfJoined + "**");
 
         messageChannel.sendMessage(embedBuilder.build()).queue();
 
