@@ -141,7 +141,8 @@ public class CommandUtil {
                 + eventSignupService.getNumOfSignupsByRank(event.getId(), DiscordBotApp.getTrialRole(), false)
                 + "/" + event.getTrialLimit() + "**\n";
 
-        fieldValue += "*Event leader:*  **" + event.getEventLeader() + "**";
+        fieldValue += "*Event leader:*  **"
+                + (event.getEventLeader() == null ? "none" : event.getEventLeader()) + "**";
 
         return fieldValue;
     }

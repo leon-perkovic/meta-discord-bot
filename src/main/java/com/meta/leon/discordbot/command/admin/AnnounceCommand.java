@@ -116,7 +116,8 @@ public class AnnounceCommand extends AbstractCommand {
         if(event.getTrialLimit() < event.getPlayerLimit()) {
             announcement += "\n*Trial limit:* **" + event.getTrialLimit() + "**";
         }
-        announcement += "\n*Event leader:* " + event.getEventLeader()
+        announcement += "\n*Event leader:* "
+                + (event.getEventLeader() == null ? "none" : event.getEventLeader())
                 + "\n--------------------------\nTo sign-up, please use: "
                 + "```!signup " + day + " " + eventTime.toString("HH:mm") + "```";
 
